@@ -29,8 +29,8 @@ World::World() {
 	chunks[0][0] = Chunk(voxels);
 }
 
-std::vector<float>* World::getVerticesToRender() {
+std::vector<float>* World::getVoxelPositionsToRender() {
 
 	//for now, just get from the only chunk in the world
-	return chunks[0][0].getVerticesToRender();
+	return chunks[0][0].getVoxelPositionsToRender();
 }

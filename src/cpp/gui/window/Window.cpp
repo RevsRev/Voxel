@@ -136,8 +136,8 @@ void Window::start() {
 	glfwSetCursorPosCallback(glfwWindow, mouse_callback);
 
 	//test loading a shader
-	std::string fragShaderPath = "C:\\Users\\eddie\\Documents\\Voxel\\Voxel\\resource\\shader\\fragment\\fragment.txt";
-	std::string vertexShaderPath = "C:\\Users\\eddie\\Documents\\Voxel\\Voxel\\resource\\shader\\vertex\\vertex.txt";
+	std::string fragShaderPath = "C:\\Users\\eddie\\Documents\\Voxel\\Voxel\\resource\\shader\\fragment\\voxel.txt";
+	std::string vertexShaderPath = "C:\\Users\\eddie\\Documents\\Voxel\\Voxel\\resource\\shader\\vertex\\voxel.txt";
 	Shader* fragShader = Shader::fromFile(fragShaderPath.c_str(), GL_FRAGMENT_SHADER);
 	Shader* vertexShader = Shader::fromFile(vertexShaderPath.c_str(), GL_VERTEX_SHADER);
 	ShaderProgram* shaderProgram = new ShaderProgram();
@@ -153,11 +153,11 @@ void Window::start() {
 
 	//test world
 	World* world = new World();
-	std::vector<float>* vcs = world->getVerticesToRender();
+	std::vector<float>* vcs = world->getVoxelPositionsToRender();
 	int size = vcs->size();
-	float* arrVertices = new float[size];
+	float* voxelPositions = new float[size];
 	for (int i = 0; i < size; i++) {
-		arrVertices[i] = vcs->at(i);
+		voxelPositions[i] = vcs->at(i);
 	}
 
 	//mera* camera = new Camera();
@@ -175,15 +175,25 @@ void Window::start() {
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
-	unsigned int VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	unsigned int cubeVBO;
+	glGenBuffers(1, &cubeVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), arrVertices, GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), arrVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 5 * 6 * 6 * sizeof(float), cubeVerticesWithTex, GL_STATIC_DRAW); //TODO - do the size properly
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)3);
 	glEnableVertexAttribArray(1);
+
+	unsigned int instanceVBO;
+	glGenBuffers(1, &instanceVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+	glBufferData(GL_ARRAY_BUFFER, vcs->size() * sizeof(float), voxelPositions, GL_STATIC_DRAW);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(2);
+	glVertexAttribDivisor(2, 1);
+
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -203,7 +213,8 @@ void Window::start() {
 		shaderProgram->use();
 		glBindVertexArray(VAO);
 		//glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/(5*sizeof(float)));
-		glDrawArrays(GL_TRIANGLES, 0, size/5);
+		//glDrawArrays(GL_TRIANGLES, 0, size/5);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, vcs->size() / 3);
 
 		glfwSwapBuffers(glfwWindow);
 		glfwPollEvents();

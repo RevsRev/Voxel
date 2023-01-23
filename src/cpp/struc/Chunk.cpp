@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 
-static float cubeVerticesWithTex[] = {
+float cubeVerticesWithTex[] = {
 	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
 	0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
 	0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
@@ -64,7 +64,7 @@ std::vector<float> getVerticesForVoxel(Voxel voxel, unsigned int i, unsigned int
 }
 
 
-std::vector<float>* Chunk::getVerticesToRender() {
+std::vector<float>* Chunk::getVoxelPositionsToRender() {
 	if (voxels == nullptr) {
 		std::cout << "Null chunk data" << std::endl;
 		return nullptr;
@@ -76,9 +76,13 @@ std::vector<float>* Chunk::getVerticesToRender() {
 		for (int j = 0; j < CHUNK_SIZE; j++) {
 			for (int k = 0; k < CHUNK_HEIGHT; k++) {
 				if (voxels[i][j][k].active) {
-					std::vector<float> voxelVertices = getVerticesForVoxel(voxels[i][j][k], i, j, k);
+				//if (true) {
+					/*std::vector<float> voxelVertices = getVerticesForVoxel(voxels[i][j][k], i, j, k);
 					vecAllVertices->reserve(vecAllVertices->size() + voxelVertices.size());
-					vecAllVertices->insert(vecAllVertices->end(), voxelVertices.begin(), voxelVertices.end());
+					vecAllVertices->insert(vecAllVertices->end(), voxelVertices.begin(), voxelVertices.end());*/
+					vecAllVertices->push_back((float)i);
+					vecAllVertices->push_back((float)j);
+					vecAllVertices->push_back((float)k);
 				}
 			}
 		}
