@@ -9,6 +9,13 @@
 #include <chrono>
 #include "gui/Camera.h"
 
+#include "gui/draw/Attribute.h"
+#include "gui/draw/VAO.h"
+#include "gui/draw/VBO.h"
+
+#include "gui/draw/ChunkRenderer.h"
+
+
 //cube vertices with texture coords
 static float vertices[] = {
 	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
@@ -171,29 +178,47 @@ void Window::start() {
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-	unsigned int VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	VAO* vao = new VAO();
+	VBO* vboCube = new VBO(cubeVerticesWithTex, 5 * 6 * 6 * sizeof(float));
+	VBO* vboInstanced = new VBO(voxelPositions, vcs->size() * sizeof(float));
 
-	unsigned int cubeVBO;
-	glGenBuffers(1, &cubeVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	//glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), arrVertices, GL_STATIC_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, 5 * 6 * 6 * sizeof(float), cubeVerticesWithTex, GL_STATIC_DRAW); //TODO - do the size properly
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)3);
-	glEnableVertexAttribArray(1);
+	Attribute* attrVertex = new Attribute(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	Attribute* attrTex = new Attribute(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)3);
+	Attribute* attrInst = new Attribute(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	attrInst->setDivisor(1);
 
-	unsigned int instanceVBO;
-	glGenBuffers(1, &instanceVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-	glBufferData(GL_ARRAY_BUFFER, vcs->size() * sizeof(float), voxelPositions, GL_STATIC_DRAW);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(2);
-	glVertexAttribDivisor(2, 1);
+	vao->addVBO(vboCube);
+	vboCube->addAttribute(attrVertex);
+	vboCube->addAttribute(attrTex);
+	vao->addVBO(vboInstanced);
+	vboInstanced->addAttribute(attrInst);
 
+	//unsigned int VAO;
+	//glGenVertexArrays(1, &VAO);
+	//glBindVertexArray(VAO);
+
+	//unsigned int cubeVBO;
+	//glGenBuffers(1, &cubeVBO);
+	//unsigned int instanceVBO;
+	//glGenBuffers(1, &instanceVBO);
+
+	//glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+	////glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	////glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), arrVertices, GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, 5 * 6 * 6 * sizeof(float), cubeVerticesWithTex, GL_STATIC_DRAW); //TODO - do the size properly
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)3);
+	//glEnableVertexAttribArray(1);
+
+	//
+	//glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+	//glBufferData(GL_ARRAY_BUFFER, vcs->size() * sizeof(float), voxelPositions, GL_STATIC_DRAW);
+	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(2);
+	//glVertexAttribDivisor(2, 1);
+
+	ChunkRenderer* chunkRenderer = new ChunkRenderer(world->chunks[0]);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -210,11 +235,13 @@ void Window::start() {
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		shaderProgram->use();
-		glBindVertexArray(VAO);
+		//shaderProgram->use();
+		//vao->bind();
+		//glBindVertexArray(VAO);
 		//glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/(5*sizeof(float)));
 		//glDrawArrays(GL_TRIANGLES, 0, size/5);
-		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, vcs->size() / 3);
+		//glDrawArraysInstanced(GL_TRIANGLES, 0, 36, vcs->size() / 3);
+		chunkRenderer->render();
 
 		glfwSwapBuffers(glfwWindow);
 		glfwPollEvents();

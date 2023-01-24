@@ -5,9 +5,11 @@
 
 class World {
 private:
-	Chunk** chunks;
+	
 
 public:
+	Chunk** chunks; //TODO - move back to private
+
 	//width and depth measured in chunks
 	const static unsigned int WORLD_WIDTH = 1;
 	const static unsigned int WORLD_DEPTH = 1;
