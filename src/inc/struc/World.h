@@ -5,7 +5,7 @@
 
 class World {
 private:
-	
+	Chunk createChunk(int xChunkCoord, int yChunkCoord);
 
 public:
 	Chunk** chunks; //TODO - move back to private

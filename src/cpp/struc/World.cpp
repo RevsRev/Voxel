@@ -1,21 +1,46 @@
 #include "struc/World.h"
 #include <iostream>
+#include "gen/PerlinNoise.h"
 
 World::World() {
+
+	//TODO - extract elsewhere. Get rid of magic numbers
+	int chunkXRange = 10;
+	int chunkYRange = 10;
+
+	chunks = new Chunk * [chunkXRange];
+
+	for (int i = 0; i < chunkXRange; i++) {
+		chunks[i] = new Chunk[chunkYRange];
+		for (int j = 0; j < chunkYRange; j++) {
+			chunks[i][j] = createChunk(i, j);
+		}
+	}
+}
+
+Chunk World::createChunk(int xChunkCoord, int yChunkCoord) {
+
+	PerlinNoise noise{ 5, 20, 50 };
+	int x = Chunk::CHUNK_SIZE * xChunkCoord;
+	int y = Chunk::CHUNK_SIZE * yChunkCoord;
 
 	Voxel*** voxels = new Voxel * *[Chunk::CHUNK_SIZE];
 	for (int i = 0; i < Chunk::CHUNK_SIZE; i++) {
 		voxels[i] = new Voxel * [Chunk::CHUNK_SIZE];
 		for (int j = 0; j < Chunk::CHUNK_SIZE; j++) {
 			voxels[i][j] = new Voxel[Chunk::CHUNK_HEIGHT];
+			float height = noise.compute(x + i, y + j);
+			std::cout << height << std::endl;
 			for (int k = 0; k < Chunk::CHUNK_HEIGHT; k++) {
 				Voxel vox = Voxel();
-				if (i == 0 || i == Chunk::CHUNK_SIZE - 1
+				/*if (i == 0 || i == Chunk::CHUNK_SIZE - 1
 					|| j == 0 || j == Chunk::CHUNK_SIZE - 1
 					|| k == 0 || k == Chunk::CHUNK_HEIGHT - 1)
 				{
 					vox.active = true;
-				}
+				}*/
+				vox.active = k < height;
+
 
 				vox.type = 1;
 				voxels[i][j][k] = vox;
@@ -23,14 +48,19 @@ World::World() {
 		}
 	}
 
-	//For now, just have one simple chunk
-	chunks = new Chunk*[1];
-	chunks[0] = new Chunk[1];
-	chunks[0][0] = Chunk(voxels);
+	return Chunk(voxels, x, y);
 }
+
 
 std::vector<float>* World::getVoxelPositionsToRender() {
 
-	//for now, just get from the only chunk in the world
-	return chunks[0][0].getVoxelPositionsToRender();
+	std::vector<float>* voxelPositions = new std::vector<float>();
+
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			std::vector<float>* positions = chunks[i][j].getVoxelPositionsToRender();
+			voxelPositions->insert(voxelPositions->end(), positions->begin(), positions->end());
+		}
+	}
+	return voxelPositions;
 }

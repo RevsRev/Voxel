@@ -80,14 +80,14 @@ std::vector<float>* Chunk::getVoxelPositionsToRender() {
 					/*std::vector<float> voxelVertices = getVerticesForVoxel(voxels[i][j][k], i, j, k);
 					vecAllVertices->reserve(vecAllVertices->size() + voxelVertices.size());
 					vecAllVertices->insert(vecAllVertices->end(), voxelVertices.begin(), voxelVertices.end());*/
-					vecAllVertices->push_back((float)i);
-					vecAllVertices->push_back((float)j);
+					vecAllVertices->push_back((float)(chunkX + i));
+					vecAllVertices->push_back((float)(chunkY + j));
 					vecAllVertices->push_back((float)k);
 				}
 			}
 		}
 	}
-	std::cout << "Finished creating vertices for " << vecAllVertices->size() / (36*5) << " cubes" << std::endl;
+	//std::cout << "Finished creating vertices for " << vecAllVertices->size() / (36*5) << " cubes" << std::endl;
 	return vecAllVertices;
 
 	//todo - extract 36 (num vertices for triangles) and 5 (num floats per vertex - 3 dim + 2 texture)
@@ -102,6 +102,8 @@ std::vector<float>* Chunk::getVoxelPositionsToRender() {
 //default constructor used when initizlizing arrays!
 Chunk::Chunk() {
 }
-Chunk::Chunk(Voxel*** voxels) {
+Chunk::Chunk(Voxel*** voxels, int chunkX, int chunkY) {
 	this->voxels = voxels;
+	this->chunkX = chunkX;
+	this->chunkY = chunkY;
 }

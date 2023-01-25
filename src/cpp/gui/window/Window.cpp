@@ -218,7 +218,13 @@ void Window::start() {
 	//glEnableVertexAttribArray(2);
 	//glVertexAttribDivisor(2, 1);
 
-	ChunkRenderer* chunkRenderer = new ChunkRenderer(world->chunks[0]);
+	std::vector<ChunkRenderer*> renderers{};
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			renderers.push_back(new ChunkRenderer(&world->chunks[i][j]));
+		}
+	}
+	//ChunkRenderer* chunkRenderer = new ChunkRenderer(world->chunks[0]);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -241,7 +247,9 @@ void Window::start() {
 		//glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/(5*sizeof(float)));
 		//glDrawArrays(GL_TRIANGLES, 0, size/5);
 		//glDrawArraysInstanced(GL_TRIANGLES, 0, 36, vcs->size() / 3);
-		chunkRenderer->render();
+		for (int i = 0; i<renderers.size(); i++) {
+			renderers.at(i)->render();
+		}
 
 		glfwSwapBuffers(glfwWindow);
 		glfwPollEvents();

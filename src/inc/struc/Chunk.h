@@ -8,12 +8,15 @@ class Chunk {
 private:
 	Voxel*** voxels;
 
+	int chunkX;
+	int chunkY;
+
 	//TODO - Chunk coordinates
 
 public:
 
 	Chunk();
-	Chunk(Voxel*** voxels);
+	Chunk(Voxel*** voxels, int chunkX, int chunkY);
 
 	const static unsigned int CHUNK_SIZE = 16;
 	const static unsigned int CHUNK_HEIGHT = 256;
