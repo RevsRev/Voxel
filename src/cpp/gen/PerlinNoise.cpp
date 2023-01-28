@@ -11,7 +11,9 @@ float PerlinNoise::compute(float x, float y) {
 	float scaledX = x / resolution;
 	float scaledY = y / resolution;
 
-	long genSeed = (long)(7507 * sin(x - y) + 1499 * sin(x + y)); //TODO - something better - no symmetry, random, etc...
+	//long genSeed = (long)(7507 * sin(x - y) + 1499 * sin(x + y)); //TODO - something better - no symmetry, random, etc...
+	//long genSeed = seed;
+	long genSeed = seed + floor(x / resolution) + floor(y / resolution);
 	srand(genSeed);
 
 	glm::vec2 point{ scaledX, scaledY };
@@ -32,9 +34,9 @@ float PerlinNoise::compute(float x, float y) {
 	float n3 = glm::dot(point - topRight, glm::normalize(topRightGrad));
 
 	float sx = scaledX - floor(scaledX);
-	float sy = scaledY = floor(scaledY);
+	float sy = scaledY - floor(scaledY);
 
-	return height*(0.1 + interpolate(sy, interpolate(sx, n0, n1), interpolate(sx, n2, n3)));
+	return height*(interpolate(sy, interpolate(sx, n0, n1), interpolate(sx, n2, n3)));
 	//return height * (0.1 + interpolate(sx, interpolate(sy, n0, n2), interpolate(sy, n1, n3)));
 }
 

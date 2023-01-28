@@ -16,11 +16,33 @@ World::World() {
 			chunks[i][j] = createChunk(i, j);
 		}
 	}
+
+	//Now cache neighbours
+	for (int i = 0; i < chunkXRange; i++) {
+		for (int j = 0; j < chunkYRange; j++) {
+			Chunk* chunk = &chunks[i][j];
+			if (i != 0) {
+				chunk->setNeighbour(Chunk::X_MINUS, &chunks[i - 1][j]);
+			}
+
+			if (i != chunkXRange - 1) {
+				chunk->setNeighbour(Chunk::X_PLUS, &chunks[i + 1][j]);
+			}
+
+			if (j != 0) {
+				chunk->setNeighbour(Chunk::Y_MINUS, &chunks[i][j - 1]);
+			}
+
+			if (j != chunkYRange - 1) {
+				chunk->setNeighbour(Chunk::Y_PLUS, &chunks[i][j + 1]);
+			}
+		}
+	}
 }
 
 Chunk World::createChunk(int xChunkCoord, int yChunkCoord) {
 
-	PerlinNoise noise{ 5, 20, 50 };
+	PerlinNoise noise{ 5, 30, 50 };
 	int x = Chunk::CHUNK_SIZE * xChunkCoord;
 	int y = Chunk::CHUNK_SIZE * yChunkCoord;
 
