@@ -17,6 +17,9 @@ private:
 	
 	bool isVoxelOnSurface(unsigned int i, unsigned int j, unsigned int k);
 
+	bool recache = true;
+	std::vector<float>* cachedSurface;
+
 public:
 
 	Chunk();

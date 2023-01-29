@@ -52,18 +52,9 @@ Chunk World::createChunk(int xChunkCoord, int yChunkCoord) {
 		for (int j = 0; j < Chunk::CHUNK_SIZE; j++) {
 			voxels[i][j] = new Voxel[Chunk::CHUNK_HEIGHT];
 			float height = noise.compute(x + i, y + j);
-			std::cout << height << std::endl;
 			for (int k = 0; k < Chunk::CHUNK_HEIGHT; k++) {
 				Voxel vox = Voxel();
-				/*if (i == 0 || i == Chunk::CHUNK_SIZE - 1
-					|| j == 0 || j == Chunk::CHUNK_SIZE - 1
-					|| k == 0 || k == Chunk::CHUNK_HEIGHT - 1)
-				{
-					vox.active = true;
-				}*/
 				vox.active = k < height;
-
-
 				vox.type = 1;
 				voxels[i][j][k] = vox;
 			}

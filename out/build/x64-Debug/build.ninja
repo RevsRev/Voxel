@@ -193,6 +193,54 @@ build CMakeFiles\Voxel.dir\src\cpp\gen\PerlinNoise.cpp.obj: CXX_COMPILER__Voxel_
   TARGET_COMPILE_PDB = CMakeFiles\Voxel.dir\
   TARGET_PDB = Voxel.pdb
 
+build CMakeFiles\Voxel.dir\src\cpp\io\KeyBoard.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\io\KeyBoard.cpp || cmake_object_order_depends_target_Voxel
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
+  OBJECT_DIR = CMakeFiles\Voxel.dir
+  OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\io
+  TARGET_COMPILE_PDB = CMakeFiles\Voxel.dir\
+  TARGET_PDB = Voxel.pdb
+
+build CMakeFiles\Voxel.dir\src\cpp\io\Mouse.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\io\Mouse.cpp || cmake_object_order_depends_target_Voxel
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
+  OBJECT_DIR = CMakeFiles\Voxel.dir
+  OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\io
+  TARGET_COMPILE_PDB = CMakeFiles\Voxel.dir\
+  TARGET_PDB = Voxel.pdb
+
+build CMakeFiles\Voxel.dir\src\cpp\io\CallBack.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\io\CallBack.cpp || cmake_object_order_depends_target_Voxel
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
+  OBJECT_DIR = CMakeFiles\Voxel.dir
+  OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\io
+  TARGET_COMPILE_PDB = CMakeFiles\Voxel.dir\
+  TARGET_PDB = Voxel.pdb
+
+build CMakeFiles\Voxel.dir\src\cpp\io\KeyCache.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\io\KeyCache.cpp || cmake_object_order_depends_target_Voxel
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
+  OBJECT_DIR = CMakeFiles\Voxel.dir
+  OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\io
+  TARGET_COMPILE_PDB = CMakeFiles\Voxel.dir\
+  TARGET_PDB = Voxel.pdb
+
+build CMakeFiles\Voxel.dir\src\cpp\phys\PhysicsEngine.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\phys\PhysicsEngine.cpp || cmake_object_order_depends_target_Voxel
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
+  OBJECT_DIR = CMakeFiles\Voxel.dir
+  OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\phys
+  TARGET_COMPILE_PDB = CMakeFiles\Voxel.dir\
+  TARGET_PDB = Voxel.pdb
+
+build CMakeFiles\Voxel.dir\src\cpp\phys\PhysicalObject.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\phys\PhysicalObject.cpp || cmake_object_order_depends_target_Voxel
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
+  OBJECT_DIR = CMakeFiles\Voxel.dir
+  OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\phys
+  TARGET_COMPILE_PDB = CMakeFiles\Voxel.dir\
+  TARGET_PDB = Voxel.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Voxel
@@ -201,7 +249,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gen\PerlinNoise.cpp.obj: CXX_COMPILER__Voxel_
 #############################################
 # Link the executable Voxel.exe
 
-build Voxel.exe: CXX_EXECUTABLE_LINKER__Voxel_Debug CMakeFiles\Voxel.dir\src\cpp\Main.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\glad\glad.c.obj CMakeFiles\Voxel.dir\src\cpp\struc\Chunk.cpp.obj CMakeFiles\Voxel.dir\src\cpp\struc\Voxel.cpp.obj CMakeFiles\Voxel.dir\src\cpp\struc\World.cpp.obj CMakeFiles\Voxel.dir\src\cpp\struc\Coord.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\ChunkRenderer.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\shader\Shader.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\window\Window.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\shader\ShaderProgram.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\Camera.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\Drawer.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\VAO.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\VBO.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\Attribute.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\Drawable.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\ChunkRenderer.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gen\PerlinNoise.cpp.obj | ..\..\..\lib\glfw3.lib
+build Voxel.exe: CXX_EXECUTABLE_LINKER__Voxel_Debug CMakeFiles\Voxel.dir\src\cpp\Main.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\glad\glad.c.obj CMakeFiles\Voxel.dir\src\cpp\struc\Chunk.cpp.obj CMakeFiles\Voxel.dir\src\cpp\struc\Voxel.cpp.obj CMakeFiles\Voxel.dir\src\cpp\struc\World.cpp.obj CMakeFiles\Voxel.dir\src\cpp\struc\Coord.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\ChunkRenderer.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\shader\Shader.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\window\Window.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\shader\ShaderProgram.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\Camera.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\Drawer.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\VAO.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\VBO.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\Attribute.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\Drawable.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gui\draw\ChunkRenderer.cpp.obj CMakeFiles\Voxel.dir\src\cpp\gen\PerlinNoise.cpp.obj CMakeFiles\Voxel.dir\src\cpp\io\KeyBoard.cpp.obj CMakeFiles\Voxel.dir\src\cpp\io\Mouse.cpp.obj CMakeFiles\Voxel.dir\src\cpp\io\CallBack.cpp.obj CMakeFiles\Voxel.dir\src\cpp\io\KeyCache.cpp.obj CMakeFiles\Voxel.dir\src\cpp\phys\PhysicsEngine.cpp.obj CMakeFiles\Voxel.dir\src\cpp\phys\PhysicalObject.cpp.obj | ..\..\..\lib\glfw3.lib
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = ..\..\..\lib\glfw3.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

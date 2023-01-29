@@ -65,6 +65,11 @@ std::vector<float> getVerticesForVoxel(Voxel voxel, unsigned int i, unsigned int
 
 
 std::vector<float>* Chunk::getVoxelPositionsToRender() {
+
+	if (!recache) {
+		return cachedSurface;
+	}
+
 	if (voxels == nullptr) {
 		std::cout << "Null chunk data" << std::endl;
 		return nullptr;
@@ -84,16 +89,11 @@ std::vector<float>* Chunk::getVoxelPositionsToRender() {
 			}
 		}
 	}
-	//std::cout << "Finished creating vertices for " << vecAllVertices->size() / (36*5) << " cubes" << std::endl;
-	return vecAllVertices;
 
-	//todo - extract 36 (num vertices for triangles) and 5 (num floats per vertex - 3 dim + 2 texture)
-	/*float* arrVertices = new float[vecAllVertices.size()];
-	for (int i = 0; i < vecAllVertices.size(); i++) {
-		arrVertices[i] = vecAllVertices.at(i);
-	}
-	return arrVertices;*/
+	cachedSurface = vecAllVertices;
+	recache = false;
 
+	return cachedSurface;
 }
 
 bool Chunk::isVoxelOnSurface(unsigned int i, unsigned int j, unsigned int k) {
