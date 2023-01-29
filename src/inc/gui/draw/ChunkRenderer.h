@@ -27,4 +27,5 @@ private:
 public:
 	ChunkRenderer(Chunk* chunk);
 	void render();
+	ShaderProgram* getShaderProgram();
 };

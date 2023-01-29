@@ -2,7 +2,7 @@
 #include "Voxel.h"
 #include <vector>
 
-extern float cubeVerticesWithTex[];
+extern float cubeVerticesWithNormalAndTex[];
 
 class Chunk {
 private:

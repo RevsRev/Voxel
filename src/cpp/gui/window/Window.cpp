@@ -61,24 +61,13 @@ Window* Window::the() {
 //	}
 
 void Window::start() {
-	//frameBufferSizeCallback(window, width, height);
 	Window* window = the();
 	GLFWwindow* glfwWindow = window->window;
 
 	glfwSetFramebufferSizeCallback(glfwWindow, frameBufferSizeCallback);
-	/*glfwSetCursorPosCallback(glfwWindow, mouse_callback);*/
 	glfwSetCursorPosCallback(glfwWindow, CallBack::mouse_callback);
 	glfwSetKeyCallback(glfwWindow, CallBack::keyboard_callback);
 
-	//test loading a shader
-	std::string fragShaderPath = "C:\\Users\\eddie\\Documents\\Voxel\\Voxel\\resource\\shader\\fragment\\voxel.txt";
-	std::string vertexShaderPath = "C:\\Users\\eddie\\Documents\\Voxel\\Voxel\\resource\\shader\\vertex\\voxel.txt";
-	Shader* fragShader = Shader::fromFile(fragShaderPath.c_str(), GL_FRAGMENT_SHADER);
-	Shader* vertexShader = Shader::fromFile(vertexShaderPath.c_str(), GL_VERTEX_SHADER);
-	ShaderProgram* shaderProgram = new ShaderProgram();
-	shaderProgram->addShader(fragShader);
-	shaderProgram->addShader(vertexShader);
-	shaderProgram->compile();
 
 	//test projections
 	glm::mat4 model = glm::mat4(1.0f);
@@ -88,47 +77,41 @@ void Window::start() {
 
 	//test world
 	World* world = new World();
-	std::vector<float>* vcs = world->getVoxelPositionsToRender();
-	int size = vcs->size();
-	float* voxelPositions = new float[size];
-	for (int i = 0; i < size; i++) {
-		voxelPositions[i] = vcs->at(i);
-	}
 
-	//mera* camera = new Camera();
-
-	shaderProgram->use();
-	int modelLoc = glGetUniformLocation(shaderProgram->getId(), "model");
-	int viewLoc = glGetUniformLocation(shaderProgram->getId(), "view");
-	int projLoc = glGetUniformLocation(shaderProgram->getId(), "projection");
-
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-	VAO* vao = new VAO();
-	VBO* vboCube = new VBO(cubeVerticesWithTex, 5 * 6 * 6 * sizeof(float));
-	VBO* vboInstanced = new VBO(voxelPositions, vcs->size() * sizeof(float));
-
-	Attribute* attrVertex = new Attribute(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	Attribute* attrTex = new Attribute(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)3);
-	Attribute* attrInst = new Attribute(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	attrInst->setDivisor(1);
-
-	vao->addVBO(vboCube);
-	vboCube->addAttribute(attrVertex);
-	vboCube->addAttribute(attrTex);
-	vao->addVBO(vboInstanced);
-	vboInstanced->addAttribute(attrInst);
+	glm::vec3 lightDirection{ 0.0f, 0.0f, 1.0f };
 
 	std::vector<ChunkRenderer*> renderers{};
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
-			renderers.push_back(new ChunkRenderer(&world->chunks[i][j]));
+			ChunkRenderer* renderer = new ChunkRenderer(&world->chunks[i][j]);
+
+			int modelLoc = renderer->getShaderProgram()->getUniformLocation("model");
+			int viewLoc = renderer->getShaderProgram()->getUniformLocation("view");
+			int projLoc = renderer->getShaderProgram()->getUniformLocation("projection");
+			int lightDirLoc = renderer->getShaderProgram()->getUniformLocation("lightDirection");
+			int camPosLoc = renderer->getShaderProgram()->getUniformLocation("cameraPosition");
+
+			std::cout << "modelLoc: " << modelLoc << std::endl;
+			std::cout << "viewLoc: " << viewLoc << std::endl;
+			std::cout << "projLoc: " << projLoc << std::endl;
+			std::cout << "lightDirLoc: " << lightDirLoc << std::endl;
+			std::cout << "camPosLoc: " << camPosLoc << std::endl;
+
+			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+			glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+			glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+			glUniform3fv(lightDirLoc, 1, glm::value_ptr(lightDirection));
+			glUniform3fv(lightDirLoc, 1, &lightDirection[0]);
+			glUniform3fv(camPosLoc, 1, glm::value_ptr(*window->getCamera()->getPosition()));
+			//glUniform3fv(camPosLoc, 1, GL_FALSE, (*window->getCamera()->getPosition())[0]);
+
+			renderer->getShaderProgram()->use(); //have to use to bind the new values (I think..?)
+
+			renderers.push_back(renderer);
 		}
 	}
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnable(GL_DEPTH_TEST);
 
 	//TODO - extract away from the window class
 	PhysicsEngine* engine = PhysicsEngine::the();
@@ -143,12 +126,16 @@ void Window::start() {
 
 		renderStartTime = std::chrono::system_clock::now();
 
-		//window->processInput((float)currentFrameTime.count());
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(*window->camera->getView()));
-
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		for (int i = 0; i<renderers.size(); i++) {
+
+			ChunkRenderer* renderer = renderers.at(i);
+			int vLoc = renderer->getShaderProgram()->getUniformLocation("view");
+			int cpLoc = renderer->getShaderProgram()->getUniformLocation("cameraPosition");
+			glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(*window->camera->getView()));
+			glUniform3fv(cpLoc, 1, glm::value_ptr(*window->getCamera()->getPosition()));
+
 			renderers.at(i)->render();
 		}
 

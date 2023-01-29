@@ -25,6 +25,4 @@ void Attribute::enable() {
 
 void Attribute::setDivisor(unsigned int divisor) {
 	this->divisor = divisor;
-	/*enable();
-	glVertexAttribDivisor(location, divisor);*/
 }

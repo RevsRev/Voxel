@@ -2,6 +2,7 @@
 
 #include "Shader.h"
 #include <vector>
+#include <string>
 
 class ShaderProgram {
 private:
@@ -13,4 +14,6 @@ public:
 	void addShader(Shader* shader);
 	void compile();
 	void use();
+
+	int getUniformLocation(std::string uniformName);
 };

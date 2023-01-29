@@ -15,15 +15,17 @@ void ChunkRenderer::initVao() {
 	vboCube = VBO();
 	vboInstance = VBO();
 
-	vboCube.setBufferData(cubeVerticesWithTex, 5 * 6 * 6 * sizeof(float));
+	vboCube.setBufferData(cubeVerticesWithNormalAndTex, 8 * 6 * 6 * sizeof(float));
 
-	Attribute* attrVertex = new Attribute(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	Attribute* attrTex = new Attribute(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)3);
-	Attribute* attrInst = new Attribute(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	Attribute* attrVertex = new Attribute(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	Attribute* attrNormal = new Attribute(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
+	Attribute* attrTex = new Attribute(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6*sizeof(float)));
+	Attribute* attrInst = new Attribute(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	attrInst->setDivisor(1);
 
 	vao.addVBO(&vboCube);
 	vboCube.addAttribute(attrVertex);
+	vboCube.addAttribute(attrNormal);
 	vboCube.addAttribute(attrTex);
 	vao.addVBO(&vboInstance);
 	vboInstance.addAttribute(attrInst);
@@ -36,10 +38,10 @@ void ChunkRenderer::initShaderProgram() {
 	Shader* fragShader = Shader::fromFile(fragShaderPath.c_str(), GL_FRAGMENT_SHADER);
 	Shader* vertexShader = Shader::fromFile(vertexShaderPath.c_str(), GL_VERTEX_SHADER);
 
-	ShaderProgram* shaderProgram = new ShaderProgram();
-	shaderProgram->addShader(fragShader);
-	shaderProgram->addShader(vertexShader);
-	shaderProgram->compile();
+	shaderProgram = ShaderProgram();
+	shaderProgram.addShader(fragShader);
+	shaderProgram.addShader(vertexShader);
+	shaderProgram.compile();
 }
 
 void ChunkRenderer::render() {
@@ -55,4 +57,8 @@ void ChunkRenderer::render() {
 	shaderProgram.use();
 	vao.bind();
 	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, vcs->size() / 3);
+}
+
+ShaderProgram* ChunkRenderer::getShaderProgram() {
+	return &shaderProgram;
 }

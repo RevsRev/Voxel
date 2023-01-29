@@ -24,6 +24,10 @@ void ShaderProgram::compile() {
 	}
 }
 
+int ShaderProgram::getUniformLocation(std::string uniformName) {
+	return glGetUniformLocation(id, uniformName.c_str());
+}
+
 void ShaderProgram::use() {
 	glUseProgram(id);
 }
