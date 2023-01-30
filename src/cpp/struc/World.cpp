@@ -55,7 +55,7 @@ Chunk World::createChunk(int xChunkCoord, int yChunkCoord) {
 			for (int k = 0; k < Chunk::CHUNK_HEIGHT; k++) {
 				Voxel vox = Voxel();
 				vox.active = k < height;
-				vox.type = 1;
+				vox.type = ChunkType::CHUNK_TYPES::DIRT;
 				voxels[i][j][k] = vox;
 			}
 		}

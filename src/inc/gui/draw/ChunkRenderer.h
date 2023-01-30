@@ -13,7 +13,8 @@ private:
 	//for rendering
 	VAO vao;
 	VBO vboCube;
-	VBO vboInstance;
+	VBO vboPositionInstance;
+	VBO vboColorInstance;
 	Attribute attributeVertex;
 	Attribute attributeTexture;
 	Attribute attributeInstance;

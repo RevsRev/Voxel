@@ -13,22 +13,27 @@ void ChunkRenderer::init() {
 void ChunkRenderer::initVao() {
 	vao = VAO();
 	vboCube = VBO();
-	vboInstance = VBO();
+	vboPositionInstance = VBO();
+	vboColorInstance = VBO();
 
 	vboCube.setBufferData(cubeVerticesWithNormalAndTex, 8 * 6 * 6 * sizeof(float));
 
 	Attribute* attrVertex = new Attribute(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	Attribute* attrNormal = new Attribute(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
 	Attribute* attrTex = new Attribute(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6*sizeof(float)));
-	Attribute* attrInst = new Attribute(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	attrInst->setDivisor(1);
+	Attribute* attrPositionInstance = new Attribute(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	attrPositionInstance->setDivisor(1);
+	Attribute* attributeColorInstance = new Attribute(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	attributeColorInstance->setDivisor(1);
 
 	vao.addVBO(&vboCube);
 	vboCube.addAttribute(attrVertex);
 	vboCube.addAttribute(attrNormal);
 	vboCube.addAttribute(attrTex);
-	vao.addVBO(&vboInstance);
-	vboInstance.addAttribute(attrInst);
+	vao.addVBO(&vboPositionInstance);
+	vboPositionInstance.addAttribute(attrPositionInstance);
+	vao.addVBO(&vboColorInstance);
+	vboColorInstance.addAttribute(attributeColorInstance);
 }
 
 void ChunkRenderer::initShaderProgram() {
@@ -46,13 +51,22 @@ void ChunkRenderer::initShaderProgram() {
 
 void ChunkRenderer::render() {
 
+	//TODO - REFACTOR
 	std::vector<float>* vcs = chunk->getVoxelPositionsToRender();
 	int size = vcs->size();
 	float* voxelPositions = new float[size];
 	for (int i = 0; i < size; i++) {
 		voxelPositions[i] = vcs->at(i);
 	}
-	vboInstance.setBufferData(voxelPositions, vcs->size() * sizeof(float));
+	vboPositionInstance.setBufferData(voxelPositions, vcs->size() * sizeof(float));
+
+	std::vector<float>* colors = chunk->getVoxelColorsToRender();
+	int colorsSize = colors->size();
+	float* voxelColors = new float[colorsSize];
+	for (int i = 0; i < colorsSize; i++) {
+		voxelColors[i] = colors->at(i);
+	}
+	vboColorInstance.setBufferData(voxelColors, colors->size() * sizeof(float));
 
 	shaderProgram.use();
 	vao.bind();

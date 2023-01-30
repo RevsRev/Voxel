@@ -4,6 +4,7 @@ layout (location = 0) in vec3 aPos; // position has attribute position 0
 layout (location = 1) in vec3 aNorm;
 layout (location = 2) in vec2 aTex; //not using at the moment!
 layout (location = 3) in vec3 translationInstance; //describes the position of the particular voxel we are rendering.
+layout (location = 4) in vec3 colorInstance;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -17,9 +18,10 @@ out vec3 FragPos;
 void main()
 {
 	gl_Position = projection * view * model * vec4(aPos + translationInstance, 1.0);
-	vertexColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+	//vertexColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
 	//vertexColor = vec4(aTex, 0.0f, 1.0f);
+	vertexColor = vec4(colorInstance, 1.0f);
 	Normal = aNorm;
 	//Normal = vec3(0.0f, 1.0f, 1.0f);
-	FragPos = vec3(model * vec4(aPos, 1.0));
+	FragPos = vec3(model * vec4(aPos + translationInstance, 1.0));
 }

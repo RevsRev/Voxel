@@ -2,6 +2,7 @@
 
 #include "Chunk.h"
 #include <vector>
+#include <phys/ChunkTypes.h>
 
 class World {
 private:

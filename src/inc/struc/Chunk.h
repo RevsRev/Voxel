@@ -1,6 +1,8 @@
 #pragma once
 #include "Voxel.h"
 #include <vector>
+#include <glm/vec3.hpp>
+#include <phys/ChunkTypes.h>
 
 extern float cubeVerticesWithNormalAndTex[];
 
@@ -19,6 +21,9 @@ private:
 
 	bool recache = true;
 	std::vector<float>* cachedSurface;
+	std::vector<float>* cachedVoxelColors;
+
+	void cacheVoxelData();
 
 public:
 
@@ -35,8 +40,8 @@ public:
 	const static unsigned int Y_PLUS = 4;
 	const static unsigned int Y_MINUS = 5;
 
-	//TODO - DO this properly at some point!
 	std::vector<float>* getVoxelPositionsToRender();
+	std::vector<float>* getVoxelColorsToRender();
 
 	void setNeighbour(int neighbour, Chunk* chunk);
 

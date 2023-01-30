@@ -72,13 +72,13 @@ void Window::start() {
 	//test projections
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 200.0f);
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 	//test world
 	World* world = new World();
 
-	glm::vec3 lightDirection{ 0.0f, 0.0f, 1.0f };
+	glm::vec3 lightDirection = glm::normalize(glm::vec3{ 0.0f, 0.5f, 1.0f });
 
 	std::vector<ChunkRenderer*> renderers{};
 	for (int i = 0; i < 10; i++) {
@@ -91,18 +91,18 @@ void Window::start() {
 			int lightDirLoc = renderer->getShaderProgram()->getUniformLocation("lightDirection");
 			int camPosLoc = renderer->getShaderProgram()->getUniformLocation("cameraPosition");
 
-			std::cout << "modelLoc: " << modelLoc << std::endl;
+			/*std::cout << "modelLoc: " << modelLoc << std::endl;
 			std::cout << "viewLoc: " << viewLoc << std::endl;
 			std::cout << "projLoc: " << projLoc << std::endl;
 			std::cout << "lightDirLoc: " << lightDirLoc << std::endl;
-			std::cout << "camPosLoc: " << camPosLoc << std::endl;
+			std::cout << "camPosLoc: " << camPosLoc << std::endl;*/
 
 			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 			glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 			glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 			glUniform3fv(lightDirLoc, 1, glm::value_ptr(lightDirection));
 			glUniform3fv(lightDirLoc, 1, &lightDirection[0]);
-			glUniform3fv(camPosLoc, 1, glm::value_ptr(*window->getCamera()->getPosition()));
+			glUniform3fv(camPosLoc, 1, &(*window->getCamera()->getPosition())[0]);
 			//glUniform3fv(camPosLoc, 1, GL_FALSE, (*window->getCamera()->getPosition())[0]);
 
 			renderer->getShaderProgram()->use(); //have to use to bind the new values (I think..?)
@@ -134,7 +134,7 @@ void Window::start() {
 			int vLoc = renderer->getShaderProgram()->getUniformLocation("view");
 			int cpLoc = renderer->getShaderProgram()->getUniformLocation("cameraPosition");
 			glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(*window->camera->getView()));
-			glUniform3fv(cpLoc, 1, glm::value_ptr(*window->getCamera()->getPosition()));
+			glUniform3fv(cpLoc, 1, &(*window->getCamera()->getPosition())[0]);
 
 			renderers.at(i)->render();
 		}

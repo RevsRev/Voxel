@@ -70,18 +70,19 @@ std::vector<float> getVerticesForVoxel(Voxel voxel, unsigned int i, unsigned int
 }
 
 
-std::vector<float>* Chunk::getVoxelPositionsToRender() {
+void Chunk::cacheVoxelData() {
 
 	if (!recache) {
-		return cachedSurface;
+		return;
 	}
 
 	if (voxels == nullptr) {
 		std::cout << "Null chunk data" << std::endl;
-		return nullptr;
+		return;
 	}
 
 	std::vector<float>* vecAllVertices = new std::vector<float>();
+	std::vector<float>* vecAllColors = new std::vector<float>();
 
 	for (int i = 0; i < CHUNK_SIZE; i++) {
 		for (int j = 0; j < CHUNK_SIZE; j++) {
@@ -91,15 +92,28 @@ std::vector<float>* Chunk::getVoxelPositionsToRender() {
 					vecAllVertices->push_back((float)(chunkX + i));
 					vecAllVertices->push_back((float)(chunkY + j));
 					vecAllVertices->push_back((float)k);
+
+					glm::vec3* color = ChunkType::getColor(voxels[i][j][k].type);
+					vecAllColors->push_back(color->x);
+					vecAllColors->push_back(color->y);
+					vecAllColors->push_back(color->z);
 				}
 			}
 		}
 	}
 
 	cachedSurface = vecAllVertices;
+	cachedVoxelColors = vecAllColors;
 	recache = false;
+}
 
+std::vector<float>* Chunk::getVoxelPositionsToRender() {
+	cacheVoxelData();
 	return cachedSurface;
+}
+std::vector<float>* Chunk::getVoxelColorsToRender() {
+	cacheVoxelData();
+	return cachedVoxelColors;
 }
 
 bool Chunk::isVoxelOnSurface(unsigned int i, unsigned int j, unsigned int k) {
