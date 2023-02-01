@@ -1,6 +1,6 @@
 #include "struc/World.h"
 #include <iostream>
-#include "gen/PerlinNoise.h"
+#include "gen/perlin/PerlinNoise.h"
 
 World::World() {
 
@@ -42,7 +42,15 @@ World::World() {
 
 Chunk World::createChunk(int xChunkCoord, int yChunkCoord) {
 
-	PerlinNoise noise{ 5, 30, 50 };
+	long seed = 5;
+	unsigned int resolution = 30;
+	unsigned int height = 50;
+	WorldGenerator generator{ seed };
+	PerlinMountain* mountain = new PerlinMountain(seed, resolution, height);
+	PerlinMountain* moreMountain = new PerlinMountain(seed, 78, 100);
+	generator.addPostProcessor(mountain);
+	generator.addPostProcessor(moreMountain);
+
 	int x = Chunk::CHUNK_SIZE * xChunkCoord;
 	int y = Chunk::CHUNK_SIZE * yChunkCoord;
 
@@ -51,7 +59,7 @@ Chunk World::createChunk(int xChunkCoord, int yChunkCoord) {
 		voxels[i] = new Voxel * [Chunk::CHUNK_SIZE];
 		for (int j = 0; j < Chunk::CHUNK_SIZE; j++) {
 			voxels[i][j] = new Voxel[Chunk::CHUNK_HEIGHT];
-			float height = noise.compute(x + i, y + j);
+			float height = generator.generate(x + i, y + j);
 			for (int k = 0; k < Chunk::CHUNK_HEIGHT; k++) {
 				Voxel vox = Voxel();
 				vox.active = k < height;

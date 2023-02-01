@@ -3,6 +3,8 @@
 #include "Chunk.h"
 #include <vector>
 #include <phys/ChunkTypes.h>
+#include <gen/WorldGenerator.h>
+#include <gen/perlin/PerlinMountain.h>
 
 class World {
 private:
