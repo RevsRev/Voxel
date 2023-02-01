@@ -72,7 +72,7 @@ void Window::start() {
 	//test projections
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 200.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 400.0f);
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 	//test world
@@ -81,8 +81,8 @@ void Window::start() {
 	glm::vec3 lightDirection = glm::normalize(glm::vec3{ 0.0f, 0.5f, 1.0f });
 
 	std::vector<ChunkRenderer*> renderers{};
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 20; j++) {
 			ChunkRenderer* renderer = new ChunkRenderer(&world->chunks[i][j]);
 
 			int modelLoc = renderer->getShaderProgram()->getUniformLocation("model");

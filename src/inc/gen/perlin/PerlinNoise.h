@@ -13,7 +13,8 @@ private:
 
 	float interpolate(float w, float a, float b);
 
-	long getGenSeed(float x, float y);
+	glm::vec2 getRandomVec(long cornerX, long cornerY);
+	long getGenSeed(long cornerX, long cornerY);
 
 public:
 	PerlinNoise();

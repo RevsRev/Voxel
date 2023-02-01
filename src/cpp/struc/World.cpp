@@ -5,8 +5,8 @@
 World::World() {
 
 	//TODO - extract elsewhere. Get rid of magic numbers
-	int chunkXRange = 10;
-	int chunkYRange = 10;
+	int chunkXRange = 20;
+	int chunkYRange = 20;
 
 	chunks = new Chunk * [chunkXRange];
 
@@ -77,8 +77,8 @@ std::vector<float>* World::getVoxelPositionsToRender() {
 
 	std::vector<float>* voxelPositions = new std::vector<float>();
 
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 20; j++) {
 			std::vector<float>* positions = chunks[i][j].getVoxelPositionsToRender();
 			voxelPositions->insert(voxelPositions->end(), positions->begin(), positions->end());
 		}

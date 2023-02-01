@@ -14,17 +14,6 @@ float PerlinNoise::compute(float x, float y) {
 	float scaledX = x / resolution;
 	float scaledY = y / resolution;
 
-	//need to impose continuity
-	bool leftEdge = (((long)floorl(x)) % resolution) == 0;
-	bool rightEdge = (((long)floorl(x)-1) % resolution) == 0;
-	bool bottomEdge = (((long)floorl(y)) % resolution) == 0;
-	bool topEdge = (((long)floorl(y) - 1) % resolution) == 0;
-
-	//long genSeed = (long)(7507 * sin(x - y) + 1499 * sin(x + y)); //TODO - something better - no symmetry, random, etc...
-	//long genSeed = seed + floor(x / resolution) + floor(y / resolution);
-	long genSeed = seed;
-	srand(genSeed);
-
 	glm::vec2 point{ scaledX, scaledY };
 
 	glm::vec2 bottomLeft{ floor(scaledX), floor(scaledY) };
@@ -32,10 +21,10 @@ float PerlinNoise::compute(float x, float y) {
 	glm::vec2 topLeft{ floor(scaledX), ceil(scaledY) };
 	glm::vec2 topRight{ ceil(scaledX), ceil(scaledY) };
 
-	glm::vec2 bottomLeftGrad{ rand(), rand() };
-	glm::vec2 bottomRightGrad{ rand(), rand() };
-	glm::vec2 topLeftGrad{ rand(), rand() };
-	glm::vec2 topRightGrad{ rand(), rand() };
+	glm::vec2 bottomLeftGrad = getRandomVec(floorl(scaledX), floorl(scaledY));
+	glm::vec2 bottomRightGrad = getRandomVec(ceill(scaledX), floorl(scaledY));
+	glm::vec2 topLeftGrad = getRandomVec(floorl(scaledX), ceill(scaledY));
+	glm::vec2 topRightGrad = getRandomVec(ceill(scaledX), ceill(scaledY));
 
 	float n0 = glm::dot(point - bottomLeft, glm::normalize(bottomLeftGrad));
 	float n1 = glm::dot(point - bottomRight, glm::normalize(bottomRightGrad));
@@ -45,7 +34,7 @@ float PerlinNoise::compute(float x, float y) {
 	float sx = scaledX - floor(scaledX);
 	float sy = scaledY - floor(scaledY);
 
-	return height*(interpolate(sy, interpolate(sx, n0, n1), interpolate(sx, n2, n3)));
+	return height*(0.1 + interpolate(sy, interpolate(sx, n0, n1), interpolate(sx, n2, n3)));
 	//return height * (0.1 + interpolate(sx, interpolate(sy, n0, n2), interpolate(sy, n1, n3)));
 }
 
@@ -53,18 +42,16 @@ float PerlinNoise::interpolate(float w, float a, float b) {
 	return w * (b - a) + a;
 }
 
-long PerlinNoise::getGenSeed(float x, float y) {
-	long xLeft = floorl(x);
-	long xRight = ceill(x);
-	long yBottom = floorl(y);
-	long yTop = ceill(y);
+glm::vec2 PerlinNoise::getRandomVec(long cornerX, long cornerY) {
+	long genSeed = getGenSeed(cornerX, cornerY);
+	srand(genSeed);
+	return glm::vec2(rand(), rand());
+}
 
-	bool leftEdge = xLeft % resolution == 0;
-	bool rightEdge = xRight % resolution == 0;
-	bool bottomEdge = yBottom % resolution == 0;
-	bool topEdge = yTop % resolution == 0;
-
-	return 1; //TODO - finish
+long PerlinNoise::getGenSeed(long cornerX, long cornerY) {
+	long genSeed = (long)(7507 * sin(cornerX - cornerY) + 1499 * sin(cornerX + cornerY)); //TODO - something better - no symmetry, random, etc...
+	genSeed += seed + 94207 * cornerX + 77, 813 * cornerY;
+	return genSeed;
 }
 
 void PerlinNoise::setSeed(long seed) {
