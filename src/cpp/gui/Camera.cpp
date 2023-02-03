@@ -6,22 +6,19 @@
 Camera::Camera(double x, double y, double z) : PhysicalObject(x,y,z) {
 }
 
-glm::vec3* Camera::getPosition() {
-	glm::vec3* pos = new glm::vec3(x, y, z);
-	return pos;
+glm::vec3 Camera::getPosition() {
+	return glm::vec3(x, y, z);
 }
-glm::vec3* Camera::getDirection() {
+glm::vec3 Camera::getDirection() {
 	//TODO - implement roll
-	return &direction;
+	return direction;
 }
-glm::mat4* Camera::getView() {
+glm::mat4 Camera::getView() {
 	//glm::mat4* view = new glm::mat4(1.0f);
 	//*view = glm::translate(*view, glm::vec3(0.0f, 0.0f, -3.0f));
 	//return view;
-	glm::mat4* view = new glm::mat4(1.0f);
-	glm::vec3 position = *getPosition();
-	* view = glm::lookAt(position, position + direction, up);
-	return view;
+	glm::vec3 position = getPosition();
+	return glm::lookAt(position, position + direction, up);
 }
 
 

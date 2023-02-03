@@ -51,7 +51,7 @@ void ChunkRenderer::initShaderProgram() {
 
 void ChunkRenderer::render() {
 
-	//TODO - REFACTOR
+	//TODO - REFACTOR - should actually cache these vectors somewhere.
 	std::vector<float>* vcs = chunk->getVoxelPositionsToRender();
 	int size = vcs->size();
 	float* voxelPositions = new float[size];
@@ -59,6 +59,7 @@ void ChunkRenderer::render() {
 		voxelPositions[i] = vcs->at(i);
 	}
 	vboPositionInstance.setBufferData(voxelPositions, vcs->size() * sizeof(float));
+	delete[] voxelPositions;
 
 	std::vector<float>* colors = chunk->getVoxelColorsToRender();
 	int colorsSize = colors->size();
@@ -67,6 +68,7 @@ void ChunkRenderer::render() {
 		voxelColors[i] = colors->at(i);
 	}
 	vboColorInstance.setBufferData(voxelColors, colors->size() * sizeof(float));
+	delete[] voxelColors;
 
 	shaderProgram.use();
 	vao.bind();

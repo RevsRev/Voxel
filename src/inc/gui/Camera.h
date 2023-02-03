@@ -37,9 +37,9 @@ public:
 
 	Camera(double x, double y, double z);
 
-	glm::vec3* getPosition();
-	glm::vec3* getDirection();
-	glm::mat4* getView();
+	glm::vec3 getPosition();
+	glm::vec3 getDirection();
+	glm::mat4 getView();
 
 	/*void moveRelativePos(glm::vec3 dir, float delTime);*/
 	void rotateCamera(float delPitch, float delYaw, float delRoll, float delTime);

@@ -102,7 +102,7 @@ void Window::start() {
 			glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 			glUniform3fv(lightDirLoc, 1, glm::value_ptr(lightDirection));
 			glUniform3fv(lightDirLoc, 1, &lightDirection[0]);
-			glUniform3fv(camPosLoc, 1, &(*window->getCamera()->getPosition())[0]);
+			glUniform3fv(camPosLoc, 1, &(window->getCamera()->getPosition())[0]);
 			//glUniform3fv(camPosLoc, 1, GL_FALSE, (*window->getCamera()->getPosition())[0]);
 
 			renderer->getShaderProgram()->use(); //have to use to bind the new values (I think..?)
@@ -133,8 +133,8 @@ void Window::start() {
 			ChunkRenderer* renderer = renderers.at(i);
 			int vLoc = renderer->getShaderProgram()->getUniformLocation("view");
 			int cpLoc = renderer->getShaderProgram()->getUniformLocation("cameraPosition");
-			glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(*window->camera->getView()));
-			glUniform3fv(cpLoc, 1, &(*window->getCamera()->getPosition())[0]);
+			glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(window->camera->getView()));
+			glUniform3fv(cpLoc, 1, &(window->getCamera()->getPosition())[0]);
 
 			renderers.at(i)->render();
 		}
