@@ -11,6 +11,9 @@ public:
 
 	PhysicalObject(double x0, double y, double z);
 
+	void doPhysics(double xForce, double yForce, double zForce, float delTime);
+	void updatePosition(float delTime);
+
 	double x;
 	double y;
 	double z;
