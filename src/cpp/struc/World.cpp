@@ -2,7 +2,14 @@
 #include <iostream>
 #include "gen/perlin/PerlinNoise.h"
 
+World* World::the() {
+	static World* theWindow = new World();
+	return theWindow;
+}
+
 World::World() {
+
+	initGenerator();
 
 	//TODO - extract elsewhere. Get rid of magic numbers
 	int chunkXRange = 20;
@@ -40,6 +47,15 @@ World::World() {
 	}
 }
 
+void World::initGenerator() {
+	unsigned int resolution = 30;
+	unsigned int height = 50;
+	PerlinMountain* mountain = new PerlinMountain(seed, resolution, height);
+	PerlinMountain* moreMountain = new PerlinMountain(seed, 78, 100);
+	generator.addPostProcessor(mountain);
+	generator.addPostProcessor(moreMountain);
+}
+
 Chunk World::createChunk(int xChunkCoord, int yChunkCoord) {
 
 	long seed = 5;
@@ -72,6 +88,9 @@ Chunk World::createChunk(int xChunkCoord, int yChunkCoord) {
 	return Chunk(voxels, x, y);
 }
 
+ChunkLoader* World::getChunkLoader() {
+	return &loader;
+}
 
 std::vector<float>* World::getVoxelPositionsToRender() {
 

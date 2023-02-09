@@ -45,4 +45,6 @@ public:
 
 	void setNeighbour(int neighbour, Chunk* chunk);
 
+	//TODO - Add a destructor (otherwise will get memory leaks when the chunk loader deletes these)
+
 };

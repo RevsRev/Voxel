@@ -17,6 +17,7 @@
 #include "io/CallBack.h"
 
 #include <phys/PhysicsEngine.h>
+#include <phys/Player.h>
 
 Window::Window(int width, int height) {
 	init(width, height);
@@ -76,7 +77,12 @@ void Window::start() {
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 	//test world
-	World* world = new World();
+	World* world = World::the();
+
+	//test player
+	Player* thePlayer = new Player(0,0,0);
+	window->addKeyboardListener(thePlayer);
+	window->addMouseListener(thePlayer);
 
 	glm::vec3 lightDirection = glm::normalize(glm::vec3{ 0.0f, 0.5f, 1.0f });
 
@@ -138,6 +144,8 @@ void Window::start() {
 
 			renderers.at(i)->render();
 		}
+		thePlayer->update(currentFrameTime.count());
+		//thePlayer->render();
 
 		glfwSwapBuffers(glfwWindow);
 		glfwPollEvents();

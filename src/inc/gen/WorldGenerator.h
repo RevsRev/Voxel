@@ -1,6 +1,5 @@
 #pragma once
 
-#include <struc/World.h>
 #include <vector>
 #include <gen/perlin/PerlinPostProcessor.h>
 

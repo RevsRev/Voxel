@@ -8,8 +8,9 @@
 #include <utility>
 #include <set>
 #include <cmath>
+#include <struc/World.h>
 
-class Player : public PhysicalObject, public GuiUpdatable{
+class Player : public PhysicalObject, public GuiUpdatable, public KeyBoardListener, public MouseListener{
 
 private:
 	Camera playerCam;
@@ -24,5 +25,9 @@ public:
 	Player(double x, double y, double z);
 
 	void update(float delTime);
+	void render(); //TODO - Extract to an interface?
+
+	void processKeyEvent(int key, int scancode, int action, int mods);
+	void processMouseEvent(double xPos, double yPos);
 
 };
