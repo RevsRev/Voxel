@@ -71,10 +71,10 @@ std::vector<float> getVerticesForVoxel(Voxel voxel, unsigned int i, unsigned int
 
 
 void Chunk::cacheVoxelData() {
-
 	if (!recache) {
 		return;
 	}
+	//std::cout << "Caching Voxel Data for chunk (x,y) = (" << chunkX << "," << chunkY << ")" << std::endl;
 
 	if (voxels == nullptr) {
 		std::cout << "Null chunk data" << std::endl;

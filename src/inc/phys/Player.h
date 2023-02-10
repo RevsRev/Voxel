@@ -9,11 +9,12 @@
 #include <set>
 #include <cmath>
 #include <struc/World.h>
+#include "glm/gtc/type_ptr.hpp"
 
 class Player : public PhysicalObject, public GuiUpdatable, public KeyBoardListener, public MouseListener{
 
 private:
-	Camera playerCam;
+	
 	std::map<std::pair<long,long>, ChunkRenderer*> renderers{};
 	unsigned char renderDistance = 10;
 
@@ -23,6 +24,9 @@ private:
 
 public:
 	Player(double x, double y, double z);
+
+	//TODO - Make private, improve composite physical objects?
+	Camera playerCam;
 
 	void update(float delTime);
 	void render(); //TODO - Extract to an interface?

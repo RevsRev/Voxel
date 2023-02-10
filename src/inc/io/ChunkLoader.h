@@ -19,6 +19,7 @@ private:
 	Chunk* generateChunk(long chunkX, long chunkY);
 	void recacheNeighbours(long chunkX, long chunkY);
 	void cacheNeighbour(int neighbour, Chunk* thisChunk, Chunk* thatChunk);
+	Chunk* getFromCache(std::pair<long, long> key);
 
 	WorldGenerator* generator;
 public:

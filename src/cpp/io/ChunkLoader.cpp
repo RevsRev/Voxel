@@ -20,7 +20,7 @@ Chunk* ChunkLoader::generateChunk(long chunkX, long chunkY) {
 		voxels[i] = new Voxel * [Chunk::CHUNK_SIZE];
 		for (int j = 0; j < Chunk::CHUNK_SIZE; j++) {
 			voxels[i][j] = new Voxel[Chunk::CHUNK_HEIGHT];
-			float height = generator->generate(chunkX * Chunk::CHUNK_SIZE, chunkY * Chunk::CHUNK_SIZE);
+			float height = generator->generate(chunkX * Chunk::CHUNK_SIZE + i, chunkY * Chunk::CHUNK_SIZE + j);
 			for (int k = 0; k < Chunk::CHUNK_HEIGHT; k++) {
 				Voxel vox = Voxel();
 				vox.type = ChunkType::DIRT;
@@ -29,7 +29,7 @@ Chunk* ChunkLoader::generateChunk(long chunkX, long chunkY) {
 			}
 		}
 	}
-	return new Chunk(voxels, chunkX, chunkY);
+	return new Chunk(voxels, Chunk::CHUNK_SIZE*chunkX, Chunk::CHUNK_SIZE*chunkY);
 }
 
 void ChunkLoader::saveToFile(Chunk* chunk) {
@@ -57,27 +57,43 @@ void ChunkLoader::removeChunk(long chunkX, long chunkY) {
 	delete chunk;
 }
 
+//TODO - This is a bit ugly... tidy up at some point.
 void ChunkLoader::recacheNeighbours(long chunkX, long chunkY) {
-	Chunk* thisChunk = chunkCache.at(std::pair<long, long>{chunkX, chunkY});
+	Chunk* thisChunk = getFromCache(std::pair<long, long>{chunkX, chunkY});
 
-	Chunk* leftNeighbour = chunkCache.at(std::pair<long, long>{chunkX - 1, chunkY});
-	Chunk* rightNeighbour = chunkCache.at(std::pair<long, long>{chunkX + 1, chunkY});
-	Chunk* bottomNeighbour = chunkCache.at(std::pair<long, long>{chunkX, chunkY - 1});
-	Chunk* topNeighbour = chunkCache.at(std::pair<long, long>{chunkX, chunkY + 1});
+	Chunk* leftNeighbour = getFromCache(std::pair<long, long>{chunkX - 1, chunkY});
+	Chunk* rightNeighbour = getFromCache(std::pair<long, long>{chunkX + 1, chunkY});
+	Chunk* bottomNeighbour = getFromCache(std::pair<long, long>{chunkX, chunkY - 1});
+	Chunk* topNeighbour = getFromCache(std::pair<long, long>{chunkX, chunkY + 1});
 
 	cacheNeighbour(Chunk::X_MINUS, thisChunk, leftNeighbour);
-	cacheNeighbour(Chunk::X_PLUS, leftNeighbour, thisChunk);
+	if (leftNeighbour != nullptr) {
+		cacheNeighbour(Chunk::X_PLUS, leftNeighbour, thisChunk);
+	}
 
 	cacheNeighbour(Chunk::X_PLUS, thisChunk, rightNeighbour);
-	cacheNeighbour(Chunk::X_MINUS, rightNeighbour, thisChunk);
+	if (rightNeighbour != nullptr) {
+		cacheNeighbour(Chunk::X_MINUS, rightNeighbour, thisChunk);
+	}
 
 	cacheNeighbour(Chunk::Y_MINUS, thisChunk, bottomNeighbour);
-	cacheNeighbour(Chunk::Y_PLUS, bottomNeighbour, thisChunk);
+	if (bottomNeighbour != nullptr) {
+		cacheNeighbour(Chunk::Y_PLUS, bottomNeighbour, thisChunk);
+	}
 
 	cacheNeighbour(Chunk::Y_PLUS, thisChunk, topNeighbour);
-	cacheNeighbour(Chunk::Y_MINUS, topNeighbour, thisChunk);
+	if (topNeighbour != nullptr) {
+		cacheNeighbour(Chunk::Y_MINUS, topNeighbour, thisChunk);
+	}
 }
 
 void ChunkLoader::cacheNeighbour(int neighbour, Chunk* thisChunk, Chunk* thatChunk) {
 	thisChunk->setNeighbour(neighbour, thatChunk);
+}
+
+Chunk* ChunkLoader::getFromCache(std::pair<long, long> key) {
+	if (chunkCache.find(key) == chunkCache.end()) {
+		return nullptr;
+	}
+	return chunkCache.at(key);
 }

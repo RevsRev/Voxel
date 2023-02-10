@@ -122,6 +122,8 @@ void Window::start() {
 	//TODO - extract away from the window class
 	PhysicsEngine* engine = PhysicsEngine::the();
 	engine->addObject(&(* window->camera));
+	engine->addObject(thePlayer);
+	engine->addObject(&thePlayer->playerCam);
 	engine->start();
 
 	std::chrono::system_clock::time_point renderStartTime = std::chrono::system_clock::now();;
@@ -142,10 +144,10 @@ void Window::start() {
 			glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(window->camera->getView()));
 			glUniform3fv(cpLoc, 1, &(window->getCamera()->getPosition())[0]);
 
-			renderers.at(i)->render();
+			//renderers.at(i)->render();
 		}
 		thePlayer->update(currentFrameTime.count());
-		//thePlayer->render();
+		thePlayer->render();
 
 		glfwSwapBuffers(glfwWindow);
 		glfwPollEvents();
