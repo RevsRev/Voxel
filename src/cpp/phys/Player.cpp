@@ -31,16 +31,17 @@ void Player::updateChunkRenderers() {
 	std::set<std::pair<long,long>> chunksToRender = getChunksToRender();
 
 	//Remove the ones that don't need rendering anymore
-	for (auto it = renderers.begin(); it != renderers.end(); it++) {
+	for (auto it = renderers.begin(); it != renderers.end();) {
 		auto finder = chunksToRender.find(it->first);
+		long chunkX = (*it).first.first;
+		long chunkY = (*it).first.second;
+		it++; //Increment here so that we don't delete the element the iterator points at
 		if (finder == chunksToRender.end()) {
-			long chunkX = (*it).first.first;
-			long chunkY = (*it).first.second;
 			ChunkRenderer* renderer = renderers.at(std::pair<long, long>{chunkX, chunkY});
 			//TODO - Fix
-			//renderers.erase(std::pair<long, long>{chunkX, chunkY});
-			//delete renderer;
-			//theWorld->getChunkLoader()->removeChunk(chunkX, chunkY);
+			renderers.erase(std::pair<long, long>{chunkX, chunkY});
+			delete renderer;
+			theWorld->getChunkLoader()->removeChunk(chunkX, chunkY);
 		}
 	}
 

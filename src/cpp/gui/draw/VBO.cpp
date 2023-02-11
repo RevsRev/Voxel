@@ -14,6 +14,13 @@ VBO::VBO(float* vertexData, unsigned int vertexDataLength) {
 	setBufferData(vertexData, vertexDataLength);
 }
 
+VBO::~VBO() {
+	//delete[] vertexData;
+	for (int i = 0; i < attributes.size(); i++) {
+		delete attributes.at(i);
+	}
+}
+
 void VBO::setBufferData(float* vertexData, unsigned int vertexDataLength) {
 	this->vertexData = vertexData;
 	this->vertexDataLength = vertexDataLength;

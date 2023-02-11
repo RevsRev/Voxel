@@ -91,16 +91,3 @@ Chunk World::createChunk(int xChunkCoord, int yChunkCoord) {
 ChunkLoader* World::getChunkLoader() {
 	return &loader;
 }
-
-std::vector<float>* World::getVoxelPositionsToRender() {
-
-	std::vector<float>* voxelPositions = new std::vector<float>();
-
-	for (int i = 0; i < 20; i++) {
-		for (int j = 0; j < 20; j++) {
-			std::vector<float>* positions = chunks[i][j].getVoxelPositionsToRender();
-			voxelPositions->insert(voxelPositions->end(), positions->begin(), positions->end());
-		}
-	}
-	return voxelPositions;
-}

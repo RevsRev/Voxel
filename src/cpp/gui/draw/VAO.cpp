@@ -6,6 +6,11 @@
 VAO::VAO() {
 	glGenVertexArrays(1, &vao);
 }
+VAO::~VAO() {
+	for (int i = 0; i < vbos.size(); i++) {
+		//delete vbos.at(i);
+	}
+}
 
 void VAO::bind() {
 	glBindVertexArray(vao);

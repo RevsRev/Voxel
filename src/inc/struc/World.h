@@ -27,6 +27,5 @@ public:
 	const static unsigned int WORLD_WIDTH = 1;
 	const static unsigned int WORLD_DEPTH = 1;
 
-	std::vector<float>* getVoxelPositionsToRender();
 	ChunkLoader* getChunkLoader();
 };

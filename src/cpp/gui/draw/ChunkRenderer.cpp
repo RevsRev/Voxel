@@ -5,6 +5,9 @@ ChunkRenderer::ChunkRenderer(Chunk* chunk) {
 	init();
 }
 
+ChunkRenderer::~ChunkRenderer() {
+}
+
 void ChunkRenderer::init() {
 	initVao();
 	initShaderProgram();
@@ -51,28 +54,15 @@ void ChunkRenderer::initShaderProgram() {
 
 void ChunkRenderer::render() {
 
-	//TODO - REFACTOR - should actually cache these vectors somewhere.
-	std::vector<float>* vcs = chunk->getVoxelPositionsToRender();
-	int size = vcs->size();
-	float* voxelPositions = new float[size];
-	for (int i = 0; i < size; i++) {
-		voxelPositions[i] = vcs->at(i);
-	}
-	vboPositionInstance.setBufferData(voxelPositions, vcs->size() * sizeof(float));
-	delete[] voxelPositions;
+	std::pair<long, float*> positions = chunk->getVoxelPositionsToRender();
+	vboPositionInstance.setBufferData(positions.second, positions.first * sizeof(float));
 
-	std::vector<float>* colors = chunk->getVoxelColorsToRender();
-	int colorsSize = colors->size();
-	float* voxelColors = new float[colorsSize];
-	for (int i = 0; i < colorsSize; i++) {
-		voxelColors[i] = colors->at(i);
-	}
-	vboColorInstance.setBufferData(voxelColors, colors->size() * sizeof(float));
-	delete[] voxelColors;
+	std::pair<long, float*> colors = chunk->getVoxelColorsToRender();
+	vboColorInstance.setBufferData(colors.second, colors.first * sizeof(float));
 
 	shaderProgram.use();
 	vao.bind();
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, vcs->size() / 3);
+	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, positions.first / 3);
 }
 
 ShaderProgram* ChunkRenderer::getShaderProgram() {

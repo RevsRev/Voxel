@@ -20,8 +20,10 @@ private:
 	bool isVoxelOnSurface(unsigned int i, unsigned int j, unsigned int k);
 
 	bool recache = true;
-	std::vector<float>* cachedSurface;
-	std::vector<float>* cachedVoxelColors;
+	float* cachedSurface = NULL;
+	long cachedSurfaceSize;
+	float* cachedVoxelColors = NULL;
+	long cachedColorsSize;
 
 	void cacheVoxelData();
 
@@ -29,6 +31,7 @@ public:
 
 	Chunk();
 	Chunk(Voxel*** voxels, int chunkX, int chunkY);
+	~Chunk();
 
 	const static unsigned int CHUNK_SIZE = 16;
 	const static unsigned int CHUNK_HEIGHT = 256;
@@ -40,8 +43,8 @@ public:
 	const static unsigned int Y_PLUS = 4;
 	const static unsigned int Y_MINUS = 5;
 
-	std::vector<float>* getVoxelPositionsToRender();
-	std::vector<float>* getVoxelColorsToRender();
+	std::pair<long, float*> getVoxelPositionsToRender();
+	std::pair<long, float*> getVoxelColorsToRender();
 
 	void setNeighbour(int neighbour, Chunk* chunk);
 

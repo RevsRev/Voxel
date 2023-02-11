@@ -12,7 +12,7 @@ private:
 	GLenum dataType;
 	GLboolean normalized;
 	GLsizei stride;
-	void* offset;
+	void* offset = NULL;
 
 	//other properties
 	unsigned int divisor = 0;
@@ -20,6 +20,7 @@ private:
 public:
 	Attribute();
 	Attribute(unsigned int location, unsigned int length, GLenum dataType, GLboolean normalized, GLsizei stride, void* offset);
+	~Attribute();
 	void createVertexAttribPointer();
 	void enable();
 	void setDivisor(unsigned int divisor);

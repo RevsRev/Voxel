@@ -14,6 +14,10 @@ Attribute::Attribute(unsigned int location, unsigned int length, GLenum dataType
 	this->offset = offset;
 }
 
+Attribute::~Attribute() {
+	//delete offset;
+}
+
 void Attribute::createVertexAttribPointer() {
 	glVertexAttribPointer(location, length, dataType, normalized, stride, offset);
 }

@@ -11,6 +11,7 @@ private:
 public:
 
 	VAO();
+	~VAO();
 	void bind();
 	void addVBO(VBO* vbo);
 };

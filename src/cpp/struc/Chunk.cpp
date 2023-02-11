@@ -97,23 +97,41 @@ void Chunk::cacheVoxelData() {
 					vecAllColors->push_back(color->x);
 					vecAllColors->push_back(color->y);
 					vecAllColors->push_back(color->z);
+					delete color;
 				}
 			}
 		}
 	}
 
-	cachedSurface = vecAllVertices;
-	cachedVoxelColors = vecAllColors;
+	delete[] cachedSurface;
+	int size = vecAllVertices->size();
+	cachedSurface = new float[size];
+	for (int i = 0; i < size; i++) {
+		cachedSurface[i] = vecAllVertices->at(i);
+	}
+	delete vecAllVertices;
+	cachedSurfaceSize = size;
+
+
+	delete[] cachedVoxelColors;
+	size = vecAllColors->size();
+	cachedVoxelColors = new float[size];
+	for (int i = 0; i < size; i++) {
+		cachedVoxelColors[i] = vecAllColors->at(i);
+	}
+	delete vecAllColors;
+	cachedColorsSize = size;
+
 	recache = false;
 }
 
-std::vector<float>* Chunk::getVoxelPositionsToRender() {
+std::pair<long, float*> Chunk::getVoxelPositionsToRender() {
 	cacheVoxelData();
-	return cachedSurface;
+	return std::pair<long,float*>{cachedSurfaceSize, cachedSurface};
 }
-std::vector<float>* Chunk::getVoxelColorsToRender() {
+std::pair<long, float*> Chunk::getVoxelColorsToRender() {
 	cacheVoxelData();
-	return cachedVoxelColors;
+	return std::pair<long, float*>{cachedColorsSize, cachedVoxelColors};
 }
 
 bool Chunk::isVoxelOnSurface(unsigned int i, unsigned int j, unsigned int k) {
@@ -224,6 +242,18 @@ Chunk::Chunk(Voxel*** voxels, int chunkX, int chunkY) {
 	this->voxels = voxels;
 	this->chunkX = chunkX;
 	this->chunkY = chunkY;
+}
+Chunk::~Chunk() {
+	for (int i = 0; i < CHUNK_SIZE; i++) {
+		Voxel** yzSlize = voxels[i];
+		for (int j = 0; j < CHUNK_SIZE; j++) {
+			delete[] yzSlize[j];
+		}
+		delete[] yzSlize;
+	}
+	delete[] voxels;
+	delete[] cachedSurface;
+	delete[] cachedVoxelColors;
 }
 
 void Chunk::setNeighbour(int neighbour, Chunk* chunk) {

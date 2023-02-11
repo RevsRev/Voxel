@@ -7,7 +7,7 @@ class VBO {
 private:
 	unsigned int vbo;
 
-	float* vertexData;
+	float* vertexData = NULL;
 	unsigned int vertexDataLength;
 
 	std::vector<Attribute*> attributes;
@@ -15,6 +15,8 @@ private:
 public:
 	VBO();
 	VBO(float* vertexData, unsigned int vertexDataLength);
+	~VBO();
+
 	void bind();
 	void setBufferData(float* vertexData, unsigned int vertexDataLength);
 	void addAttribute(Attribute* attribute);
