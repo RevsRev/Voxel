@@ -37,7 +37,13 @@ void ChunkLoader::saveToFile(Chunk* chunk) {
 }
 
 Chunk* ChunkLoader::getChunk(long chunkX, long chunkY) {
+
 	Chunk* chunk;
+	chunk = getFromCache(std::pair<long, long>{chunkX, chunkY});
+	if (chunk != nullptr) {
+		return chunk;
+	}
+
 	if (chunkFileExists(chunkX, chunkY)) {
 		chunk = loadFromFile(chunkX, chunkY);
 	}

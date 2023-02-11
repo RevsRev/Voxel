@@ -26,10 +26,10 @@ void PhysicsEngine::physicsLoop() {
 	while (state = RUNNING) {
 		for (auto it = objects.begin(); it != objects.end(); it++) {
 			PhysicalObject* obj = *it;
-			obj->updatePosition(10);
+			obj->updatePosition(1);
 		}
 		//TODO - sort out frame rate properly
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 
 	engineThread = nullptr;

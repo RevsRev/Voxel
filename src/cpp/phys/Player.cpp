@@ -5,7 +5,24 @@ Player::Player(double x, double y, double z) : PhysicalObject(x, y, z), playerCa
 }
 
 void Player::update(float delTime) {
-	updateChunkRenderers();
+
+	bool updateRenderers = updateChunkPosition();
+	if (updateRenderers) {
+		updateChunkRenderers();
+	}
+}
+
+//TODO - Replace with player's position, not the cameras
+bool Player::updateChunkPosition() {
+	long newChunkX = playerCam.x / Chunk::CHUNK_SIZE;
+	long newChunkY = playerCam.y / Chunk::CHUNK_SIZE;
+
+	if (newChunkX == chunkX && newChunkY == chunkY) {
+		return false;
+	}
+	chunkX = newChunkX;
+	chunkY = newChunkY;
+	return true;
 }
 
 void Player::updateChunkRenderers() {

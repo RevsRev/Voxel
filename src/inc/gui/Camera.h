@@ -17,9 +17,9 @@ private:
 	
 	//todo - these need fixing
 	float movementSpeed = 1.0f;
-	float pitchSpeed = 1.0f;
-	float yawSpeed = 1.0f;
-	float rollSpeed = 1.0f;
+	float pitchSpeed = 10.0f;
+	float yawSpeed = 10.0f;
+	float rollSpeed = 10.0f;
 	
 	float pitch = 0.0f;
 	float yaw = 0.0f;

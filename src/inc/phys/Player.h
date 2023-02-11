@@ -17,8 +17,10 @@ private:
 	
 	std::map<std::pair<long,long>, ChunkRenderer*> renderers{};
 	unsigned char renderDistance = 10;
+	long chunkX;
+	long chunkY;
 
-private:
+	bool updateChunkPosition();
 	void updateChunkRenderers();
 	std::set<std::pair<long,long>> getChunksToRender();
 

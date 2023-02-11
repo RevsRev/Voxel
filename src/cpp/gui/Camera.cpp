@@ -99,12 +99,12 @@ void Camera::processMouseEvent(double xPos, double yPos) {
 	float yoffset = lastY - yPos;
 	lastX = xPos;
 	lastY = yPos;
-	float sensitivity = 0.1f;
+	float sensitivity = 10.0f; //TODO - remove at some point, as this doesn't do anything!
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 	float delYaw = xoffset;
 	float delPitch = yoffset;
 		
 	//TODO - remove the time component?
-	rotateCamera(delPitch, delYaw, 0.0f, 0.1f);
+	rotateCamera(delPitch, delYaw, 0.0f, 0.01f);
 }
