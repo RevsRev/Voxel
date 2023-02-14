@@ -4,20 +4,31 @@
 
 
 VAO::VAO() {
-	glGenVertexArrays(1, &vao);
 }
 VAO::~VAO() {
+	bind();
 	for (int i = 0; i < vbos.size(); i++) {
-		//delete vbos.at(i);
+		delete vbos.at(i);
 	}
+
+	if (initialized) {
+		glDeleteVertexArrays(1, &vao);
+	}
+}
+
+void VAO::init() {
+	glGenVertexArrays(1, &vao);
+	initialized = true;
 }
 
 void VAO::bind() {
 	glBindVertexArray(vao);
 }
 
-void VAO::addVBO(VBO* vbo) {
-	vbos.push_back(vbo);
+void VAO::addVBO(VBO* vbo) 
+{	
+	VBO* thisVbo = new VBO(*vbo);
+	vbos.push_back(thisVbo);
 	bind();
-	vbo->bind();
+	thisVbo->bind();
 }

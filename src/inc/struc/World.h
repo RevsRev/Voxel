@@ -14,12 +14,10 @@ private:
 	ChunkLoader loader{ &generator };
 
 	void initGenerator();
-	Chunk createChunk(int xChunkCoord, int yChunkCoord);
 
 	World();
 
 public:
-	Chunk** chunks; //TODO - move back to private
 
 	static World* the();
 

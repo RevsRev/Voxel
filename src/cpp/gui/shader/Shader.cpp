@@ -32,9 +32,7 @@ Shader* Shader::fromFile(const char* filePath, unsigned int shaderType) {
 	catch (std::ifstream::failure e) {
 		std::cout << "ERROR::FILE::FILE_NOT_SUCCESSFULLY_READ" << std::endl;
 	}
-	const char* shaderCStr = shaderCode.c_str();
-
-	return new Shader(shaderCStr, shaderType);
+	return new Shader(shaderCode.c_str(), shaderType);
 }
 
 unsigned int Shader::getId() {

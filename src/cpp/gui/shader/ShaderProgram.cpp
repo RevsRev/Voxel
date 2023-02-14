@@ -3,12 +3,24 @@
 ShaderProgram::ShaderProgram() {
 }
 
+ShaderProgram::~ShaderProgram() {
+	for (int i = shaders.size() -1; i > 0; i--) {
+		delete shaders.at(i);
+	}
+
+	if (compiled)
+	{
+		glDeleteProgram(id);
+	}
+}
+
 void ShaderProgram::addShader(Shader* shader) {
-	shaders.push_back(shader);
+	shaders.push_back(new Shader(*shader));
 }
 
 void ShaderProgram::compile() {
 	id = glCreateProgram();
+	compiled = true;
 	for (int i = 0; i < shaders.size(); i++) {
 		glAttachShader(id, shaders.at(i)->getId());
 	}

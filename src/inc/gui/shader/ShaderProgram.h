@@ -7,9 +7,11 @@
 class ShaderProgram {
 private:
 	unsigned int id;
+	bool compiled = false;
 	std::vector<Shader*> shaders{};
 public:
 	ShaderProgram();
+	~ShaderProgram();
 	unsigned int getId();
 	void addShader(Shader* shader);
 	void compile();

@@ -3,15 +3,11 @@
 #include <glad\glad.h>
 
 VBO::VBO() {
-	//just for object initialization
-	//TODO - Find a better solution at some point
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 }
 
 VBO::VBO(float* vertexData, unsigned int vertexDataLength) {
-	glGenBuffers(1, &vbo);
-	setBufferData(vertexData, vertexDataLength);
+	this->vertexData = vertexData;
+	this->vertexDataLength = vertexDataLength;
 }
 
 VBO::~VBO() {
@@ -19,6 +15,15 @@ VBO::~VBO() {
 	for (int i = 0; i < attributes.size(); i++) {
 		delete attributes.at(i);
 	}
+
+	if (initialized) {
+		glDeleteBuffers(1, &vbo);
+	}
+}
+
+void VBO::init() {
+	glGenBuffers(1, &vbo);
+	initialized = true;
 }
 
 void VBO::setBufferData(float* vertexData, unsigned int vertexDataLength) {
@@ -33,8 +38,9 @@ void VBO::bind() {
 }
 
 void VBO::addAttribute(Attribute* attribute) {
-	attributes.push_back(attribute);
+	Attribute* thisAttribute = new Attribute(*attribute);
+	attributes.push_back(thisAttribute);
 	bind();
-	attribute->createVertexAttribPointer();
-	attribute->enable();
+	thisAttribute->createVertexAttribPointer();
+	thisAttribute->enable();
 }
