@@ -22,7 +22,9 @@ void VAO::init() {
 }
 
 void VAO::bind() {
-	glBindVertexArray(vao);
+	if (initialized) {
+		glBindVertexArray(vao);
+	}
 }
 
 void VAO::addVBO(VBO* vbo) 

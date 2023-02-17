@@ -2,6 +2,13 @@
 
 ChunkLoader::ChunkLoader(WorldGenerator* generator) {
 	this->generator = generator;
+	initChunkLocks();
+}
+ChunkLoader::~ChunkLoader() {
+	/*destroyChunkLocks();
+	destroyChunks();*/
+
+	//TODO - Not too bothered at the moment because this is only destroyed on application exit at the moment.
 }
 
 bool ChunkLoader::chunkFileExists(long chunkX, long chunkY) {
@@ -37,10 +44,13 @@ void ChunkLoader::saveToFile(Chunk* chunk) {
 }
 
 Chunk* ChunkLoader::getChunk(long chunkX, long chunkY) {
+	std::mutex* chunkLock = getChunkLock(chunkX, chunkY);
+	chunkLock->lock();
 
 	Chunk* chunk;
 	chunk = getFromCache(std::pair<long, long>{chunkX, chunkY});
 	if (chunk != nullptr) {
+		chunkLock->unlock();
 		return chunk;
 	}
 
@@ -53,14 +63,22 @@ Chunk* ChunkLoader::getChunk(long chunkX, long chunkY) {
 	}
 	chunkCache.insert({ std::pair<long, long>{chunkX, chunkY}, chunk });
 	recacheNeighbours(chunkX, chunkY);
+
+	chunkLock->unlock();
+
 	return chunk;
 }
 
 void ChunkLoader::removeChunk(long chunkX, long chunkY) {
+	std::mutex* chunkLock = getChunkLock(chunkX, chunkY);
+	chunkLock->lock();
+
 	Chunk* chunk = chunkCache.at(std::pair<long, long>{chunkX, chunkY});
 	saveToFile(chunk);
 	chunkCache.erase(std::pair<long, long>{chunkX, chunkY});
 	delete chunk;
+
+	chunkLock->unlock();
 }
 
 //TODO - This is a bit ugly... tidy up at some point.
@@ -102,4 +120,34 @@ Chunk* ChunkLoader::getFromCache(std::pair<long, long> key) {
 		return nullptr;
 	}
 	return chunkCache.at(key);
+}
+
+void ChunkLoader::initChunkLocks() {
+	for (int i = 0; i < chunkLocksSize; i++) {
+		for (int j = 0; j < chunkLocksSize; j++) {
+			std::pair<long, long> key{ i,j };
+			std::mutex* chunkLock = new std::mutex();
+			chunkLocks.insert(std::pair < std::pair<long, long>, std::mutex*> { key, chunkLock });
+		}
+	}
+}
+
+//TODO - Make this more elegant (what happens if a lock is acquired while we delete? Although this scenario is unrealistic...)
+void ChunkLoader::destroyChunkLocks() {
+	for (int i = 0; i < chunkLocksSize; i++) {
+		for (int j = 0; j < chunkLocksSize; j++) {
+			std::pair<long, long> key{ i,j };
+			std::mutex* chunkLock = chunkLocks.at(key);
+			chunkLocks.erase(key);
+			delete chunkLock;
+		}
+	}
+}
+
+std::mutex* ChunkLoader::getChunkLock(long chunkX, long chunkY) {
+	long keyX = (chunkX % chunkLocksSize + chunkLocksSize) % chunkLocksSize;
+	long keyY = (chunkY % chunkLocksSize + chunkLocksSize) % chunkLocksSize;
+
+	std::pair<long, long> key{keyX, keyY };
+	return chunkLocks.at(key);
 }

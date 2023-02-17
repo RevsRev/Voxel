@@ -10,19 +10,31 @@
 #include <cmath>
 #include <struc/World.h>
 #include "glm/gtc/type_ptr.hpp"
+#include <future>
+
 
 class Player : public PhysicalObject, public GuiUpdatable, public KeyBoardListener, public MouseListener{
 
 private:
 	
 	std::map<std::pair<long,long>, ChunkRenderer*> renderers{};
-	unsigned char renderDistance = 10;
+	unsigned char renderDistance = 30;
 	long chunkX;
 	long chunkY;
+
+	bool firstChunkCache = true;
+	double lastChunkCacheX;
+	double lastChunkCacheY;
+	double lastChunkCacheZ;
 
 	bool updateChunkPosition();
 	void updateChunkRenderers();
 	std::set<std::pair<long,long>> getChunksToRender();
+	std::set<std::pair<long,long>> getChunksToDelete();
+
+	std::future<void>* deleteChunkAsync(long chunkX, long chunkY);
+	std::future<Chunk*>* getChunkAsync(long chunkX, long chunkY);
+	Chunk* getChunk(long chunkX, long chunkY);
 
 public:
 	Player(double x, double y, double z);

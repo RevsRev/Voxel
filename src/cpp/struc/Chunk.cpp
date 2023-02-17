@@ -244,6 +244,11 @@ Chunk::Chunk(Voxel*** voxels, int chunkX, int chunkY) {
 	this->chunkY = chunkY;
 }
 Chunk::~Chunk() {
+	deleteVoxelArray();
+	delete[] cachedSurface;
+	delete[] cachedVoxelColors;
+}
+void Chunk::deleteVoxelArray() {
 	for (int i = 0; i < CHUNK_SIZE; i++) {
 		Voxel** yzSlize = voxels[i];
 		for (int j = 0; j < CHUNK_SIZE; j++) {
@@ -252,8 +257,6 @@ Chunk::~Chunk() {
 		delete[] yzSlize;
 	}
 	delete[] voxels;
-	delete[] cachedSurface;
-	delete[] cachedVoxelColors;
 }
 
 void Chunk::setNeighbour(int neighbour, Chunk* chunk) {

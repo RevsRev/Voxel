@@ -32,6 +32,7 @@ public:
 	Chunk();
 	Chunk(Voxel*** voxels, int chunkX, int chunkY);
 	~Chunk();
+	void Chunk::deleteVoxelArray();
 
 	const static unsigned int CHUNK_SIZE = 16;
 	const static unsigned int CHUNK_HEIGHT = 256;
