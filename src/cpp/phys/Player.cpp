@@ -46,24 +46,6 @@ void Player::updateChunkRenderers() {
 		}
 	}
 
-	//auto it = renderers.begin();
-	//while (it != renderers.end()) {
-	//	auto finder = chunksToDelete.find(it->first);
-	//	long chunkX = (*it).first.first;
-	//	long chunkY = (*it).first.second;
-	//	ChunkRenderer* renderer = (*it).second;
-	//	it++; //Increment here so that we don't delete the element the iterator points at
-	//	if (finder == chunksToDelete.end()) {
-	//		deleteChunkAsync(chunkX, chunkY);
-	//		renderers.erase(std::pair<long, long>{chunkX, chunkY});
-	//		delete renderer;
-	//		//deleteChunkRenderer(chunkX, chunkY);
-	//	}
-	//	else {
-	//		//it++;
-	//	}
-	//}
-
 	//Load the chunks that need rendering
 	std::set<std::pair<long, long>> chunksToRender = getChunksToRender();
 	for (auto it = chunksToRender.begin(); it != chunksToRender.end(); it++) {
@@ -79,25 +61,23 @@ void Player::updateChunkRenderers() {
 	//crate the new renderers
 	for (auto it = newChunks.begin(); it != newChunks.end(); it++) {
 		std::pair<long, long> key = (*it).first;
-		//std::future<Chunk*>* result = (*it).second;
-		//Chunk* newChunk = result->get();
-		//ChunkRenderer* renderer = new ChunkRenderer(newChunk);
-		//renderers.insert({ key, renderer });
 		renderers.insert({ key, new ChunkRenderer(getChunk(key.first, key.second)) });
-		//delete result;
 	}
+
+	lastChunkCacheX = playerCam.x;
+	lastChunkCacheY = playerCam.y;
 }
 
-std::future<Chunk*>* Player::getChunkAsync(long chunkX, long chunkY) {
-	return &std::async(std::launch::async, &ChunkLoader::getChunk, World::the()->getChunkLoader(), chunkX, chunkY);
+std::future<Chunk*>* Player::getChunkAsync(long &chunkX, long &chunkY) {
+	return &std::async(std::launch::async, &ChunkLoader::getChunk, World::the()->getChunkLoader(), std::ref(chunkX), std::ref(chunkY));
 }
-Chunk* Player::getChunk(long chunkX, long chunkY) {
+Chunk* Player::getChunk(long &chunkX, long &chunkY) {
 	World* theWorld = World::the();
 	return theWorld->getChunkLoader()->getChunk(chunkX, chunkY);
 }
 
-std::future<void>* Player::deleteChunkAsync(long chunkX, long chunkY) {
-	return &std::async(std::launch::async, &ChunkLoader::removeChunk, World::the()->getChunkLoader(), chunkX, chunkY);
+std::future<void>* Player::deleteChunkAsync(long &chunkX, long &chunkY) {
+	return &std::async(std::launch::async, &ChunkLoader::removeChunk, World::the()->getChunkLoader(), std::ref(chunkX), std::ref(chunkY));
 }
 
 //TODO - Replace with the palyer's position and update the player
@@ -117,25 +97,22 @@ std::set<std::pair<long, long>> Player::getChunksToRender() {
 				}
 			}
 		}
-		lastChunkCacheX = x;
-		lastChunkCacheY = y;
 		firstChunkCache = false;
 		return retval;
 	}
 
 	long lastChunkX = floorl(lastChunkCacheX / Chunk::CHUNK_SIZE);
 	long lastChunkY = floorl(lastChunkCacheY / Chunk::Chunk::CHUNK_SIZE);
+	long squaredRadWithSlack = (renderDistance - 2) * (renderDistance - 2);
 
 	for (int i = chunkX - renderDistance; i <= chunkX + renderDistance; i++) {
 		for (int j = chunkY - renderDistance; j <= chunkY + renderDistance; j++) {
 			if (((i - chunkX) * (i - chunkX) + (j - chunkY) * (j - chunkY) <= squaredRad)
-				&& ((i - lastChunkX) * (i - lastChunkX) + (j - lastChunkY) * (j - lastChunkY) > squaredRad)) {
+				&& ((i - lastChunkX) * (i - lastChunkX) + (j - lastChunkY) * (j - lastChunkY) > squaredRadWithSlack)) {
 				retval.insert(std::pair<int, int>{i,j});
 			}
 		}
 	}
-	lastChunkCacheX = x;
-	lastChunkCacheY = y;
 	return retval;
 }
 
@@ -149,11 +126,14 @@ std::set<std::pair<long, long>> Player::getChunksToDelete() {
 	long lastChunkX = floorl(lastChunkCacheX / Chunk::CHUNK_SIZE);
 	long lastChunkY = floorl(lastChunkCacheY / Chunk::Chunk::CHUNK_SIZE);
 	long squaredRad = renderDistance * renderDistance;
+	long squaredRadWithSlack = (renderDistance + 2) * (renderDistance + 2);
+	long checkDistance = std::ceill(std::fmax(std::abs(chunkX - lastChunkX) + renderDistance + 1, std::abs(chunkY - lastChunkY) + renderDistance + 1));
+	long squredCheckDistance = checkDistance * checkDistance;
 
-	for (int i = chunkX - renderDistance; i <= chunkX + renderDistance; i++) {
-		for (int j = chunkY - renderDistance; j <= chunkY + renderDistance; j++) {
+	for (int i = chunkX - checkDistance; i <= chunkX + checkDistance; i++) {
+		for (int j = chunkY - checkDistance; j <= chunkY + checkDistance; j++) {
 			if (((i - chunkX) * (i - chunkX) + (j - chunkY) * (j - chunkY) > squaredRad)
-				&& ((i - lastChunkX) * (i - lastChunkX) + (j - lastChunkY) * (j - lastChunkY) <= squaredRad)) {
+				&& ((i - lastChunkX) * (i - lastChunkX) + (j - lastChunkY) * (j - lastChunkY) <= squaredRadWithSlack)) {
 				retval.insert(std::pair<int, int>{i, j});
 			}
 		}

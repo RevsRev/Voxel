@@ -2,6 +2,9 @@
 
 #include <vector>
 #include <gen/perlin/PerlinPostProcessor.h>
+#include <struc/Voxel.h>
+#include <struc/Chunk.h>
+#include <cmath>
 
 class WorldGenerator {
 private:
@@ -12,5 +15,6 @@ public:
 	WorldGenerator(long seed);
 
 	void addPostProcessor(PerlinPostProcessor* postProcessor);
-	float generate(long x, long y);
+	Voxel* generate(long &x, long &y);
+	std::vector<std::pair<long, long>>* generateSurfaceSeeds(long &x, long &y);
 };

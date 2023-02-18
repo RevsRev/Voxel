@@ -84,24 +84,43 @@ void Chunk::cacheVoxelData() {
 	std::vector<float>* vecAllVertices = new std::vector<float>();
 	std::vector<float>* vecAllColors = new std::vector<float>();
 
-	for (int i = 0; i < CHUNK_SIZE; i++) {
-		for (int j = 0; j < CHUNK_SIZE; j++) {
-			for (int k = 0; k < CHUNK_HEIGHT; k++) {
-				if (voxels[i][j][k].active
-					&& isVoxelOnSurface(i,j,k)) {
-					vecAllVertices->push_back((float)(chunkX + i));
-					vecAllVertices->push_back((float)(chunkY + j));
-					vecAllVertices->push_back((float)k);
+	//TODO - Refactor
+	if (lazyInited) {
+		for (auto it = cachedVoxelSurface->begin(); it != cachedVoxelSurface->end(); it++) {
+			Triple<long, long, long> key = (*it).first;
+			Voxel vox = (*it).second;
+			vecAllVertices->push_back((float)key.first);
+			vecAllVertices->push_back((float)key.second);
+			vecAllVertices->push_back((float)key.third);
 
-					glm::vec3* color = ChunkType::getColor(voxels[i][j][k].type);
-					vecAllColors->push_back(color->x);
-					vecAllColors->push_back(color->y);
-					vecAllColors->push_back(color->z);
-					delete color;
+			glm::vec3* color = ChunkType::getColor(vox.type);
+			vecAllColors->push_back(color->x);
+			vecAllColors->push_back(color->y);
+			vecAllColors->push_back(color->z);
+			delete color;
+		}
+	}
+	else {
+		for (int i = 0; i < CHUNK_SIZE; i++) {
+			for (int j = 0; j < CHUNK_SIZE; j++) {
+				for (int k = 0; k < CHUNK_HEIGHT; k++) {
+					if (voxels[i][j][k].active
+						&& isVoxelOnSurface(i, j, k)) {
+						vecAllVertices->push_back((float)(chunkX + i));
+						vecAllVertices->push_back((float)(chunkY + j));
+						vecAllVertices->push_back((float)k);
+
+						glm::vec3* color = ChunkType::getColor(voxels[i][j][k].type);
+						vecAllColors->push_back(color->x);
+						vecAllColors->push_back(color->y);
+						vecAllColors->push_back(color->z);
+						delete color;
+					}
 				}
 			}
 		}
 	}
+	
 
 	delete[] cachedSurface;
 	int size = vecAllVertices->size();
@@ -242,9 +261,26 @@ Chunk::Chunk(Voxel*** voxels, int chunkX, int chunkY) {
 	this->voxels = voxels;
 	this->chunkX = chunkX;
 	this->chunkY = chunkY;
+
+	lazyInited = false;
+}
+Chunk::Chunk(std::map<Triple<long, long, long>, Voxel>* surface, int chunkX, int chunkY) {
+	this->cachedVoxelSurface = surface;
+	this->chunkX = chunkX;
+	this->chunkY = chunkY;
+
+	lazyInited = true;
+
+	cacheVoxelData();
 }
 Chunk::~Chunk() {
-	deleteVoxelArray();
+	if (lazyInited) {
+		delete cachedVoxelSurface;
+	}
+	else {
+		deleteVoxelArray();
+	}
+	
 	delete[] cachedSurface;
 	delete[] cachedVoxelColors;
 }

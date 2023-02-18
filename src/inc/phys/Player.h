@@ -18,7 +18,7 @@ class Player : public PhysicalObject, public GuiUpdatable, public KeyBoardListen
 private:
 	
 	std::map<std::pair<long,long>, ChunkRenderer*> renderers{};
-	unsigned char renderDistance = 30;
+	unsigned char renderDistance = 50;
 	long chunkX;
 	long chunkY;
 
@@ -32,9 +32,9 @@ private:
 	std::set<std::pair<long,long>> getChunksToRender();
 	std::set<std::pair<long,long>> getChunksToDelete();
 
-	std::future<void>* deleteChunkAsync(long chunkX, long chunkY);
-	std::future<Chunk*>* getChunkAsync(long chunkX, long chunkY);
-	Chunk* getChunk(long chunkX, long chunkY);
+	std::future<void>* deleteChunkAsync(long &chunkX, long &chunkY);
+	std::future<Chunk*>* getChunkAsync(long &chunkX, long &chunkY);
+	Chunk* getChunk(long &chunkX, long &chunkY);
 
 public:
 	Player(double x, double y, double z);

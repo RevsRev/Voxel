@@ -11,14 +11,14 @@ private:
 	unsigned int resolution;
 	unsigned int height;
 
-	float interpolate(float w, float a, float b);
+	float interpolate(float &w, float &a, float &b);
 
-	glm::vec2 getRandomVec(long cornerX, long cornerY);
-	long getGenSeed(long cornerX, long cornerY);
+	glm::vec2 getRandomVec(long &cornerX, long &cornerY);
+	long getGenSeed(long &cornerX, long &cornerY);
 
 public:
 	PerlinNoise();
 	PerlinNoise(long seed, unsigned int resolution, unsigned int height);
 	void setSeed(long seed);
-	float compute(float x, float y);
+	float compute(long &x, long &y);
 };

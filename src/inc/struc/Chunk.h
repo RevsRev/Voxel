@@ -3,12 +3,17 @@
 #include <vector>
 #include <glm/vec3.hpp>
 #include <phys/ChunkTypes.h>
+#include <map>
+#include <util/Triple.h>
 
 extern float cubeVerticesWithNormalAndTex[];
 
 class Chunk {
 private:
+
+	bool lazyInited = true;
 	Voxel*** voxels;
+	std::map<Triple<long, long, long>, Voxel>* cachedVoxelSurface;
 
 	int chunkX;
 	int chunkY;
@@ -31,6 +36,7 @@ public:
 
 	Chunk();
 	Chunk(Voxel*** voxels, int chunkX, int chunkY);
+	Chunk(std::map<Triple<long, long, long>, Voxel>* surface, int chunkX, int chunkY);
 	~Chunk();
 	void Chunk::deleteVoxelArray();
 
