@@ -39,78 +39,120 @@ Chunk* ChunkLoader::generateChunkLazy(long &chunkX, long &chunkY) {
 	long chunkXCoord = chunkX * Chunk::CHUNK_SIZE;
 	long chunkYCoord = chunkY * Chunk::CHUNK_SIZE;
 
-	std::map<std::pair<long, long>, std::vector<std::pair<long, long>>*> surfaceSeeds{};
+	std::map<std::pair<long, long>, unsigned char*> columnBitFlags{};
 	for (int i = 0; i <= Chunk::CHUNK_SIZE + 1; i++) { //include the sides of the adjacent chunks
 		for (int j = 0; j <= Chunk::CHUNK_SIZE + 1; j++) {
 			std::pair<long, long> key{ chunkXCoord + i - 1, chunkYCoord + j - 1};
-			surfaceSeeds.insert({ key, generator->generateSurfaceSeeds(key.first, key.second) });
+			columnBitFlags.insert({ key, generator->generateChunkColumnBitFlags(key.first, key.second) });
 		}
 	}
 
 	std::map<Triple<long, long, long>, Voxel>* cachedVoxelSurface = new std::map<Triple<long, long, long>, Voxel>();
 	for (int i = 0; i < Chunk::CHUNK_SIZE; i++) {
 		for (int j = 0; j < Chunk::CHUNK_SIZE; j++) {
-			std::vector<std::pair<long, long>>* mySeeds = surfaceSeeds.at(std::pair<long, long>{ chunkXCoord + i, chunkYCoord + j });
-			std::vector<std::pair<long, long>>* xMinusSeeds = surfaceSeeds.at(std::pair<long, long>{ chunkXCoord + i - 1, chunkYCoord + j });
-			std::vector<std::pair<long, long>>* xPlusSeeds = surfaceSeeds.at(std::pair<long, long>{ chunkXCoord + i + 1, chunkYCoord + j });
-			std::vector<std::pair<long, long>>* yMinusSeeds = surfaceSeeds.at(std::pair<long, long>{ chunkXCoord + i, chunkYCoord + j - 1 });
-			std::vector<std::pair<long, long>>* yPlusSeeds = surfaceSeeds.at(std::pair<long, long>{ chunkXCoord + i, chunkYCoord + j + 1 });
+			unsigned char* mySeeds = columnBitFlags.at(std::pair<long, long>{ chunkXCoord + i, chunkYCoord + j });
+			unsigned char* xMinusBitFlags = columnBitFlags.at(std::pair<long, long>{ chunkXCoord + i - 1, chunkYCoord + j });
+			unsigned char* xPlusBitFlags = columnBitFlags.at(std::pair<long, long>{ chunkXCoord + i + 1, chunkYCoord + j });
+			unsigned char* yMinusBitFlags = columnBitFlags.at(std::pair<long, long>{ chunkXCoord + i, chunkYCoord + j - 1 });
+			unsigned char* yPlusBitFlags = columnBitFlags.at(std::pair<long, long>{ chunkXCoord + i, chunkYCoord + j + 1 });
 
 			long x = chunkXCoord + i;
 			long y = chunkYCoord + j;
 
-			addToSurface(cachedVoxelSurface, x, y, mySeeds, mySeeds);
-			addToSurface(cachedVoxelSurface, x, y, mySeeds, xMinusSeeds);
-			addToSurface(cachedVoxelSurface, x, y, mySeeds, xPlusSeeds);
-			addToSurface(cachedVoxelSurface, x, y, mySeeds, yMinusSeeds);
-			addToSurface(cachedVoxelSurface, x, y, mySeeds, yPlusSeeds);
+			addToSurface(cachedVoxelSurface, x, y, mySeeds, xMinusBitFlags, xPlusBitFlags, yMinusBitFlags, yPlusBitFlags);
 		}
 	}
 
-	for (auto it = surfaceSeeds.begin(); it != surfaceSeeds.end(); it++) {
-		delete (*it).second;
+	int charSize = 8 * sizeof(unsigned char);
+	int bitFlagsSize = Chunk::CHUNK_HEIGHT / charSize;
+	auto it = columnBitFlags.begin();
+	while (it != columnBitFlags.end()) {
+		unsigned char* bitFlag = (*it).second;
+		it++;
+		delete[] bitFlag;
 	}
 
 	return new Chunk(cachedVoxelSurface, chunkX, chunkY);
 }
 
-void ChunkLoader::addToSurface(std::map<Triple<long, long, long>, Voxel>*& cachedVoxelSurface, long& colX, long& colY, std::vector<std::pair<long, long>>*& colBeingConsidered, std::vector<std::pair<long, long>>*& neighbour) {
 
-	std::vector<long> zCoordsToAdd{};
-	for (int i = 0; i < neighbour->size(); i++) {
-		long neighbourFirstAir = neighbour->at(i).first;
-		long neighbourSecondAir = neighbour->at(i).first;
-		
-		for (int j = neighbourFirstAir; j <= neighbourSecondAir; j++) {
-			zCoordsToAdd.push_back(j);
+//TODO - This isn't quite right. Should also optimise
+void ChunkLoader::addToSurface(std::map<Triple<long, long, long>, Voxel>*& cachedVoxelSurface, long& colX, long& colY,
+	unsigned char* thisColBitFlags,
+	unsigned char* xMinusBitFlags,
+	unsigned char* xPlusBitFlags,
+	unsigned char* yMinusBitFlags,
+	unsigned char* yPlusBitFlags) {
+
+	int charSize = 8*sizeof(unsigned char);
+	int bitFlagsSize = Chunk::CHUNK_HEIGHT / charSize;
+	//unsigned char* surfaceBitFlags = new unsigned char[bitFlagsSize];
+	for (int i = 0; i < bitFlagsSize; i++) {
+		unsigned char thisColBitFlagsLShifted = thisColBitFlags[i] << 1;
+		unsigned char thisColBitFlagsRShifted = thisColBitFlags[i] >> 1;
+		if (i != bitFlagsSize -1 && ((thisColBitFlags[i + 1] & 128) == 128)) {
+			thisColBitFlagsLShifted += 1;
 		}
-	}
+		if (i != 0 && ((thisColBitFlags[i - 1] & 1) == 1)) {
+			thisColBitFlagsRShifted += 128;
+		}
 
-	if (colBeingConsidered != neighbour) //because I'm lazy and don't want to write another method right now.
-	{
-		for (int i = 0; i < colBeingConsidered->size(); i++) {
-			long firstAir = colBeingConsidered->at(i).first;
-			long secondAir = colBeingConsidered->at(i).second;
+		//std::cout << "lShift, char, rShift = " << (int)thisColBitFlagsLShifted << " , " << (int)thisColBitFlags[i] << " , " << (int)thisColBitFlagsRShifted << std::endl;
 
-			for (int j = firstAir; j <= secondAir; j++) {
-				for (int k = zCoordsToAdd.size() - 1; k >= 0; k--) {
-					if (zCoordsToAdd.at(k) == j) {
-						zCoordsToAdd.erase(zCoordsToAdd.begin() + k);
-					}
-				}
+		//The left shifted and right shifted bit flags can be XORd with the bit flags to detect changes. This then gives us all the edges from within this bitflag.
+		unsigned char surfaceBitFlags = ((thisColBitFlagsLShifted ^ thisColBitFlags[i]) | (thisColBitFlagsRShifted ^ thisColBitFlags[i]) & thisColBitFlags[i]);
+
+		//Now saturate with the edges inherited from our neighbours.
+		surfaceBitFlags = surfaceBitFlags | (thisColBitFlags[i] & (~xMinusBitFlags[i] | ~xPlusBitFlags[i] | ~yMinusBitFlags[i] | ~yPlusBitFlags[i]));
+
+		for (int j = 0; j < charSize; j++) {
+			unsigned char twoToTheJ = 1 << j;
+			if ((surfaceBitFlags & twoToTheJ) == twoToTheJ) {
+				Triple<long, long, long> key{ colX, colY, (i+1)*charSize - j}; //bottom of each char corresponds to the lower z coordinate
+				Voxel vox{};
+				vox.active = true;
+				vox.type = ChunkType::DIRT; //TODO - This needs to be extracted elsewhere.
+				cachedVoxelSurface->insert({ key, vox });
 			}
 		}
 	}
-
-	for (int i = 0; i < zCoordsToAdd.size(); i++) {
-		Triple<long, long, long> key{ colX, colY, zCoordsToAdd.at(i)};
-		Voxel vox{};
-		vox.active = true;
-		vox.type = ChunkType::DIRT; //TODO - This needs to be extracted elsewhere.
-		cachedVoxelSurface->insert({ key,vox });
-	}
-	
 }
+
+
+	//std::vector<long> zCoordsToAdd{};
+	//for (int i = 0; i < neighbour->size(); i++) {
+	//	long neighbourFirstAir = neighbour->at(i).first;
+	//	long neighbourSecondAir = neighbour->at(i).first;
+	//	
+	//	for (int j = neighbourFirstAir; j <= neighbourSecondAir; j++) {
+	//		zCoordsToAdd.push_back(j);
+	//	}
+	//}
+
+	//if (colBeingConsidered != neighbour) //because I'm lazy and don't want to write another method right now.
+	//{
+	//	for (int i = 0; i < colBeingConsidered->size(); i++) {
+	//		long firstAir = colBeingConsidered->at(i).first;
+	//		long secondAir = colBeingConsidered->at(i).second;
+
+	//		for (int j = firstAir; j <= secondAir; j++) {
+	//			for (int k = zCoordsToAdd.size() - 1; k >= 0; k--) {
+	//				if (zCoordsToAdd.at(k) == j) {
+	//					zCoordsToAdd.erase(zCoordsToAdd.begin() + k);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
+	//for (int i = 0; i < zCoordsToAdd.size(); i++) {
+	//	Triple<long, long, long> key{ colX, colY, zCoordsToAdd.at(i)};
+	//	Voxel vox{};
+	//	vox.active = true;
+	//	vox.type = ChunkType::DIRT; //TODO - This needs to be extracted elsewhere.
+	//	cachedVoxelSurface->insert({ key,vox });
+	//}
+//}
 
 	//std::set<long> zCoordsToAdd{};
 

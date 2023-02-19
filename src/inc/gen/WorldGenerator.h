@@ -16,5 +16,5 @@ public:
 
 	void addPostProcessor(PerlinPostProcessor* postProcessor);
 	Voxel* generate(long &x, long &y);
-	std::vector<std::pair<long, long>>* generateSurfaceSeeds(long &x, long &y);
+	unsigned char* generateChunkColumnBitFlags(long &x, long &y);
 };

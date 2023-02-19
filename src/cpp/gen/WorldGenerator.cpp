@@ -23,18 +23,37 @@ Voxel* WorldGenerator::generate(long &x, long &y) {
 	return retval;
 }
 
-std::vector<std::pair<long, long>>* WorldGenerator::generateSurfaceSeeds(long &x, long &y) {
+unsigned char* WorldGenerator::generateChunkColumnBitFlags(long &x, long &y) {
 	float height = 0.0f;
 	for (int i = 0; i < postProcessors.size(); i++) {
 		height += postProcessors.at(i)->compute(x, y);
 	}
 	int iHeight = std::floorl(height);
 
-	std::vector<std::pair<long, long>>* retval = new std::vector<std::pair<long, long>>();
+	int charSize = 8*sizeof(unsigned char);
+	int bitFlagsSize = Chunk::CHUNK_HEIGHT / charSize;
+	unsigned char* bitFlags = new unsigned char[bitFlagsSize];
+	for (int i = 0; i < bitFlagsSize; i++) {
+		int startOfChar = charSize * i; //0,8,16,...
+		int endOfChar = charSize * (i + 1) - 1; //7,15,23,...
+		if (endOfChar <= iHeight) {
+			bitFlags[i] = 255;
+		}
+		else if (startOfChar > iHeight) {
+			bitFlags[i] = 0;
+		}
+		else {
+			int diff = iHeight - startOfChar;
+			unsigned char bitFlag = 255 << (7 - diff);
+			bitFlags[i] = bitFlag;
+		}
+	}
+	return bitFlags;
+	/*std::vector<std::pair<long, long>>* retval = new std::vector<std::pair<long, long>>();
 	if (iHeight <= Chunk::CHUNK_HEIGHT) {
 		retval->push_back(std::pair<long, long>{iHeight, Chunk::CHUNK_HEIGHT});
 	}
-	return retval;
+	return retval;*/
 }
 
 

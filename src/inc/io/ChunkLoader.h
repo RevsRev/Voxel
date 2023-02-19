@@ -29,7 +29,12 @@ private:
 	void cacheNeighbour(int &neighbour, Chunk* &thisChunk, Chunk* &thatChunk);*/
 	Chunk* getFromCache(std::pair<long, long> &key);
 
-	void addToSurface(std::map<Triple<long,long,long>,Voxel>* &cachedVoxelSurface, long &colX, long &colY, std::vector<std::pair<long, long>>* &colBeingConsidered, std::vector<std::pair<long, long>>* &neighbour);
+	void addToSurface(std::map<Triple<long, long, long>, Voxel>*& cachedVoxelSurface, long& colX, long& colY,
+		unsigned char* thisColBitFlags,
+		unsigned char* xMinusBitFlags,
+		unsigned char* xPlusBitFlags,
+		unsigned char* yMinusBitFlags,
+		unsigned char* yPlusBitFlags);
 
 	void initChunkLocks();
 	void destroyChunkLocks();

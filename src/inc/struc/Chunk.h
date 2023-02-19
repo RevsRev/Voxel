@@ -53,6 +53,8 @@ public:
 	std::pair<long, float*> getVoxelPositionsToRender();
 	std::pair<long, float*> getVoxelColorsToRender();
 
+	void setCachedInfos(float* cachedSurface, long cachedSurfaceSize, float* cachedVoxelColors, long cachedColorsSize);
+
 	void setNeighbour(int neighbour, Chunk* chunk);
 
 	//TODO - Add a destructor (otherwise will get memory leaks when the chunk loader deletes these)

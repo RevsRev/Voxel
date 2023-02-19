@@ -254,6 +254,14 @@ bool Chunk::isVoxelOnSurface(unsigned int i, unsigned int j, unsigned int k) {
 	return false;
 }
 
+void Chunk::setCachedInfos(float* cachedSurface, long cachedSurfaceSize, float* cachedVoxelColors, long cachedColorsSize) {
+	this->cachedColorsSize = cachedColorsSize;
+	this->cachedVoxelColors = cachedVoxelColors;
+	this->cachedSurfaceSize = cachedSurfaceSize;
+	this->cachedSurface = cachedSurface;
+	this->recache = false;
+}
+
 //default constructor used when initizlizing arrays!
 Chunk::Chunk() {
 }
