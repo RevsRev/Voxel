@@ -76,7 +76,6 @@ Chunk* ChunkLoader::generateChunkLazy(long &chunkX, long &chunkY) {
 }
 
 
-//TODO - This isn't quite right. Should also optimise
 void ChunkLoader::addToSurface(std::map<Triple<long, long, long>, Voxel>*& cachedVoxelSurface, long& colX, long& colY,
 	unsigned char* thisColBitFlags,
 	unsigned char* xMinusBitFlags,
@@ -86,7 +85,6 @@ void ChunkLoader::addToSurface(std::map<Triple<long, long, long>, Voxel>*& cache
 
 	int charSize = 8*sizeof(unsigned char);
 	int bitFlagsSize = Chunk::CHUNK_HEIGHT / charSize;
-	//unsigned char* surfaceBitFlags = new unsigned char[bitFlagsSize];
 	for (int i = 0; i < bitFlagsSize; i++) {
 		unsigned char thisColBitFlagsLShifted = thisColBitFlags[i] << 1;
 		unsigned char thisColBitFlagsRShifted = thisColBitFlags[i] >> 1;
@@ -118,77 +116,6 @@ void ChunkLoader::addToSurface(std::map<Triple<long, long, long>, Voxel>*& cache
 	}
 }
 
-
-	//std::vector<long> zCoordsToAdd{};
-	//for (int i = 0; i < neighbour->size(); i++) {
-	//	long neighbourFirstAir = neighbour->at(i).first;
-	//	long neighbourSecondAir = neighbour->at(i).first;
-	//	
-	//	for (int j = neighbourFirstAir; j <= neighbourSecondAir; j++) {
-	//		zCoordsToAdd.push_back(j);
-	//	}
-	//}
-
-	//if (colBeingConsidered != neighbour) //because I'm lazy and don't want to write another method right now.
-	//{
-	//	for (int i = 0; i < colBeingConsidered->size(); i++) {
-	//		long firstAir = colBeingConsidered->at(i).first;
-	//		long secondAir = colBeingConsidered->at(i).second;
-
-	//		for (int j = firstAir; j <= secondAir; j++) {
-	//			for (int k = zCoordsToAdd.size() - 1; k >= 0; k--) {
-	//				if (zCoordsToAdd.at(k) == j) {
-	//					zCoordsToAdd.erase(zCoordsToAdd.begin() + k);
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-
-	//for (int i = 0; i < zCoordsToAdd.size(); i++) {
-	//	Triple<long, long, long> key{ colX, colY, zCoordsToAdd.at(i)};
-	//	Voxel vox{};
-	//	vox.active = true;
-	//	vox.type = ChunkType::DIRT; //TODO - This needs to be extracted elsewhere.
-	//	cachedVoxelSurface->insert({ key,vox });
-	//}
-//}
-
-	//std::set<long> zCoordsToAdd{};
-
-	//for (int i = 0; i < neighbour->size(); i++) {
-	//	long neighbourFirstAir = neighbour->at(i).first;
-	//	long neighbourSecondAir = neighbour->at(i).first;
-	//	
-	//	for (int j = neighbourFirstAir; j <= neighbourSecondAir; j++) {
-	//		zCoordsToAdd.insert(j);
-	//	}
-	//}
-
-	//if (colBeingConsidered != neighbour) //because I'm lazy and don't want to write another method right now.
-	//{
-	//	for (int i = 0; i < colBeingConsidered->size(); i++) {
-	//		long firstAir = colBeingConsidered->at(i).first;
-	//		long secondAir = colBeingConsidered->at(i).second;
-
-	//		for (int j = firstAir; j <= secondAir; j++) {
-	//			auto find = zCoordsToAdd.find(j);
-	//			if (find != zCoordsToAdd.end()) {
-	//				zCoordsToAdd.erase(j);
-	//			}
-	//		}
-	//	}
-	//}
-	//
-	//for (auto it = zCoordsToAdd.begin(); it != zCoordsToAdd.end(); it++) {
-	//	Triple<long,long,long> key{ colX, colY, (*it) };
-	//	Voxel vox{};
-	//	vox.active = true;
-	//	vox.type = ChunkType::DIRT; //TODO - This needs to be extracted elsewhere.
-	//	cachedVoxelSurface->insert({ key,vox });
-	//}
-//}
-
 void ChunkLoader::saveToFile(Chunk*& chunk) {
 	//TODO - Implement
 }
@@ -208,12 +135,10 @@ Chunk* ChunkLoader::getChunk(long& chunkX, long& chunkY) {
 		chunk = loadFromFile(chunkX, chunkY);
 	}
 	else {
-		//chunk = generateChunk(chunkX, chunkY);
 		chunk = generateChunkLazy(chunkX, chunkY);
 		saveToFile(chunk);
 	}
 	chunkCache.insert({ std::pair<long, long>{chunkX, chunkY}, chunk });
-	//recacheNeighbours(chunkX, chunkY);
 
 	chunkLock->unlock();
 
@@ -232,39 +157,6 @@ void ChunkLoader::removeChunk(long& chunkX, long& chunkY) {
 	chunkLock->unlock();
 }
 
-//TODO - This is a bit ugly... tidy up at some point.
-//void ChunkLoader::recacheNeighbours(long& chunkX, long& chunkY) {
-//	Chunk* thisChunk = getFromCache(std::pair<long, long>{chunkX, chunkY});
-//
-//	Chunk* leftNeighbour = getFromCache(std::pair<long, long>{chunkX - 1, chunkY});
-//	Chunk* rightNeighbour = getFromCache(std::pair<long, long>{chunkX + 1, chunkY});
-//	Chunk* bottomNeighbour = getFromCache(std::pair<long, long>{chunkX, chunkY - 1});
-//	Chunk* topNeighbour = getFromCache(std::pair<long, long>{chunkX, chunkY + 1});
-//
-//	cacheNeighbour(Chunk::X_MINUS, thisChunk, leftNeighbour);
-//	if (leftNeighbour != nullptr) {
-//		cacheNeighbour(Chunk::X_PLUS, leftNeighbour, thisChunk);
-//	}
-//
-//	cacheNeighbour(Chunk::X_PLUS, thisChunk, rightNeighbour);
-//	if (rightNeighbour != nullptr) {
-//		cacheNeighbour(Chunk::X_MINUS, rightNeighbour, thisChunk);
-//	}
-//
-//	cacheNeighbour(Chunk::Y_MINUS, thisChunk, bottomNeighbour);
-//	if (bottomNeighbour != nullptr) {
-//		cacheNeighbour(Chunk::Y_PLUS, bottomNeighbour, thisChunk);
-//	}
-//
-//	cacheNeighbour(Chunk::Y_PLUS, thisChunk, topNeighbour);
-//	if (topNeighbour != nullptr) {
-//		cacheNeighbour(Chunk::Y_MINUS, topNeighbour, thisChunk);
-//	}
-//}
-//
-//void ChunkLoader::cacheNeighbour(int& neighbour, Chunk*& thisChunk, Chunk*& thatChunk) {
-//	thisChunk->setNeighbour(neighbour, thatChunk);
-//}
 
 Chunk* ChunkLoader::getFromCache(std::pair<long, long>& key) {
 	if (chunkCache.find(key) == chunkCache.end()) {

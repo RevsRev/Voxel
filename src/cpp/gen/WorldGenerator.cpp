@@ -49,21 +49,11 @@ unsigned char* WorldGenerator::generateChunkColumnBitFlags(long &x, long &y) {
 		}
 	}
 	return bitFlags;
-	/*std::vector<std::pair<long, long>>* retval = new std::vector<std::pair<long, long>>();
-	if (iHeight <= Chunk::CHUNK_HEIGHT) {
-		retval->push_back(std::pair<long, long>{iHeight, Chunk::CHUNK_HEIGHT});
-	}
-	return retval;*/
 }
 
 
 
 void WorldGenerator::addPostProcessor(PerlinPostProcessor* postProcessor) {
-	/*PerlinPostProcessor* newProcessor;
-	*newProcessor = *postProcessor;
-	newProcessor->setSeed(seed);
-	postProcessors.push_back(newProcessor);*/
-	//TODO - Figure out how to copy??? Maybe...
 	postProcessor->setSeed(seed);
 	postProcessors.push_back(postProcessor);
 }

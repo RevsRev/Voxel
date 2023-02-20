@@ -9,7 +9,6 @@ PerlinNoise::PerlinNoise() {
 
 }
 
-//TODO - Might need to make this threadsafe at some point?
 float PerlinNoise::compute(long &x, long &y) {
 	float scaledX = (float)x / resolution;
 	float scaledY = (float)y / resolution;
@@ -42,13 +41,13 @@ float PerlinNoise::compute(long &x, long &y) {
 	float firstInterpolate = interpolate(sx, n0, n1);
 	float secondInterpolate = interpolate(sx, n2, n3);
 	return height*(0.1 + interpolate(sy, firstInterpolate, secondInterpolate));
-	//return height * (0.1 + interpolate(sx, interpolate(sy, n0, n2), interpolate(sy, n1, n3)));
 }
 
 float PerlinNoise::interpolate(float &w, float &a, float &b) {
 	return w * (b - a) + a;
 }
 
+//TODO - Might need to make this threadsafe at some point?
 glm::vec2 PerlinNoise::getRandomVec(long &cornerX, long &cornerY) {
 	long genSeed = getGenSeed(cornerX, cornerY);
 	srand(genSeed);

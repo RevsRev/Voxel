@@ -49,7 +49,6 @@ Camera* Window::getCamera() {
 	return camera;
 }
 
-//TODO - Thread safety + extract window size.
 Window* Window::the() {
 	static Window* theWindow = new Window(800, 600);
 	return theWindow;
@@ -103,24 +102,6 @@ void Window::start() {
 	std::chrono::system_clock::time_point renderEndTime = std::chrono::system_clock::now();;
 	std::chrono::duration<double> currentFrameTime = renderEndTime - renderStartTime;
 
-	//Test for chunk loader memory leak
-	//ChunkLoader* loader = new ChunkLoader(new WorldGenerator(10));
-	//for (int k = 0; k < 10; k++) {
-	//	for (int i = 0; i < 50; i++) {
-	//		for (int j = 0; j < 50; j++) {
-	//			//loader->getChunk(i, j);
-	//			ChunkRenderer* renderer = new ChunkRenderer(loader->getChunk(i, j));
-	//			delete renderer;
-	//		}
-	//	}
-	//	for (int i = 0; i < 50; i++) {
-	//		for (int j = 0; j < 50; j++) {
-	//			loader->removeChunk(i, j);
-	//		}
-	//	}
-	//}
-	
-	
 	std::cout << "Beginning render loop" << std::endl;
 
 	while (!glfwWindowShouldClose(glfwWindow)) {

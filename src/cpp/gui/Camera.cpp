@@ -14,20 +14,10 @@ glm::vec3 Camera::getDirection() {
 	return direction;
 }
 glm::mat4 Camera::getView() {
-	//glm::mat4* view = new glm::mat4(1.0f);
-	//*view = glm::translate(*view, glm::vec3(0.0f, 0.0f, -3.0f));
-	//return view;
 	glm::vec3 position = getPosition();
 	return glm::lookAt(position, position + direction, up);
 }
 
-
-//void Camera::moveRelativePos(glm::vec3 dir, float delTime) {
-//	glm::vec3 moveDir = dir.x * direction + dir.z * up + dir.y * glm::cross(direction, up);
-//	moveDir = glm::normalize(moveDir);
-//
-//	position += delTime * movementSpeed * moveDir;
-//}
 void Camera::rotateCamera(float delPitch, float delYaw, float delRoll, float delTime) {
 	float root = sqrt(delPitch * delPitch + delYaw * delYaw + delRoll * delRoll); //normalize the vals
 

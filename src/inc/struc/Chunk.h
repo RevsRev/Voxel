@@ -17,10 +17,6 @@ private:
 
 	int chunkX;
 	int chunkY;
-
-	Chunk* neighbours[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-
-	//TODO - Chunk coordinates
 	
 	bool isVoxelOnSurface(unsigned int i, unsigned int j, unsigned int k);
 
@@ -43,20 +39,8 @@ public:
 	const static unsigned int CHUNK_SIZE = 16;
 	const static unsigned int CHUNK_HEIGHT = 256;
 
-	const static unsigned int TOP = 0;
-	const static unsigned int BOTTOM = 1;
-	const static unsigned int X_PLUS = 2;
-	const static unsigned int X_MINUS = 3;
-	const static unsigned int Y_PLUS = 4;
-	const static unsigned int Y_MINUS = 5;
-
 	std::pair<long, float*> getVoxelPositionsToRender();
 	std::pair<long, float*> getVoxelColorsToRender();
 
 	void setCachedInfos(float* cachedSurface, long cachedSurfaceSize, float* cachedVoxelColors, long cachedColorsSize);
-
-	void setNeighbour(int neighbour, Chunk* chunk);
-
-	//TODO - Add a destructor (otherwise will get memory leaks when the chunk loader deletes these)
-
 };

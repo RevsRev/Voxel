@@ -52,7 +52,7 @@ std::vector<float> getVerticesForVoxel(Voxel voxel, unsigned int i, unsigned int
 	std::vector<float> retval{};
 	int size = sizeof(cubeVerticesWithNormalAndTex) / sizeof(float);
 	for (int index = 0; index < size; index++) {
-		switch (index % 8) { //TODO - Really need to extract this.
+		switch (index % 8) { //TODO - Really should to extract this.
 		case 0:
 			retval.push_back(i + cubeVerticesWithNormalAndTex[index]);
 			break;
@@ -69,6 +69,10 @@ std::vector<float> getVerticesForVoxel(Voxel voxel, unsigned int i, unsigned int
 	return retval;
 }
 
+//TODO - Implement properly
+bool Chunk::isVoxelOnSurface(unsigned int i, unsigned int j, unsigned int k) {
+	return true;
+}
 
 void Chunk::cacheVoxelData() {
 	if (!recache) {
@@ -153,107 +157,6 @@ std::pair<long, float*> Chunk::getVoxelColorsToRender() {
 	return std::pair<long, float*>{cachedColorsSize, cachedVoxelColors};
 }
 
-bool Chunk::isVoxelOnSurface(unsigned int i, unsigned int j, unsigned int k) {
-	if (i == 0) {
-		if (neighbours[X_MINUS] == nullptr) {
-			return true;
-		}
-		else {
-			if (!neighbours[X_MINUS]->voxels[Chunk::CHUNK_SIZE-1][j][k].active) {
-				return true;
-			}
-		}
-	}
-	else {
-		if (!voxels[i-1][j][k].active) {
-			return true;
-		}
-	}
-
-	if (i == Chunk::CHUNK_SIZE-1) {
-		if (neighbours[X_PLUS] == nullptr) {
-			return true;
-		}
-		else {
-			if (!neighbours[X_PLUS]->voxels[0][j][k].active) {
-				return true;
-			}
-		}
-	}
-	else {
-		if (!voxels[i+1][j][k].active) {
-			return true;
-		}
-	}
-
-	if (j == 0) {
-		if (neighbours[Y_MINUS] == nullptr) {
-			return true;
-		}
-		else {
-			if (!neighbours[Y_MINUS]->voxels[i][Chunk::CHUNK_SIZE - 1][k].active) {
-				return true;
-			}
-		}
-	}
-	else {
-		if (!voxels[i][j-1][k].active) {
-			return true;
-		}
-	}
-
-	if (j == Chunk::CHUNK_SIZE - 1) {
-		if (neighbours[Y_PLUS] == nullptr) {
-			return true;
-		}
-		else {
-			if (!neighbours[Y_PLUS]->voxels[i][0][k].active) {
-				return true;
-			}
-		}
-	}
-	else {
-		if (!voxels[i][j+1][k].active) {
-			return true;
-		}
-	}
-
-	if (k == 0) {
-		if (neighbours[BOTTOM] == nullptr) {
-			return true;
-		}
-		else {
-			if (!neighbours[BOTTOM]->voxels[i][j][Chunk::CHUNK_HEIGHT-1].active) {
-				return true;
-			}
-		}
-	}
-	else {
-		if (!voxels[i][j][k-1].active) {
-			return true;
-		}
-	}
-
-	if (k == Chunk::CHUNK_HEIGHT - 1) {
-		if (neighbours[TOP] == nullptr) {
-			return true;
-		}
-		else {
-			if (!neighbours[TOP]->voxels[i][j][0].active) {
-				return true;
-			}
-		}
-	}
-	else {
-		if (!voxels[i][j][k+1].active) {
-			return true;
-		}
-	}
-
-	//TODO - This method is gross. Need to refactor.
-	return false;
-}
-
 void Chunk::setCachedInfos(float* cachedSurface, long cachedSurfaceSize, float* cachedVoxelColors, long cachedColorsSize) {
 	this->cachedColorsSize = cachedColorsSize;
 	this->cachedVoxelColors = cachedVoxelColors;
@@ -301,8 +204,4 @@ void Chunk::deleteVoxelArray() {
 		delete[] yzSlize;
 	}
 	delete[] voxels;
-}
-
-void Chunk::setNeighbour(int neighbour, Chunk* chunk) {
-	neighbours[neighbour] = chunk;
 }
