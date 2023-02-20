@@ -18,7 +18,7 @@ class Player : public PhysicalObject, public GuiUpdatable, public KeyBoardListen
 private:
 	
 	std::map<std::pair<long,long>, ChunkRenderer*> renderers{};
-	unsigned char renderDistance = 50;
+	unsigned char renderDistance = 10;
 	long chunkX;
 	long chunkY;
 

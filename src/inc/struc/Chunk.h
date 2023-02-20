@@ -26,7 +26,12 @@ private:
 	float* cachedVoxelColors = NULL;
 	long cachedColorsSize;
 
+	Voxel* getNeighbouringVoxel(int iNeighbour, int jNeighbour, int kNeighbour);
+
 	void cacheVoxelData();
+	std::pair<std::vector<float>*, std::vector<float>*> cacheSurfaceAndColors();
+	std::pair<std::vector<float>*, std::vector<float>*> cacheSurfaceAndColorsLazy();
+	std::pair<std::vector<float>*, std::vector<float>*> cacheSurfaceAndColorsIndustrious();
 
 public:
 
@@ -36,7 +41,7 @@ public:
 	~Chunk();
 	void Chunk::deleteVoxelArray();
 
-	const static unsigned int CHUNK_SIZE = 16;
+	const static unsigned int CHUNK_SIZE = 64;
 	const static unsigned int CHUNK_HEIGHT = 256;
 
 	std::pair<long, float*> getVoxelPositionsToRender();

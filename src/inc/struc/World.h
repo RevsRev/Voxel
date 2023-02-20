@@ -26,4 +26,5 @@ public:
 	const static unsigned int WORLD_DEPTH = 1;
 
 	ChunkLoader* getChunkLoader();
+	WorldGenerator* getWorldGenerator();
 };

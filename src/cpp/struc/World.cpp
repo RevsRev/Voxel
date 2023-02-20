@@ -28,3 +28,7 @@ void World::initGenerator() {
 ChunkLoader* World::getChunkLoader() {
 	return &loader;
 }
+
+WorldGenerator* World::getWorldGenerator() {
+	return &generator;
+}
