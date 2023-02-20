@@ -60,3 +60,6 @@
 17	908	6986320947856287	CMakeFiles/Voxel.dir/src/cpp/gui/window/Window.cpp.obj	94c49f3607eb848b
 37	1067	6986320949441584	CMakeFiles/Voxel.dir/src/cpp/phys/Player.cpp.obj	51f2208bd4215654
 1068	1236	6986320950879791	Voxel.exe	dcc0b27a147a210d
+3	925	6986390310987525	CMakeFiles/Voxel.dir/src/cpp/struc/Chunk.cpp.obj	318994caf3b6060
+9	1165	6986390313364131	CMakeFiles/Voxel.dir/src/cpp/phys/Player.cpp.obj	51f2208bd4215654
+1165	1339	6986390314859858	Voxel.exe	dcc0b27a147a210d
