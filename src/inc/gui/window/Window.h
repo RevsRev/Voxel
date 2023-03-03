@@ -15,7 +15,6 @@ extern void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 class Window : public HasKeyBoardListener, public HasMouseListener {
 private:
 	GLFWwindow* window;
-	Camera* camera = new Camera(0.0f, 0.0f, 0.0f);
 
 	void init(int width, int height);
 	void initGlad();
@@ -23,7 +22,6 @@ private:
 
 public:
 	Window(int width, int height);
-	Camera* getCamera();
 	static Window* the();
 	static void start();
 };

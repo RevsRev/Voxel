@@ -25,8 +25,6 @@ private:
 	void saveToFile(Chunk* &chunk);
 	Chunk* generateChunk(long &chunkX, long &chunkY);
 	Chunk* generateChunkLazy(long &chunkX, long &chunkY);
-	/*void recacheNeighbours(long &chunkX, long &chunkY);
-	void cacheNeighbour(int &neighbour, Chunk* &thisChunk, Chunk* &thatChunk);*/
 	Chunk* getFromCache(std::pair<long, long> &key);
 
 	void addToSurface(std::map<Triple<long, long, long>, Voxel>*& cachedVoxelSurface, long& colX, long& colY,

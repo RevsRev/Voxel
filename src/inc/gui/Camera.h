@@ -5,11 +5,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <io/KeyBoard.h>
 #include <io/Mouse.h>
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 #include <io/KeyCache.h>
-#include <phys/PhysicalObject.h>
+#include <phys/GameObject.h>
 
-class Camera : public MouseListener, public KeyBoardListener, public PhysicalObject {
+class Camera : public MouseListener, public KeyBoardListener {
 private:
 	//glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 direction = glm::vec3(1.0f, 0.0f, 0.0f);
@@ -33,11 +33,13 @@ private:
 	//for tracking keys
 	KeyCache keyCache{};
 
+	GameObject* trackedObject;
+
 public:
 
-	Camera(double x, double y, double z);
+	Camera(GameObject* trackedObject);
 
-	glm::vec3 getPosition();
+	glm::vec3 &getPosition();
 	glm::vec3 getDirection();
 	glm::mat4 getView();
 
