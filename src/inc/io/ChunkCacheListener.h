@@ -1,8 +1,8 @@
 #pragma once
 
-class ChunkCacheListner {
+class ChunkCacheListener {
 public:
-	virtual void chunkCreated() = 0;
-	virtual void chunkUpdated() = 0;
-	virtual void chunkDeleted() = 0;
+	virtual void chunkCreated(Chunk* chunk) = 0;
+	virtual void chunkUpdated(Chunk* chunk) = 0;
+	virtual void chunkDeleted(Chunk* chunk) = 0;
 };

@@ -182,3 +182,26 @@ void WorldUi::render() {
 		renderer->render();
 	}
 }
+
+bool WorldUi::checkRenderDistance(long& chunkX, long& chunkY) {
+	return (lastChunkCacheX - chunkX) * (lastChunkCacheX - chunkX) + (lastChunkCacheY - chunkY) * (lastChunkCacheY - chunkY) < renderDistance * renderDistance;
+}
+
+//TODO - This all needs to made thread safe
+void WorldUi::chunkCreated(Chunk* chunk) {
+	long chunkX = chunk->getChunkX();
+	long chunkY = chunk->getChunkY();
+	if (checkRenderDistance(chunkX, chunkY)) {
+		renderers.insert({ std::pair<long,long>{chunkX, chunkY}, new ChunkRenderer(chunk) });
+	}
+}
+void WorldUi::chunkDeleted(Chunk* chunk) {
+	std::pair<long, long> key{ chunk->getChunkX(), chunk->getChunkY() };
+	auto finder = renderers.find(key);
+	if (finder != renderers.end()) {
+		renderers.erase(key);
+	}
+}
+void WorldUi::chunkUpdated(Chunk* chunk) {
+	//don't need to do anything
+}

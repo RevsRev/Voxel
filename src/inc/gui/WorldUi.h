@@ -6,9 +6,10 @@
 #include <set>
 #include <struc/World.h>
 #include <future>
+#include <io/ChunkCacheListener.h>
 #include "glm/gtc/type_ptr.hpp"
 
-class WorldUi : GuiUpdatable {
+class WorldUi : public GuiUpdatable, public ChunkCacheListener {
 private:
 	std::set<Camera*> cameras{};
 
@@ -35,6 +36,8 @@ private:
 	std::future<Chunk*>* getChunkAsync(long& chunkX, long& chunkY);
 	Chunk* getChunk(long& chunkX, long& chunkY);
 
+	bool checkRenderDistance(long& chunkX, long& chunkY);
+
 public:
 
 	WorldUi(World* world);
@@ -45,5 +48,9 @@ public:
 	void setSelectedCamera(Camera* camera);
 
 	void render(); //TODO - Extract to an interface?
+
+	void chunkCreated(Chunk* chunk);
+	void chunkUpdated(Chunk* chunk);
+	void chunkDeleted(Chunk* chunk);
 
 };

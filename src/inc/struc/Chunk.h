@@ -44,6 +44,9 @@ public:
 	const static unsigned int CHUNK_SIZE = 64;
 	const static unsigned int CHUNK_HEIGHT = 256;
 
+	int getChunkX();
+	int getChunkY();
+
 	std::pair<long, float*> getVoxelPositionsToRender();
 	std::pair<long, float*> getVoxelColorsToRender();
 

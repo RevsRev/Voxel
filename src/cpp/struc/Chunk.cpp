@@ -252,3 +252,6 @@ void Chunk::deleteVoxelArray() {
 	}
 	delete[] voxels;
 }
+
+int Chunk::getChunkX() { return chunkX; }
+int Chunk::getChunkY() { return chunkY; }
