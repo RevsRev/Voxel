@@ -39,13 +39,13 @@ public:
 	Chunk(Voxel*** voxels, int chunkX, int chunkY);
 	Chunk(std::map<Triple<long, long, long>, Voxel>* surface, int chunkX, int chunkY);
 	~Chunk();
-	void Chunk::deleteVoxelArray();
+	void deleteVoxelArray();
 
 	const static unsigned int CHUNK_SIZE = 64;
 	const static unsigned int CHUNK_HEIGHT = 256;
 
-	int getChunkX();
-	int getChunkY();
+	int getChunkX() const;
+	int getChunkY() const;
 
 	std::pair<long, float*> getVoxelPositionsToRender();
 	std::pair<long, float*> getVoxelColorsToRender();

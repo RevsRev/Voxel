@@ -1,7 +1,8 @@
 #include <gui/WorldUi.h>
 
-WorldUi::WorldUi(World* world) {
+WorldUi::WorldUi(World* world) : pool{ world->getChunkLoader() } {
 	this->world = world;
+	pool.addSubscriber(this);
 }
 
 void WorldUi::addCamera(Camera* camera) {
@@ -52,10 +53,10 @@ void WorldUi::updateChunkRenderers() {
 		long chunkY = it->second;
 		std::pair<long, long> key{ chunkX, chunkY };
 		if (renderers.find(key) != renderers.end()) {
-			deleteChunkAsync(chunkX, chunkY);
-			ChunkRenderer* renderer = renderers.at(key);
-			renderers.erase(key);
-			delete renderer;
+			//deleteChunkAsync(chunkX, chunkY);
+			//ChunkRenderer* renderer = renderers.at(key);
+			//renderers.erase(key);
+			//delete renderer;
 		}
 	}
 
@@ -67,7 +68,12 @@ void WorldUi::updateChunkRenderers() {
 			long chunkX = (*it).first;
 			long chunkY = (*it).second;
 			std::pair<long, long> key{ chunkX, chunkY };
-			newChunks.insert({ key, getChunkAsync(chunkX, chunkY) });
+			pool.asyncRequest(this, key, std::map<std::string, std::string >{});
+			//newChunks.insert({ key, getChunkAsync(chunkX, chunkY) });
+
+			//just for testing
+			//pool.asyncRequest(this,key, std::map<std::string,std::string>{});
+
 		}
 	}
 
@@ -187,21 +193,13 @@ bool WorldUi::checkRenderDistance(long& chunkX, long& chunkY) {
 	return (lastChunkCacheX - chunkX) * (lastChunkCacheX - chunkX) + (lastChunkCacheY - chunkY) * (lastChunkCacheY - chunkY) < renderDistance * renderDistance;
 }
 
-//TODO - This all needs to made thread safe
-void WorldUi::chunkCreated(Chunk* chunk) {
-	long chunkX = chunk->getChunkX();
-	long chunkY = chunk->getChunkY();
-	if (checkRenderDistance(chunkX, chunkY)) {
-		renderers.insert({ std::pair<long,long>{chunkX, chunkY}, new ChunkRenderer(chunk) });
-	}
+void WorldUi::onCreate(Chunk& val) {
+	std::pair<long, long>key{ val.getChunkX(), val.getChunkY() };
+	renderers.insert({ key, new ChunkRenderer(&val)});
 }
-void WorldUi::chunkDeleted(Chunk* chunk) {
-	std::pair<long, long> key{ chunk->getChunkX(), chunk->getChunkY() };
-	auto finder = renderers.find(key);
-	if (finder != renderers.end()) {
-		renderers.erase(key);
-	}
+void WorldUi::onUpdate(Chunk& val) {
+	//TODO - implement at a later date
 }
-void WorldUi::chunkUpdated(Chunk* chunk) {
-	//don't need to do anything
+void WorldUi::onDelete(Chunk& val) {
+	//TODO - implement at a later date
 }

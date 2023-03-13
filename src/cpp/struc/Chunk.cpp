@@ -253,5 +253,5 @@ void Chunk::deleteVoxelArray() {
 	delete[] voxels;
 }
 
-int Chunk::getChunkX() { return chunkX; }
-int Chunk::getChunkY() { return chunkY; }
+int Chunk::getChunkX() const { return chunkX; }
+int Chunk::getChunkY() const { return chunkY; }

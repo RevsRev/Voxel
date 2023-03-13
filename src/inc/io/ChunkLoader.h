@@ -11,8 +11,9 @@
 #include <map>
 #include <set>
 #include <iostream>
+#include <util/data/Loader.h>
 
-class ChunkLoader {
+class ChunkLoader : public Loader<std::pair<long,long>,Chunk> {
 private:
 
 	long chunkLocksSize = 20;
@@ -47,4 +48,6 @@ public:
 	Chunk* getChunk(long &chunkX, long &chunkY);
 	void removeChunk(long &chunkX, long &chunkY);
 	
+	Chunk& load(std::pair<long, long>& key, std::map<std::string, std::string>& args) override;
+
 };

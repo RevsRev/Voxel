@@ -4,18 +4,20 @@
 #include <gui/draw/ChunkRenderer.h>
 #include <gui/GuiUpdatable.h>
 #include <set>
+#include <map>
 #include <struc/World.h>
 #include <future>
-#include <io/ChunkCacheListener.h>
+#include <io/ChunkCache.h>
+#include <util/pattern/pubsub/Subscriber.h>
 #include "glm/gtc/type_ptr.hpp"
-#include <io/ObjectPool.h>
-#include <io/Loader.h>
+#include <util/data/ObjectPool.h>
+#include <util/data/Loader.h>
 
-class WorldUi : public GuiUpdatable, public ChunkCacheListener {
+class WorldUi : public GuiUpdatable, private Subscriber<Chunk> {
 private:
 	std::set<Camera*> cameras{};
 
-	ObjectPool<std::pair<long,long>,Chunk> pool{new ChunkLoaderTest()};
+	ObjectPool<std::pair<long, long>, Chunk> pool = NULL;
 
 	Camera* selectedCamera = nullptr;
 	const World* world;
@@ -53,8 +55,8 @@ public:
 
 	void render(); //TODO - Extract to an interface?
 
-	void chunkCreated(Chunk* chunk);
-	void chunkUpdated(Chunk* chunk);
-	void chunkDeleted(Chunk* chunk);
-
+	//TODO - extract into some sort of render manager
+	void onCreate(Chunk& val) override;
+	void onUpdate(Chunk& val) override;
+	void onDelete(Chunk& val) override;
 };

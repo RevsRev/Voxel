@@ -21,6 +21,14 @@ Chunk* ChunkLoader::loadFromFile(long &chunkX, long& chunkY) {
 	return nullptr;
 }
 
+Chunk& ChunkLoader::load(std::pair<long, long>& key, std::map<std::string, std::string>& args) {
+
+	//TODO - use the args for lazy chunk loading
+	long &chunkX = key.first;
+	long &chunkY = key.second;
+	return *getChunk(chunkX, chunkY);
+}
+
 Chunk* ChunkLoader::generateChunk(long& chunkX, long& chunkY) {
 	Voxel*** voxels = new Voxel * *[Chunk::CHUNK_SIZE];
 	for (int i = 0; i < Chunk::CHUNK_SIZE; i++) {

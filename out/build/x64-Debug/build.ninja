@@ -50,7 +50,7 @@ cmake_ninja_workdir = C$:\Users\eddie\Documents\Voxel\Voxel\out\build\x64-Debug\
 build cmake_object_order_depends_target_Voxel: phony || CMakeFiles\Voxel.dir
 
 build CMakeFiles\Voxel.dir\src\cpp\Main.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\Main.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp
@@ -66,7 +66,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\glad\glad.c.obj: C_COMPILER__Voxel_Debug 
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\struc\Chunk.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\struc\Chunk.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\struc
@@ -74,7 +74,7 @@ build CMakeFiles\Voxel.dir\src\cpp\struc\Chunk.cpp.obj: CXX_COMPILER__Voxel_Debu
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\struc\Voxel.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\struc\Voxel.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\struc
@@ -82,7 +82,7 @@ build CMakeFiles\Voxel.dir\src\cpp\struc\Voxel.cpp.obj: CXX_COMPILER__Voxel_Debu
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\struc\World.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\struc\World.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\struc
@@ -90,7 +90,7 @@ build CMakeFiles\Voxel.dir\src\cpp\struc\World.cpp.obj: CXX_COMPILER__Voxel_Debu
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\struc\Coord.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\struc\Coord.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\struc
@@ -98,7 +98,7 @@ build CMakeFiles\Voxel.dir\src\cpp\struc\Coord.cpp.obj: CXX_COMPILER__Voxel_Debu
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\shader\Shader.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\shader\Shader.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui\shader
@@ -106,7 +106,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\shader\Shader.cpp.obj: CXX_COMPILER__Voxe
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\window\Window.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\window\Window.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui\window
@@ -114,7 +114,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\window\Window.cpp.obj: CXX_COMPILER__Voxe
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\shader\ShaderProgram.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\shader\ShaderProgram.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui\shader
@@ -122,7 +122,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\shader\ShaderProgram.cpp.obj: CXX_COMPILE
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\Camera.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\Camera.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui
@@ -130,7 +130,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\Camera.cpp.obj: CXX_COMPILER__Voxel_Debug
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\draw\Drawer.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\draw\Drawer.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui\draw
@@ -138,7 +138,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\draw\Drawer.cpp.obj: CXX_COMPILER__Voxel_
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\draw\VAO.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\draw\VAO.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui\draw
@@ -146,7 +146,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\draw\VAO.cpp.obj: CXX_COMPILER__Voxel_Deb
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\draw\VBO.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\draw\VBO.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui\draw
@@ -154,7 +154,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\draw\VBO.cpp.obj: CXX_COMPILER__Voxel_Deb
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\draw\Attribute.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\draw\Attribute.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui\draw
@@ -162,7 +162,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\draw\Attribute.cpp.obj: CXX_COMPILER__Vox
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\draw\Drawable.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\draw\Drawable.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui\draw
@@ -170,7 +170,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\draw\Drawable.cpp.obj: CXX_COMPILER__Voxe
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\draw\ChunkRenderer.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\draw\ChunkRenderer.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui\draw
@@ -178,7 +178,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\draw\ChunkRenderer.cpp.obj: CXX_COMPILER_
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gen\perlin\PerlinNoise.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gen\perlin\PerlinNoise.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gen\perlin
@@ -186,7 +186,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gen\perlin\PerlinNoise.cpp.obj: CXX_COMPILER_
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\io\KeyBoard.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\io\KeyBoard.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\io
@@ -194,7 +194,7 @@ build CMakeFiles\Voxel.dir\src\cpp\io\KeyBoard.cpp.obj: CXX_COMPILER__Voxel_Debu
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\io\Mouse.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\io\Mouse.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\io
@@ -202,7 +202,7 @@ build CMakeFiles\Voxel.dir\src\cpp\io\Mouse.cpp.obj: CXX_COMPILER__Voxel_Debug C
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\io\CallBack.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\io\CallBack.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\io
@@ -210,7 +210,7 @@ build CMakeFiles\Voxel.dir\src\cpp\io\CallBack.cpp.obj: CXX_COMPILER__Voxel_Debu
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\io\KeyCache.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\io\KeyCache.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\io
@@ -218,7 +218,7 @@ build CMakeFiles\Voxel.dir\src\cpp\io\KeyCache.cpp.obj: CXX_COMPILER__Voxel_Debu
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\phys\GameEngine.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\phys\GameEngine.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\phys
@@ -226,7 +226,7 @@ build CMakeFiles\Voxel.dir\src\cpp\phys\GameEngine.cpp.obj: CXX_COMPILER__Voxel_
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\phys\GameObject.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\phys\GameObject.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\phys
@@ -234,7 +234,7 @@ build CMakeFiles\Voxel.dir\src\cpp\phys\GameObject.cpp.obj: CXX_COMPILER__Voxel_
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\phys\ChunkTypes.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\phys\ChunkTypes.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\phys
@@ -242,7 +242,7 @@ build CMakeFiles\Voxel.dir\src\cpp\phys\ChunkTypes.cpp.obj: CXX_COMPILER__Voxel_
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\Color.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\Color.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui
@@ -250,7 +250,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\Color.cpp.obj: CXX_COMPILER__Voxel_Debug 
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gen\WorldGenerator.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gen\WorldGenerator.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gen
@@ -258,7 +258,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gen\WorldGenerator.cpp.obj: CXX_COMPILER__Vox
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gen\perlin\PerlinPostProcessor.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gen\perlin\PerlinPostProcessor.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gen\perlin
@@ -266,7 +266,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gen\perlin\PerlinPostProcessor.cpp.obj: CXX_C
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gen\perlin\PerlinMountain.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gen\perlin\PerlinMountain.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gen\perlin
@@ -274,7 +274,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gen\perlin\PerlinMountain.cpp.obj: CXX_COMPIL
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\phys\Player.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\phys\Player.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\phys
@@ -282,7 +282,7 @@ build CMakeFiles\Voxel.dir\src\cpp\phys\Player.cpp.obj: CXX_COMPILER__Voxel_Debu
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\GuiUpdatable.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\GuiUpdatable.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui
@@ -290,7 +290,7 @@ build CMakeFiles\Voxel.dir\src\cpp\gui\GuiUpdatable.cpp.obj: CXX_COMPILER__Voxel
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\io\ChunkLoader.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\io\ChunkLoader.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\io
@@ -298,7 +298,7 @@ build CMakeFiles\Voxel.dir\src\cpp\io\ChunkLoader.cpp.obj: CXX_COMPILER__Voxel_D
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\io\ChunkCache.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\io\ChunkCache.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\io
@@ -306,7 +306,7 @@ build CMakeFiles\Voxel.dir\src\cpp\io\ChunkCache.cpp.obj: CXX_COMPILER__Voxel_De
   TARGET_PDB = Voxel.pdb
 
 build CMakeFiles\Voxel.dir\src\cpp\gui\WorldUi.cpp.obj: CXX_COMPILER__Voxel_Debug C$:\Users\eddie\Documents\Voxel\Voxel\src\cpp\gui\WorldUi.cpp || cmake_object_order_depends_target_Voxel
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
   INCLUDES = -IC:\Users\eddie\Documents\Voxel\Voxel\inc -IC:\Users\eddie\Documents\Voxel\Voxel\src\inc
   OBJECT_DIR = CMakeFiles\Voxel.dir
   OBJECT_FILE_DIR = CMakeFiles\Voxel.dir\src\cpp\gui
