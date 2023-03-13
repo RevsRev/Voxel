@@ -7,6 +7,8 @@
 #include <set>
 #include <future>
 #include <thread>
+#include <io/ReadWriteCache.h>
+#include <io/ReadWriteSet.h>
 
 
 //TODO - this whole class needs to be made thread safe

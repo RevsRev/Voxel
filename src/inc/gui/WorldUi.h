@@ -8,10 +8,14 @@
 #include <future>
 #include <io/ChunkCacheListener.h>
 #include "glm/gtc/type_ptr.hpp"
+#include <io/ObjectPool.h>
+#include <io/Loader.h>
 
 class WorldUi : public GuiUpdatable, public ChunkCacheListener {
 private:
 	std::set<Camera*> cameras{};
+
+	ObjectPool<std::pair<long,long>,Chunk> pool{new ChunkLoaderTest()};
 
 	Camera* selectedCamera = nullptr;
 	const World* world;
