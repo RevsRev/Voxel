@@ -68,8 +68,8 @@ void WorldUi::updateChunkRenderers() {
 			long chunkX = (*it).first;
 			long chunkY = (*it).second;
 			std::pair<long, long> key{ chunkX, chunkY };
-			pool.asyncRequest(this, key, std::map<std::string, std::string >{});
-			//newChunks.insert({ key, getChunkAsync(chunkX, chunkY) });
+			//pool.asyncRequest(this, key, std::map<std::string, std::string >{});
+			newChunks.insert({ key, getChunkAsync(chunkX, chunkY) });
 
 			//just for testing
 			//pool.asyncRequest(this,key, std::map<std::string,std::string>{});
@@ -88,7 +88,8 @@ void WorldUi::updateChunkRenderers() {
 }
 
 std::future<Chunk*>* WorldUi::getChunkAsync(long& chunkX, long& chunkY) {
-	return &std::async(std::launch::async, &ChunkLoader::getChunk, World::the()->getChunkLoader(), std::ref(chunkX), std::ref(chunkY));
+	std::future future = std::async(std::launch::async, &ChunkLoader::getChunk, World::the()->getChunkLoader(), std::ref(chunkX), std::ref(chunkY));
+	return &future;
 }
 Chunk* WorldUi::getChunk(long& chunkX, long& chunkY) {
 	World* theWorld = World::the();
@@ -96,7 +97,8 @@ Chunk* WorldUi::getChunk(long& chunkX, long& chunkY) {
 }
 
 std::future<void>* WorldUi::deleteChunkAsync(long& chunkX, long& chunkY) {
-	return &std::async(std::launch::async, &ChunkLoader::removeChunk, World::the()->getChunkLoader(), std::ref(chunkX), std::ref(chunkY));
+	std::future future = async(std::launch::async, &ChunkLoader::removeChunk, World::the()->getChunkLoader(), std::ref(chunkX), std::ref(chunkY));
+	return &future;
 }
 
 //TODO - Replace with the palyer's position and update the player

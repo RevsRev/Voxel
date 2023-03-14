@@ -39,7 +39,8 @@ public:
 
 	Camera(GameObject* trackedObject);
 
-	glm::vec3 &getPosition();
+	//todo - make these return references, rather than copying values
+	glm::vec3 getPosition();
 	glm::vec3 getDirection();
 	glm::mat4 getView();
 

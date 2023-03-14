@@ -12,6 +12,6 @@ void GameObject::updatePosition(float delTime) {
 	z += delTime * zVel;
 }
 
-glm::vec3 &GameObject::getPosition() {
+glm::vec3 GameObject::getPosition() {
 	return glm::vec3{ x,y,z };
 }

@@ -7,6 +7,7 @@
 #include <future>
 
 template <typename K, typename V>
+	requires std::equality_comparable<K>&& std::is_copy_constructible<V>::value
 class ObjectPool : private ReadWriteCache<K,V> , public Publisher<V>{
 private:
 

@@ -11,7 +11,7 @@ public:
 
 	GameObject(double x0, double y, double z);
 
-	glm::vec3 &getPosition();
+	glm::vec3 getPosition();
 	void updatePosition(float delTime);
 
 	double x;

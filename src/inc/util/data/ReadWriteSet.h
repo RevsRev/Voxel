@@ -10,7 +10,7 @@ private:
 	mutable std::shared_mutex mutex{};
 
 public:
-	void put(V &val) {
+	void put(V val) {
 		std::unique_lock<std::shared_mutex> lock{ mutex };
 		set.insert(val);
 	}

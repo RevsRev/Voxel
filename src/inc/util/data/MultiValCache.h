@@ -7,6 +7,7 @@
 #include <shared_mutex>
 
 template <typename K, typename V>
+	requires std::equality_comparable<K>&& std::is_copy_constructible<V>::value
 class MultiValCache {
 private:
 	mutable std::shared_mutex mutex{};
@@ -41,7 +42,7 @@ public:
 		valSet->put(val);
 	}
 
-	ReadWriteSet<V*>* get(K& key) {
+	ReadWriteSet<V>* get(K& key) {
 		return getSet(key);
 	}
 };

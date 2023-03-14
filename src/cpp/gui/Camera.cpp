@@ -7,7 +7,7 @@ Camera::Camera(GameObject* trackedObject) {
 	this->trackedObject = trackedObject;
 }
 
-glm::vec3 &Camera::getPosition() {
+glm::vec3 Camera::getPosition() {
 	return trackedObject->getPosition();
 }
 glm::vec3 Camera::getDirection() {

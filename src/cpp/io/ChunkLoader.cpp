@@ -133,7 +133,8 @@ Chunk* ChunkLoader::getChunk(long& chunkX, long& chunkY) {
 	chunkLock->lock();
 
 	Chunk* chunk;
-	chunk = getFromCache(std::pair<long, long>{chunkX, chunkY});
+	std::pair<long, long> key{ chunkX, chunkY };
+	chunk = getFromCache(key);
 	if (chunk != nullptr) {
 		chunkLock->unlock();
 		return chunk;

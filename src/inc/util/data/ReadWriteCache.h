@@ -6,17 +6,18 @@
 #include <util/data/Cache.h>
 
 template <typename K, typename V>
-requires std::equality_comparable<K>
+	requires std::equality_comparable<K>&& std::is_copy_constructible<V>::value
 class ReadWriteCache : public Cache<K,V>{
 private:
 	mutable std::shared_mutex mutex{};
 	std::map<K, V> cache;
 public:
 
-	void put(const K &key, V &val) override {
+	void put(const K key,const V val) override {
 		std::unique_lock<std::shared_mutex> lock{ mutex };
-		std::pair<const K, V> keyVal{};
+		std::pair<K, V> keyVal{};
 		keyVal.first = key;
+		keyVal.second = val;
 		//cache.insert({ key, val });
 	}
 	V* get(const K &key) override {
