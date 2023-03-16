@@ -9,10 +9,10 @@
 template <typename K, typename V>
 	requires std::equality_comparable<K>&& std::is_copy_constructible<V>::value
 class ObjectPool : private ReadWriteCache<K,V> , public Publisher<V>{
-private:
+public:
 
 	Loader<K,V>* loader;
-	MultiValCache<K, void*> hooks{};
+	MultiValCache<const K, void*> hooks{};
 
 	void gc();
 
@@ -21,7 +21,7 @@ private:
 		if (this->get(key) == nullptr) {
 			this->put(key, loader->load(key, args));
 			V& value = *this->get(key);
-			publishCreate(value);
+			this->publishCreate(value);
 		}
 	}
 	void release(void* releaser, K& key) {
@@ -34,8 +34,6 @@ private:
 		}
 	}
 
-	//TODO - need to implement listeners for updates?
-
 public:
 
 	ObjectPool(Loader<K, V>* loader) {
@@ -43,7 +41,8 @@ public:
 	}
 
 	void asyncRequest(void* requester, K& key, std::map<std::string, std::string> &args) {
-		std::async(std::launch::async, &ObjectPool<K,V>::request, this, requester, key, args);
+		//std::future<void> requestFuture = std::async(&ObjectPool<K,V>::request, this, requester, std::ref(key), std::ref(args));
+		request(requester, key, args);
 	}
 	void asyncRelease(void* releaser, K& key) {
 		//TODO - Presumably just remove from cache?

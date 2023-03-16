@@ -14,26 +14,31 @@ private:
 	ReadWriteCache<K, ReadWriteSet<V>> cache{};
 
 	ReadWriteSet<V>* getSet(K& key) {
-		std::shared_lock<std::shared_mutex> readLock{ mutex };
+		//std::shared_lock<std::shared_mutex> readLock{ mutex };
+		mutex.lock_shared();
 		ReadWriteSet<V>* theSet = cache.get(key);
 		if (theSet != nullptr) {
+			mutex.unlock_shared();
 			return theSet;
 		}
-
-		readLock.release();
+		//readLock.release();
+		mutex.unlock_shared();
 		return initSet(key);
 	}
 	ReadWriteSet<V>* initSet(K& key) {
-		std::unique_lock<std::shared_mutex> uniqueLock{ mutex };
+		//std::unique_lock<std::shared_mutex> uniqueLock{ mutex };
+		mutex.lock();
 		ReadWriteSet<V>* theSet = cache.get(key);
 
 		//check that there wasn't two threads competing for the unique lock
 		if (theSet != nullptr) {
+			mutex.unlock();
 			return theSet;
 		}
-		theSet = ReadWriteSet<V>{};
-		cache.put(key, theSet);
-		return &cache.get(key);
+		theSet = new ReadWriteSet<V>{};
+		cache.put(key, *theSet);
+		mutex.unlock();
+		return theSet;
 	}
 
 public:

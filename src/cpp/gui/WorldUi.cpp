@@ -69,10 +69,11 @@ void WorldUi::updateChunkRenderers() {
 			long chunkY = (*it).second;
 			std::pair<long, long> key{ chunkX, chunkY };
 			//pool.asyncRequest(this, key, std::map<std::string, std::string >{});
-			newChunks.insert({ key, getChunkAsync(chunkX, chunkY) });
+			//newChunks.insert({ key, getChunkAsync(chunkX, chunkY) });
 
 			//just for testing
-			//pool.asyncRequest(this,key, std::map<std::string,std::string>{});
+			std::map<std::string, std::string> args{};
+			pool.asyncRequest(this,key, args);
 
 		}
 	}
