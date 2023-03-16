@@ -11,8 +11,9 @@
 #include <map>
 #include <set>
 #include <iostream>
+#include <util/data/Loader.h>
 
-class ChunkLoader {
+class ChunkLoader : public Loader<std::pair<long,long>,Chunk> {
 private:
 
 	long chunkLocksSize = 20;
@@ -25,8 +26,6 @@ private:
 	void saveToFile(Chunk* &chunk);
 	Chunk* generateChunk(long &chunkX, long &chunkY);
 	Chunk* generateChunkLazy(long &chunkX, long &chunkY);
-	/*void recacheNeighbours(long &chunkX, long &chunkY);
-	void cacheNeighbour(int &neighbour, Chunk* &thisChunk, Chunk* &thatChunk);*/
 	Chunk* getFromCache(std::pair<long, long> &key);
 
 	void addToSurface(std::map<Triple<long, long, long>, Voxel>*& cachedVoxelSurface, long& colX, long& colY,
@@ -49,4 +48,6 @@ public:
 	Chunk* getChunk(long &chunkX, long &chunkY);
 	void removeChunk(long &chunkX, long &chunkY);
 	
+	Chunk& load(std::pair<long, long>& key, std::map<std::string, std::string>& args) override;
+
 };

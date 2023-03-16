@@ -7,10 +7,13 @@
 #include <gui/shader/Shader.h>
 #include <gui/shader/ShaderProgram.h>
 #include <string>
+#include <thread>
 
 int main() {
 
 	std::cout << "Starting Voxel game engine..." << std::endl;
+
+	std::cout << "Available Threads: " << std::thread::hardware_concurrency() << std::endl;
 
 	//first init glfw
 	glfwInit();

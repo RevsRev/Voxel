@@ -3,11 +3,12 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include <iostream>
 
-Camera::Camera(double x, double y, double z) : PhysicalObject(x,y,z) {
+Camera::Camera(GameObject* trackedObject) {
+	this->trackedObject = trackedObject;
 }
 
 glm::vec3 Camera::getPosition() {
-	return glm::vec3(x, y, z);
+	return trackedObject->getPosition();
 }
 glm::vec3 Camera::getDirection() {
 	//TODO - implement roll
@@ -62,20 +63,20 @@ void Camera::processKeyEvent(int key, int scancode, int action, int mods) {
 		delZ -= 1;
 	}
 
-	//TODO - refactor to make neater.
+	//TODO - refactor to make neater - should extract into a class for updating the postion of game objects, independent of if any cameras are looking at them
 	if (delX != 0 || delY != 0 || delZ != 0) {
 		glm::vec3 dir(delX, delY, delZ);
 		glm::vec3 moveDir = dir.x * direction + dir.z * up + dir.y * glm::cross(direction, up);
 		moveDir = glm::normalize(moveDir);
 		glm::vec3 velocity = movementSpeed * moveDir;
-		this->xVel = velocity.x;
-		this->yVel = velocity.y;
-		this->zVel = velocity.z;
+		trackedObject->xVel = velocity.x;
+		trackedObject->yVel = velocity.y;
+		trackedObject->zVel = velocity.z;
 	}
 	else {
-		this->xVel = 0;
-		this->yVel = 0;
-		this->zVel = 0;
+		trackedObject->xVel = 0;
+		trackedObject->yVel = 0;
+		trackedObject->zVel = 0;
 	}
 }
 void Camera::processMouseEvent(double xPos, double yPos) {

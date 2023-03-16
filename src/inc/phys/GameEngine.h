@@ -2,11 +2,11 @@
 
 #include <set>
 #include <iterator>
-#include <phys/PhysicalObject.h>
+#include <phys/GameObject.h>
 #include <thread>
 #include <chrono>
 
-class PhysicsEngine {
+class GameEngine {
 private:
 
 	static enum State {
@@ -18,23 +18,23 @@ private:
 	State state = STOPPED;
 	std::thread* engineThread;
 
-	std::set<PhysicalObject*> objects{};
-	PhysicsEngine();
+	std::set<GameObject*> objects{};
+	GameEngine();
 
 public:
-	static PhysicsEngine* the();
+	static GameEngine* the();
 	void start();
 	void stop();
 
 	void physicsLoop();
 
-	void addObject(PhysicalObject* object);
-	void removeObject(PhysicalObject* object);
+	void addObject(GameObject* object);
+	void removeObject(GameObject* object);
 
-	friend PhysicalObject;
+	friend GameObject;
 };
 
 namespace physLoop {
 	static bool started_engine_thread;
-	extern void physics_loop(PhysicsEngine* engine);
+	extern void physics_loop(GameEngine* engine);
 }

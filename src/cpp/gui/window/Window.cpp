@@ -16,8 +16,9 @@
 #include "gui/draw/ChunkRenderer.h"
 #include "io/CallBack.h"
 
-#include <phys/PhysicsEngine.h>
+#include <phys/GameEngine.h>
 #include <phys/Player.h>
+#include <gui/WorldUi.h>
 
 Window::Window(int width, int height) {
 	init(width, height);
@@ -33,9 +34,6 @@ void Window::init(int width, int height) {
 	glfwMakeContextCurrent(window);
 
 	initGlad();
-
-	addMouseListener(camera);
-	addKeyboardListener(camera);
 }
 
 void Window::initGlad() {
@@ -43,10 +41,6 @@ void Window::initGlad() {
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 	}
-}
-
-Camera* Window::getCamera() {
-	return camera;
 }
 
 Window* Window::the() {
@@ -81,10 +75,17 @@ void Window::start() {
 	//test world
 	World* world = World::the();
 
+	WorldUi* worldUi = new WorldUi(world);
+
 	//test player
 	Player* thePlayer = new Player(0,0,0);
 	window->addKeyboardListener(thePlayer);
 	window->addMouseListener(thePlayer);
+	Camera* playerCamera = new Camera(thePlayer);
+	window->addKeyboardListener(playerCamera);
+	window->addMouseListener(playerCamera);
+
+	worldUi->setSelectedCamera(playerCamera);
 
 	glm::vec3 lightDirection = glm::normalize(glm::vec3{ 0.0f, 0.5f, 1.0f });
 
@@ -92,10 +93,8 @@ void Window::start() {
 	glEnable(GL_DEPTH_TEST);
 
 	//TODO - extract away from the window class
-	PhysicsEngine* engine = PhysicsEngine::the();
-	engine->addObject(&(* window->camera));
+	GameEngine* engine = GameEngine::the();
 	engine->addObject(thePlayer);
-	engine->addObject(&thePlayer->playerCam);
 	engine->start();
 
 	std::chrono::system_clock::time_point renderStartTime = std::chrono::system_clock::now();;
@@ -110,8 +109,8 @@ void Window::start() {
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		thePlayer->update(currentFrameTime.count());
-		thePlayer->render();
+		worldUi->update(currentFrameTime.count());
+		worldUi->render();
 
 		glfwSwapBuffers(glfwWindow);
 		glfwPollEvents();
