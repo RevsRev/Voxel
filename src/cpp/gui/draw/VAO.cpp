@@ -1,6 +1,6 @@
 #include "gui/draw/VAO.h"
 
-#include <glad\glad.h>
+
 
 
 VAO::VAO() {

@@ -8,6 +8,9 @@
 #include <GLFW/glfw3.h>
 #include <io/KeyCache.h>
 #include <phys/GameObject.h>
+#include "glm/common.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include <iostream>
 
 class Camera : public MouseListener, public KeyBoardListener {
 private:

@@ -1,6 +1,4 @@
 #include "struc/World.h"
-#include <iostream>
-#include "gen/perlin/PerlinNoise.h"
 
 World* World::the() {
 	static World* theWindow = new World();

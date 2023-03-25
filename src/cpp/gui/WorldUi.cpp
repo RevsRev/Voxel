@@ -53,6 +53,8 @@ void WorldUi::updateChunkRenderers() {
 		long chunkY = it->second;
 		std::pair<long, long> key{ chunkX, chunkY };
 		if (renderers.find(key) != renderers.end()) {
+			std::pair<long, long> key{ chunkX, chunkY };
+			pool.asyncRelease(this, key);
 			//deleteChunkAsync(chunkX, chunkY);
 			//ChunkRenderer* renderer = renderers.at(key);
 			//renderers.erase(key);
@@ -79,10 +81,10 @@ void WorldUi::updateChunkRenderers() {
 	}
 
 	//crate the new renderers
-	for (auto it = newChunks.begin(); it != newChunks.end(); it++) {
+	/*for (auto it = newChunks.begin(); it != newChunks.end(); it++) {
 		std::pair<long, long> key = (*it).first;
 		renderers.insert({ key, new ChunkRenderer(getChunk(key.first, key.second)) });
-	}
+	}*/
 
 	lastChunkCacheX = selectedCamera->getPosition().x;
 	lastChunkCacheY = selectedCamera->getPosition().y;

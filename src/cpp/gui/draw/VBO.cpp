@@ -1,7 +1,5 @@
 #include "gui/draw/VBO.h"
 
-#include <glad\glad.h>
-
 VBO::VBO() {
 }
 

@@ -1,6 +1,4 @@
 #include "struc/Chunk.h"
-#include <iostream>
-#include <vector>
 #include <struc/World.h>
 
 float cubeVerticesWithNormalAndTex[] {

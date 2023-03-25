@@ -2,6 +2,7 @@
 
 #include "gui/draw/Attribute.h"
 #include <vector>
+#include <glad\glad.h>
 
 class VBO {
 private:

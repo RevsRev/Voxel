@@ -5,6 +5,7 @@
 #include <phys/ChunkTypes.h>
 #include <map>
 #include <util/Triple.h>
+#include <vector>
 
 extern float cubeVerticesWithNormalAndTex[];
 

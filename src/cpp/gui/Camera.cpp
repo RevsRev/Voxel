@@ -1,7 +1,4 @@
 #include "gui/Camera.h"
-#include "glm/common.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include <iostream>
 
 Camera::Camera(GameObject* trackedObject) {
 	this->trackedObject = trackedObject;

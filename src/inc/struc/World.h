@@ -6,6 +6,8 @@
 #include <gen/WorldGenerator.h>
 #include <gen/perlin/PerlinMountain.h>
 #include <io/ChunkLoader.h>
+#include <iostream>
+#include "gen/perlin/PerlinNoise.h"
 
 class World {
 private:

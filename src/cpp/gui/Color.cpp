@@ -1,5 +1,4 @@
 #include <gui/Color.h>
-#include <iostream>
 
 glm::vec3* Color::getAsGlmVec3(unsigned char* red) {
 	char r = *red;

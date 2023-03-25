@@ -2,12 +2,6 @@
 //
 
 #include "Main.h"
-#include <iostream>
-#include <gui/window/Window.h>
-#include <gui/shader/Shader.h>
-#include <gui/shader/ShaderProgram.h>
-#include <string>
-#include <thread>
 
 int main() {
 
