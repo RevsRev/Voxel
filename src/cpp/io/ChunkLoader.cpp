@@ -132,9 +132,8 @@ Chunk* ChunkLoader::getChunk(long& chunkX, long& chunkY) {
 	std::mutex* chunkLock = getChunkLock(chunkX, chunkY);
 	chunkLock->lock();
 
-	Chunk* chunk;
+	Chunk* chunk = nullptr;
 	std::pair<long, long> key{ chunkX, chunkY };
-	chunk = getFromCache(key);
 	if (chunk != nullptr) {
 		chunkLock->unlock();
 		return chunk;
@@ -147,32 +146,24 @@ Chunk* ChunkLoader::getChunk(long& chunkX, long& chunkY) {
 		chunk = generateChunkLazy(chunkX, chunkY);
 		saveToFile(chunk);
 	}
-	chunkCache.insert({ std::pair<long, long>{chunkX, chunkY}, chunk });
 
 	chunkLock->unlock();
 
 	return chunk;
 }
 
-void ChunkLoader::removeChunk(long& chunkX, long& chunkY) {
-	std::mutex* chunkLock = getChunkLock(chunkX, chunkY);
-	chunkLock->lock();
+//void ChunkLoader::removeChunk(long& chunkX, long& chunkY) {
+//	std::mutex* chunkLock = getChunkLock(chunkX, chunkY);
+//	chunkLock->lock();
+//
+//	Chunk* chunk = chunkCache.at(std::pair<long, long>{chunkX, chunkY});
+//	saveToFile(chunk);
+//	chunkCache.erase(std::pair<long, long>{chunkX, chunkY});
+//	delete chunk;
+//
+//	chunkLock->unlock();
+//}
 
-	Chunk* chunk = chunkCache.at(std::pair<long, long>{chunkX, chunkY});
-	saveToFile(chunk);
-	chunkCache.erase(std::pair<long, long>{chunkX, chunkY});
-	delete chunk;
-
-	chunkLock->unlock();
-}
-
-
-Chunk* ChunkLoader::getFromCache(std::pair<long, long>& key) {
-	if (chunkCache.find(key) == chunkCache.end()) {
-		return nullptr;
-	}
-	return chunkCache.at(key);
-}
 
 void ChunkLoader::initChunkLocks() {
 	for (int i = 0; i < chunkLocksSize; i++) {

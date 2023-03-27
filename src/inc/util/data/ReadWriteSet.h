@@ -30,6 +30,9 @@ public:
 		}
 		mutex.unlock();
 	}
+	bool isEmpty() {
+		return set.size() == 0;
+	}
 
 	ReadWriteSet() {
 

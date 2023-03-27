@@ -25,10 +25,14 @@ public:
 		}
 	}
 	void release(void* releaser, K& key) {
-		ReadWriteSet<void*> keyHooks = hooks.get(key);
-		keyHooks.remove(releaser);
-		if (keyHooks.isEmpty()) {
-			this->remove(key);
+		ReadWriteSet<void*>* keyHooks = hooks.get(key);
+		keyHooks->remove(releaser);
+		if (keyHooks->isEmpty()) {
+			V* removed = this->remove(key);
+			if (removed != nullptr) {
+				this->publishDelete(*removed);
+				delete removed;
+			}
 			//TODO - Way to remove from hooks (small memory leak here...)
 			//TODO - error handling (need to keep the ReadWriteCache and hooks in sync with one another)
 		}
@@ -41,11 +45,12 @@ public:
 	}
 
 	void asyncRequest(void* requester, K& key, std::map<std::string, std::string> &args) {
-		//std::future<void> requestFuture = std::async(&ObjectPool<K,V>::request, this, requester, std::ref(key), std::ref(args));
-		request(requester, key, args);
+		std::future<void> requestFuture = std::async(&ObjectPool<K,V>::request, this, requester, std::ref(key), std::ref(args));
+		//request(requester, key, args);
 	}
 	void asyncRelease(void* releaser, K& key) {
-		//TODO - Presumably just remove from cache?
+		std::async(&ObjectPool<K, V>::release, this, releaser, std::ref(key));
+		//release(releaser, key);
 		//std::async(std::launch::async, &Loader::load, loader, key);
 	}
 	V* retrieve(K &key) {

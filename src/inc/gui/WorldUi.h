@@ -12,6 +12,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include <util/data/ObjectPool.h>
 #include <util/data/Loader.h>
+#include <mutex>
 
 class WorldUi : public GuiUpdatable, private Subscriber<Chunk> {
 private:
@@ -23,8 +24,14 @@ private:
 	const World* world;
 
 	//All for making sure we render chunks properly
+	std::mutex queueLock{};
+	std::mutex renderLock{};
+	std::mutex rendererDeleteLock{};
+	std::map<std::pair<long, long>, Chunk*> chunkQueue{};
 	std::map<std::pair<long, long>, ChunkRenderer*> renderers{};
-	unsigned char renderDistance = 10;
+	std::map<std::pair<long, long>, ChunkRenderer*> renderersToDelete{};
+
+	unsigned char renderDistance = 5;
 	long chunkX;
 	long chunkY;
 
@@ -34,7 +41,12 @@ private:
 	double lastChunkCacheZ;
 
 	bool updateChunkPosition();
-	void updateChunkRenderers();
+	void requestFromChunkPool();
+	void releaseFromChunkPool();
+
+	void flushChunkQueue();
+	void flushRenderersToDelete();
+
 	std::set<std::pair<long, long>> getChunksToRender();
 	std::set<std::pair<long, long>> getChunksToDelete();
 

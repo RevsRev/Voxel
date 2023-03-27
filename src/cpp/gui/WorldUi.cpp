@@ -23,10 +23,40 @@ void WorldUi::setSelectedCamera(Camera* camera) {
 }
 
 void WorldUi::update(float delTime) {
-	bool updateRenderers = updateChunkPosition();
-	if (updateRenderers) {
-		updateChunkRenderers();
+	bool flushPool = updateChunkPosition();
+	if (flushPool) {
+		releaseFromChunkPool();
+		requestFromChunkPool();
 	}
+	flushChunkQueue();
+	flushRenderersToDelete();
+}
+
+void WorldUi::flushChunkQueue() {
+	queueLock.lock();
+	renderLock.lock();
+
+	for (auto it = chunkQueue.begin(); it != chunkQueue.end(); it++) {
+		std::pair<long, long> key = (*it).first;
+		Chunk* chunk = (*it).second;
+		renderers.insert({ key, new ChunkRenderer(chunk) });
+	}
+	chunkQueue.clear();
+
+	renderLock.unlock();
+	queueLock.unlock();
+}
+
+void WorldUi::flushRenderersToDelete() {
+	rendererDeleteLock.lock();
+
+	for (auto it = renderersToDelete.begin(); it != renderersToDelete.end(); it++) {
+		ChunkRenderer* renderer = (*it).second;
+		delete renderer;
+	}
+	renderersToDelete.clear();
+
+	rendererDeleteLock.unlock();
 }
 
 bool WorldUi::updateChunkPosition() {
@@ -41,26 +71,7 @@ bool WorldUi::updateChunkPosition() {
 	return true;
 }
 
-void WorldUi::updateChunkRenderers() {
-	World* theWorld = World::the();
-
-	std::set<std::pair<long, long>> chunksToDelete = getChunksToDelete();
-	std::map<std::pair<long, long>, std::future<Chunk*>*> newChunks{};
-
-	//Remove the ones that don't need rendering anymore
-	for (auto it = chunksToDelete.begin(); it != chunksToDelete.end(); it++) {
-		long chunkX = it->first;
-		long chunkY = it->second;
-		std::pair<long, long> key{ chunkX, chunkY };
-		if (renderers.find(key) != renderers.end()) {
-			std::pair<long, long> key{ chunkX, chunkY };
-			pool.asyncRelease(this, key);
-			//deleteChunkAsync(chunkX, chunkY);
-			//ChunkRenderer* renderer = renderers.at(key);
-			//renderers.erase(key);
-			//delete renderer;
-		}
-	}
+void WorldUi::requestFromChunkPool() {
 
 	//Load the chunks that need rendering
 	std::set<std::pair<long, long>> chunksToRender = getChunksToRender();
@@ -70,38 +81,37 @@ void WorldUi::updateChunkRenderers() {
 			long chunkX = (*it).first;
 			long chunkY = (*it).second;
 			std::pair<long, long> key{ chunkX, chunkY };
-			//pool.asyncRequest(this, key, std::map<std::string, std::string >{});
-			//newChunks.insert({ key, getChunkAsync(chunkX, chunkY) });
 
-			//just for testing
+			//TODO - Proper args here
 			std::map<std::string, std::string> args{};
 			pool.asyncRequest(this,key, args);
 
 		}
 	}
 
-	//crate the new renderers
-	/*for (auto it = newChunks.begin(); it != newChunks.end(); it++) {
-		std::pair<long, long> key = (*it).first;
-		renderers.insert({ key, new ChunkRenderer(getChunk(key.first, key.second)) });
-	}*/
-
 	lastChunkCacheX = selectedCamera->getPosition().x;
 	lastChunkCacheY = selectedCamera->getPosition().y;
 }
 
-std::future<Chunk*>* WorldUi::getChunkAsync(long& chunkX, long& chunkY) {
-	std::future future = std::async(std::launch::async, &ChunkLoader::getChunk, World::the()->getChunkLoader(), std::ref(chunkX), std::ref(chunkY));
-	return &future;
+void WorldUi::releaseFromChunkPool() {
+
+	std::set<std::pair<long, long>> chunksToDelete = getChunksToDelete();
+
+	//Remove the ones that don't need rendering anymore
+	for (auto it = chunksToDelete.begin(); it != chunksToDelete.end(); it++) {
+		long chunkX = it->first;
+		long chunkY = it->second;
+		std::pair<long, long> key{ chunkX, chunkY };
+		if (renderers.find(key) != renderers.end()) {
+			std::pair<long, long> key{ chunkX, chunkY };
+			pool.asyncRelease(this, key);
+		}
+	}
 }
+
 Chunk* WorldUi::getChunk(long& chunkX, long& chunkY) {
 	World* theWorld = World::the();
 	return theWorld->getChunkLoader()->getChunk(chunkX, chunkY);
-}
-
-std::future<void>* WorldUi::deleteChunkAsync(long& chunkX, long& chunkY) {
-	std::future future = async(std::launch::async, &ChunkLoader::removeChunk, World::the()->getChunkLoader(), std::ref(chunkX), std::ref(chunkY));
-	return &future;
 }
 
 //TODO - Replace with the palyer's position and update the player
@@ -174,8 +184,12 @@ void WorldUi::render() {
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 800.0f);
 	glm::vec3 lightDirection = glm::normalize(glm::vec3{ 0.0f, 0.5f, 1.0f });
 
+	renderLock.lock();
+
 	for (auto it = renderers.begin(); it != renderers.end(); it++) {
+		std::pair<long, long> key = (*it).first;
 		ChunkRenderer* renderer = (*it).second;
+		//std::cout << "key = (" << key.first << "," << key.second << ")" << std::endl;
 
 		int modelLoc = renderer->getShaderProgram()->getUniformLocation("model");
 		int viewLoc = renderer->getShaderProgram()->getUniformLocation("view");
@@ -192,6 +206,8 @@ void WorldUi::render() {
 
 		renderer->render();
 	}
+
+	renderLock.unlock();
 }
 
 bool WorldUi::checkRenderDistance(long& chunkX, long& chunkY) {
@@ -200,11 +216,30 @@ bool WorldUi::checkRenderDistance(long& chunkX, long& chunkY) {
 
 void WorldUi::onCreate(Chunk& val) {
 	std::pair<long, long>key{ val.getChunkX(), val.getChunkY() };
-	renderers.insert({ key, new ChunkRenderer(&val)});
+	queueLock.lock();
+	chunkQueue.insert({ key, &val});
+	queueLock.unlock();
 }
 void WorldUi::onUpdate(Chunk& val) {
 	//TODO - implement at a later date
 }
 void WorldUi::onDelete(Chunk& val) {
-	//TODO - implement at a later date
+	std::pair<long, long>key{ val.getChunkX(), val.getChunkY() };
+	renderLock.lock();
+	queueLock.lock();
+	rendererDeleteLock.lock();
+
+	if (chunkQueue.find(key) != chunkQueue.end()) {
+		chunkQueue.erase(key);
+	}
+
+	if (renderers.find(key) != renderers.end()) {
+		ChunkRenderer* renderer = renderers.at(key);
+		renderers.erase(key);
+		renderersToDelete.insert({ key, renderer });
+	}
+
+	rendererDeleteLock.unlock();
+	queueLock.unlock();
+	renderLock.unlock();
 }

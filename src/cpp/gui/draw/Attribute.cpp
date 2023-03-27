@@ -19,12 +19,16 @@ Attribute::~Attribute() {
 }
 
 void Attribute::createVertexAttribPointer() {
+	GlLock::lock();
 	glVertexAttribPointer(location, length, dataType, normalized, stride, offset);
+	GlLock::unlock();
 }
 
 void Attribute::enable() {
+	GlLock::lock();
 	glEnableVertexAttribArray(location);
 	glVertexAttribDivisor(location, divisor);
+	GlLock::unlock();
 }
 
 void Attribute::setDivisor(unsigned int divisor) {

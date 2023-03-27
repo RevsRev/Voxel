@@ -42,7 +42,7 @@ public:
 	~Chunk();
 	void deleteVoxelArray();
 
-	const static unsigned int CHUNK_SIZE = 64;
+	const static unsigned int CHUNK_SIZE = 16;
 	const static unsigned int CHUNK_HEIGHT = 256;
 
 	int getChunkX() const;

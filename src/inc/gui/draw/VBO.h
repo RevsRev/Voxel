@@ -3,6 +3,7 @@
 #include "gui/draw/Attribute.h"
 #include <vector>
 #include <glad\glad.h>
+#include <gui/draw/GlLock.h>
 
 class VBO {
 private:

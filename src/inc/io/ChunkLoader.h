@@ -18,7 +18,6 @@ private:
 
 	long chunkLocksSize = 20;
 
-	std::map<std::pair<long, long>, Chunk*> chunkCache{};
 	std::map<std::pair<long, long>, std::mutex*> chunkLocks{};
 
 	bool chunkFileExists(long &chunkX, long &chunkY);
@@ -26,7 +25,6 @@ private:
 	void saveToFile(Chunk* &chunk);
 	Chunk* generateChunk(long &chunkX, long &chunkY);
 	Chunk* generateChunkLazy(long &chunkX, long &chunkY);
-	Chunk* getFromCache(std::pair<long, long> &key);
 
 	void addToSurface(std::map<Triple<long, long, long>, Voxel>*& cachedVoxelSurface, long& colX, long& colY,
 		unsigned char* thisColBitFlags,
@@ -46,7 +44,8 @@ public:
 
 	const static std::string CHUNK_FILE_DIR_PATH;
 	Chunk* getChunk(long &chunkX, long &chunkY);
-	void removeChunk(long &chunkX, long &chunkY);
+	//TODO - implement properly
+	/*void removeChunk(long &chunkX, long &chunkY);*/
 	
 	Chunk& load(std::pair<long, long>& key, std::map<std::string, std::string>& args) override;
 

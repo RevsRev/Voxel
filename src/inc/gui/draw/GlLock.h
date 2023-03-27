@@ -2,6 +2,9 @@
 
 #include <mutex>
 
-//namespace GlLock {
-//	std::recursive_mutex lock{};
-//}
+namespace GlLock {
+	extern std::recursive_mutex gl_lock;
+
+	extern void lock();
+	extern void unlock();
+}

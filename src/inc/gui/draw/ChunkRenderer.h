@@ -24,7 +24,6 @@ private:
 	void init();
 	void initVao();
 	void initShaderProgram();
-
 public:
 	ChunkRenderer(Chunk* chunk);
 	//~ChunkRenderer();

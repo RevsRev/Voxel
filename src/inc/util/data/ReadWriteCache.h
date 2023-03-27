@@ -32,12 +32,14 @@ public:
 	V* remove(const K &key) override {
 		//std::unique_lock< std::shared_mutex> lock{ mutex };
 		mutex.lock_shared();
-		if (cache.find(key) != cache.end()) {
-			mutex.unlock_shared();
+		auto find = cache.find(key);
+		V* retval = nullptr;
+		if (find != cache.end()) {
+			retval = (* find).second;
 			cache.erase(key);
 		}
 		mutex.unlock_shared();
-		return nullptr; //TODO - implement properly
+		return retval; //TODO - implement properly
 	}
 
 };
