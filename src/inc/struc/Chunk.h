@@ -15,8 +15,9 @@ private:
 	bool lazyInited = true;
 	Voxel*** voxels;
 	std::map<Triple<long, long, long>, Voxel>* cachedVoxelSurface;
-	std::vector<float> cachedFloatSurface{};
-	std::vector<float> cachedFloatColors{};
+	/*std::vector<float> cachedFloatSurface{};
+	std::vector<float> cachedFloatColors{};*/
+	std::vector<float> cachedFloatSurfaceAndColors{};
 
 	int chunkX;
 	int chunkY;
@@ -46,6 +47,7 @@ public:
 	int getChunkY() const;
 
 	void cacheVoxelData();
-	std::pair<long, float*> getVoxelPositionsToRender();
-	std::pair<long, float*> getVoxelColorsToRender();
+	/*std::pair<long, float*> getVoxelPositionsToRender();
+	std::pair<long, float*> getVoxelColorsToRender();*/
+	std::pair<long, float*> getPositionsAndColorsToRender();
 };
