@@ -20,11 +20,6 @@ void ChunkRenderer::initVao() {
 	vboCube = VBO();
 	vboCube.init();
 
-	/*vboPositionInstance = VBO();
-	vboPositionInstance.init();
-
-	vboColorInstance = VBO();
-	vboColorInstance.init();*/
 	vboPositionAndColorInstance = VBO();
 	vboPositionAndColorInstance.init();
 
@@ -42,10 +37,6 @@ void ChunkRenderer::initVao() {
 	vboCube.addAttribute(&attrVertex);
 	vboCube.addAttribute(&attrNormal);
 	vboCube.addAttribute(&attrTex);
-	/*vao.addVBO(&vboPositionInstance);
-	vboPositionInstance.addAttribute(&attrPositionInstance);
-	vao.addVBO(&vboColorInstance);
-	vboColorInstance.addAttribute(&attributeColorInstance);*/
 	vao.addVBO(&vboPositionAndColorInstance);
 	vboPositionAndColorInstance.addAttribute(&attrPositionInstance);
 	vboPositionAndColorInstance.addAttribute(&attributeColorInstance);
@@ -72,12 +63,6 @@ void ChunkRenderer::initShaderProgram() {
 void ChunkRenderer::render() {
 
 	if (recache) {
-		/*std::pair<long, float*> positions = chunk->getVoxelPositionsToRender();
-		vboPositionInstance.setBufferData(positions.second, positions.first * sizeof(float));
-
-		std::pair<long, float*> colors = chunk->getVoxelColorsToRender();
-		vboColorInstance.setBufferData(colors.second, colors.first * sizeof(float));*/
-
 		std::pair<long, float*> positionsAndColors = chunk->getPositionsAndColorsToRender();
 		vboPositionAndColorInstance.setBufferData(positionsAndColors.second, positionsAndColors.first * sizeof(float));
 

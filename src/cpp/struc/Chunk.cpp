@@ -126,8 +126,6 @@ void Chunk::cacheSurfaceAndColors() {
 	return cacheSurfaceAndColorsIndustrious();
 }
 void Chunk::cacheSurfaceAndColorsLazy() {
-	/*cachedFloatSurface.clear();
-	cachedFloatColors.clear();*/
 	cachedFloatSurfaceAndColors.clear();
 
 	for (auto it = cachedVoxelSurface->begin(); it != cachedVoxelSurface->end(); it++) {
@@ -168,22 +166,6 @@ void Chunk::cacheSurfaceAndColorsIndustrious() {
 	}
 }
 
-//std::pair<long, float*> Chunk::getVoxelPositionsToRender() {
-//	cacheVoxelData();
-//	long size = cachedFloatSurface.size();
-//	if (size == 0) {
-//		return std::pair<long, float*>(0, nullptr);
-//	}
-//	return std::pair<long,float*>{size, &(cachedFloatSurface[0])};
-//}
-//std::pair<long, float*> Chunk::getVoxelColorsToRender() {
-//	cacheVoxelData();
-//	long size = cachedFloatColors.size();
-//	if (size == 0) {
-//		return std::pair<long, float*>(0, nullptr);
-//	}
-//	return std::pair<long, float*>{size, & (cachedFloatColors[0])};
-//}
 std::pair<long, float*> Chunk::getPositionsAndColorsToRender() {
 	cacheVoxelData();
 	long size = cachedFloatSurfaceAndColors.size();

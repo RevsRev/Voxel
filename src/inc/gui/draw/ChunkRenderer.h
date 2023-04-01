@@ -16,8 +16,6 @@ private:
 	//for rendering
 	VAO vao;
 	VBO vboCube;
-	/*VBO vboPositionInstance;
-	VBO vboColorInstance;*/
 	VBO vboPositionAndColorInstance;
 	Attribute attributeVertex;
 	Attribute attributeTexture;
