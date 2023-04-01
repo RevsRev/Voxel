@@ -99,8 +99,6 @@ void ChunkLoader::addToSurface(std::map<Triple<long, long, long>, Voxel>*& cache
 			thisColBitFlagsRShifted += 128;
 		}
 
-		//std::cout << "lShift, char, rShift = " << (int)thisColBitFlagsLShifted << " , " << (int)thisColBitFlags[i] << " , " << (int)thisColBitFlagsRShifted << std::endl;
-
 		//The left shifted and right shifted bit flags can be XORd with the bit flags to detect changes. This then gives us all the edges from within this bitflag.
 		unsigned char surfaceBitFlags = ((thisColBitFlagsLShifted ^ thisColBitFlags[i]) | (thisColBitFlagsRShifted ^ thisColBitFlags[i]) & thisColBitFlags[i]);
 

@@ -47,7 +47,6 @@ float PerlinNoise::interpolate(float &w, float &a, float &b) {
 	return w * (b - a) + a;
 }
 
-//TODO - Might need to make this threadsafe at some point?
 glm::vec2 PerlinNoise::getRandomVec(long &cornerX, long &cornerY) {
 	long genSeed = getGenSeed(cornerX, cornerY);
 	std::minstd_rand stdRand{};

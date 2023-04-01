@@ -33,14 +33,17 @@ void WorldUi::update(float delTime) {
 
 void WorldUi::flushChunkQueue() {
 	queueLock.lock();
+	renderLock.lock();
 
 	for (auto it = chunkQueue.begin(); it != chunkQueue.end(); it++) {
 		std::pair<long, long> key = (*it).first;
 		Chunk* chunk = (*it).second;
-		renderLock.lock();
-		renderers.insert({ key, new ChunkRenderer(chunk) });
-		renderLock.unlock();
+		ChunkRenderer* renderer = new ChunkRenderer(chunk);
+		
+		renderers.insert({ key, renderer});
 	}
+	renderLock.unlock();
+
 	chunkQueue.clear();
 	queueLock.unlock();
 }
@@ -139,7 +142,6 @@ void WorldUi::flushChunkPool() {
 		addXright = lastLeft-1;
 	}
 
-	//TODO - Combine into one to make more efficient (maybe?)
 	for (int j = lastBottom; j <= lastTop; j++) {
 		for (int i = deleteXleft; i <= deleteXright; i++) {
 			std::pair<long, long> key{ i,j };

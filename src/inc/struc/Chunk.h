@@ -15,6 +15,8 @@ private:
 	bool lazyInited = true;
 	Voxel*** voxels;
 	std::map<Triple<long, long, long>, Voxel>* cachedVoxelSurface;
+	std::vector<float> cachedFloatSurface;
+	std::vector<float>* cachedColors;
 
 	int chunkX;
 	int chunkY;
@@ -41,7 +43,7 @@ public:
 	~Chunk();
 	void deleteVoxelArray();
 
-	const static unsigned int CHUNK_SIZE = 64;
+	const static unsigned int CHUNK_SIZE = 16;
 	const static unsigned int CHUNK_HEIGHT = 256;
 
 	int getChunkX() const;
