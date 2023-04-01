@@ -126,40 +126,41 @@ void Chunk::cacheSurfaceAndColors() {
 	return cacheSurfaceAndColorsIndustrious();
 }
 void Chunk::cacheSurfaceAndColorsLazy() {
-	cachedFloatSurface.clear();
-	cachedFloatColors.clear();
+	/*cachedFloatSurface.clear();
+	cachedFloatColors.clear();*/
+	cachedFloatSurfaceAndColors.clear();
 
 	for (auto it = cachedVoxelSurface->begin(); it != cachedVoxelSurface->end(); it++) {
 		Triple<long, long, long> key = (*it).first;
 		Voxel vox = (*it).second;
-		cachedFloatSurface.push_back((float)key.first);
-		cachedFloatSurface.push_back((float)key.second);
-		cachedFloatSurface.push_back((float)key.third);
+		cachedFloatSurfaceAndColors.push_back((float)key.first);
+		cachedFloatSurfaceAndColors.push_back((float)key.second);
+		cachedFloatSurfaceAndColors.push_back((float)key.third);
 
 		glm::vec3* color = ChunkType::getColor(vox.type);
-		cachedFloatColors.push_back(color->x);
-		cachedFloatColors.push_back(color->y);
-		cachedFloatColors.push_back(color->z);
+		cachedFloatSurfaceAndColors.push_back(color->x);
+		cachedFloatSurfaceAndColors.push_back(color->y);
+		cachedFloatSurfaceAndColors.push_back(color->z);
 		delete color;
 	}
 }
 void Chunk::cacheSurfaceAndColorsIndustrious() {
-	cachedFloatSurface.clear();
-	cachedFloatColors.clear();
+	cachedFloatSurfaceAndColors.clear();
+	cachedFloatSurfaceAndColors.clear();
 
 	for (int i = 0; i < CHUNK_SIZE; i++) {
 		for (int j = 0; j < CHUNK_SIZE; j++) {
 			for (int k = 0; k < CHUNK_HEIGHT; k++) {
 				if (voxels[i][j][k].active
 					&& isVoxelOnSurface(i, j, k)) {
-					cachedFloatSurface.push_back((float)(chunkX + i));
-					cachedFloatSurface.push_back((float)(chunkY + j));
-					cachedFloatSurface.push_back((float)k);
+					cachedFloatSurfaceAndColors.push_back((float)(chunkX + i));
+					cachedFloatSurfaceAndColors.push_back((float)(chunkY + j));
+					cachedFloatSurfaceAndColors.push_back((float)k);
 
 					glm::vec3* color = ChunkType::getColor(voxels[i][j][k].type);
-					cachedFloatColors.push_back(color->x);
-					cachedFloatColors.push_back(color->y);
-					cachedFloatColors.push_back(color->z);
+					cachedFloatSurfaceAndColors.push_back(color->x);
+					cachedFloatSurfaceAndColors.push_back(color->y);
+					cachedFloatSurfaceAndColors.push_back(color->z);
 					delete color;
 				}
 			}
@@ -167,21 +168,29 @@ void Chunk::cacheSurfaceAndColorsIndustrious() {
 	}
 }
 
-std::pair<long, float*> Chunk::getVoxelPositionsToRender() {
+//std::pair<long, float*> Chunk::getVoxelPositionsToRender() {
+//	cacheVoxelData();
+//	long size = cachedFloatSurface.size();
+//	if (size == 0) {
+//		return std::pair<long, float*>(0, nullptr);
+//	}
+//	return std::pair<long,float*>{size, &(cachedFloatSurface[0])};
+//}
+//std::pair<long, float*> Chunk::getVoxelColorsToRender() {
+//	cacheVoxelData();
+//	long size = cachedFloatColors.size();
+//	if (size == 0) {
+//		return std::pair<long, float*>(0, nullptr);
+//	}
+//	return std::pair<long, float*>{size, & (cachedFloatColors[0])};
+//}
+std::pair<long, float*> Chunk::getPositionsAndColorsToRender() {
 	cacheVoxelData();
-	long size = cachedFloatSurface.size();
+	long size = cachedFloatSurfaceAndColors.size();
 	if (size == 0) {
 		return std::pair<long, float*>(0, nullptr);
 	}
-	return std::pair<long,float*>{size, &(cachedFloatSurface[0])};
-}
-std::pair<long, float*> Chunk::getVoxelColorsToRender() {
-	cacheVoxelData();
-	long size = cachedFloatColors.size();
-	if (size == 0) {
-		return std::pair<long, float*>(0, nullptr);
-	}
-	return std::pair<long, float*>{size, & (cachedFloatColors[0])};
+	return std::pair<long, float*>{size, & (cachedFloatSurfaceAndColors[0])};
 }
 
 //default constructor used when initizlizing arrays!
