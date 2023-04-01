@@ -2,12 +2,8 @@
 
 ChunkLoader::ChunkLoader(WorldGenerator* generator) {
 	this->generator = generator;
-	initChunkLocks();
 }
 ChunkLoader::~ChunkLoader() {
-	/*destroyChunkLocks();
-	destroyChunks();*/
-
 	//TODO - Not too bothered at the moment because this is only destroyed on application exit at the moment.
 }
 
@@ -129,13 +125,9 @@ void ChunkLoader::saveToFile(Chunk*& chunk) {
 }
 
 Chunk* ChunkLoader::getChunk(long& chunkX, long& chunkY) {
-	std::mutex* chunkLock = getChunkLock(chunkX, chunkY);
-	chunkLock->lock();
-
 	Chunk* chunk = nullptr;
 	std::pair<long, long> key{ chunkX, chunkY };
 	if (chunk != nullptr) {
-		chunkLock->unlock();
 		return chunk;
 	}
 
@@ -146,8 +138,6 @@ Chunk* ChunkLoader::getChunk(long& chunkX, long& chunkY) {
 		chunk = generateChunkLazy(chunkX, chunkY);
 		saveToFile(chunk);
 	}
-
-	chunkLock->unlock();
 
 	return chunk;
 }
@@ -163,34 +153,3 @@ Chunk* ChunkLoader::getChunk(long& chunkX, long& chunkY) {
 //
 //	chunkLock->unlock();
 //}
-
-
-void ChunkLoader::initChunkLocks() {
-	for (int i = 0; i < chunkLocksSize; i++) {
-		for (int j = 0; j < chunkLocksSize; j++) {
-			std::pair<long, long> key{ i,j };
-			std::mutex* chunkLock = new std::mutex();
-			chunkLocks.insert(std::pair < std::pair<long, long>, std::mutex*> { key, chunkLock });
-		}
-	}
-}
-
-//TODO - Make this more elegant (what happens if a lock is acquired while we delete? Although this scenario is unrealistic...)
-void ChunkLoader::destroyChunkLocks() {
-	for (int i = 0; i < chunkLocksSize; i++) {
-		for (int j = 0; j < chunkLocksSize; j++) {
-			std::pair<long, long> key{ i,j };
-			std::mutex* chunkLock = chunkLocks.at(key);
-			chunkLocks.erase(key);
-			delete chunkLock;
-		}
-	}
-}
-
-std::mutex* ChunkLoader::getChunkLock(long& chunkX, long& chunkY) {
-	long keyX = (chunkX % chunkLocksSize + chunkLocksSize) % chunkLocksSize;
-	long keyY = (chunkY % chunkLocksSize + chunkLocksSize) % chunkLocksSize;
-
-	std::pair<long, long> key{keyX, keyY };
-	return chunkLocks.at(key);
-}

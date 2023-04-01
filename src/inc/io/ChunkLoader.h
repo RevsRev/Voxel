@@ -16,10 +16,6 @@
 class ChunkLoader : public Loader<std::pair<long,long>,Chunk> {
 private:
 
-	long chunkLocksSize = 20;
-
-	std::map<std::pair<long, long>, std::mutex*> chunkLocks{};
-
 	bool chunkFileExists(long &chunkX, long &chunkY);
 	Chunk* loadFromFile(long &chunkX, long &chunkY);
 	void saveToFile(Chunk* &chunk);
@@ -32,10 +28,6 @@ private:
 		unsigned char* xPlusBitFlags,
 		unsigned char* yMinusBitFlags,
 		unsigned char* yPlusBitFlags);
-
-	void initChunkLocks();
-	void destroyChunkLocks();
-	std::mutex* getChunkLock(long &chunkX, long &chunkY);
 
 	WorldGenerator* generator;
 public:

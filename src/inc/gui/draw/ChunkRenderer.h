@@ -10,6 +10,9 @@ private:
 	//thing being rendered
 	Chunk* chunk;
 
+	bool recache = true;
+	int numTrianglesForArray;
+
 	//for rendering
 	VAO vao;
 	VBO vboCube;

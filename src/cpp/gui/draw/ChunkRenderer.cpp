@@ -66,15 +66,21 @@ void ChunkRenderer::initShaderProgram() {
 
 void ChunkRenderer::render() {
 
-	std::pair<long, float*> positions = chunk->getVoxelPositionsToRender();
-	vboPositionInstance.setBufferData(positions.second, positions.first * sizeof(float));
+	if (recache) {
+		std::pair<long, float*> positions = chunk->getVoxelPositionsToRender();
+		vboPositionInstance.setBufferData(positions.second, positions.first * sizeof(float));
 
-	std::pair<long, float*> colors = chunk->getVoxelColorsToRender();
-	vboColorInstance.setBufferData(colors.second, colors.first * sizeof(float));
+		std::pair<long, float*> colors = chunk->getVoxelColorsToRender();
+		vboColorInstance.setBufferData(colors.second, colors.first * sizeof(float));
+
+		numTrianglesForArray = positions.first / 3;
+		recache = false;
+	}
+	
 
 	shaderProgram.use();
 	vao.bind();
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, positions.first / 3);
+	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, numTrianglesForArray);
 }
 
 ShaderProgram* ChunkRenderer::getShaderProgram() {

@@ -25,8 +25,7 @@ void WorldUi::setSelectedCamera(Camera* camera) {
 void WorldUi::update(float delTime) {
 	bool flushPool = updateChunkPosition();
 	if (flushPool) {
-		releaseFromChunkPool();
-		requestFromChunkPool();
+		flushChunkPool();
 	}
 	flushChunkQueue();
 	flushRenderersToDelete();
@@ -34,16 +33,15 @@ void WorldUi::update(float delTime) {
 
 void WorldUi::flushChunkQueue() {
 	queueLock.lock();
-	renderLock.lock();
 
 	for (auto it = chunkQueue.begin(); it != chunkQueue.end(); it++) {
 		std::pair<long, long> key = (*it).first;
 		Chunk* chunk = (*it).second;
+		renderLock.lock();
 		renderers.insert({ key, new ChunkRenderer(chunk) });
+		renderLock.unlock();
 	}
 	chunkQueue.clear();
-
-	renderLock.unlock();
 	queueLock.unlock();
 }
 
@@ -71,40 +69,131 @@ bool WorldUi::updateChunkPosition() {
 	return true;
 }
 
-void WorldUi::requestFromChunkPool() {
+void WorldUi::flushChunkPool() {
 
-	//Load the chunks that need rendering
-	std::set<std::pair<long, long>> chunksToRender = getChunksToRender();
-	for (auto it = chunksToRender.begin(); it != chunksToRender.end(); it++) {
-		auto finder = renderers.find(*it);
-		if (finder == renderers.end()) {
-			long chunkX = (*it).first;
-			long chunkY = (*it).second;
-			std::pair<long, long> key{ chunkX, chunkY };
+	long chunkX = floorl(selectedCamera->getPosition().x / Chunk::CHUNK_SIZE);
+	long chunkY = floorl(selectedCamera->getPosition().y / Chunk::CHUNK_SIZE);
+	std::set<std::pair<long, long>> retval{};
 
-			//TODO - Proper args here
-			std::map<std::string, std::string> args{};
-			pool.asyncRequest(this,key, args);
+	long squaredRad = renderDistance * renderDistance;
 
+	std::map<std::string, std::string> args{};
+
+	if (firstChunkCache) {
+		for (int i = -renderDistance; i <= renderDistance; i++) {
+			for (int j = -renderDistance; j <= renderDistance; j++) {
+				std::pair<long, long> key{ chunkX + i, chunkY + j };
+				pool.asyncRequest(this, key, args);
+			}
+		}
+		lastChunkCacheX = selectedCamera->getPosition().x;
+		lastChunkCacheY = selectedCamera->getPosition().y;
+		firstChunkCache = false;
+		return;
+	}
+
+	long lastChunkX = floorl(lastChunkCacheX / Chunk::CHUNK_SIZE);
+	long lastChunkY = floorl(lastChunkCacheY / Chunk::Chunk::CHUNK_SIZE);
+	lastChunkCacheX = selectedCamera->getPosition().x;
+	lastChunkCacheY = selectedCamera->getPosition().y;
+	long squaredRadWithSlack = (renderDistance - 2) * (renderDistance - 2);
+
+	//circular caching - seemed very slow
+	/*int left = chunkX - renderDistance;
+	int right = chunkX + renderDistance;
+	int bottom = chunkY - renderDistance;
+	int top = chunkY + renderDistance;
+	for (int i = left; i <= right; i++) {
+		for (int j = bottom; j <= top; j++) {
+			if (((i - chunkX) * (i - chunkX) + (j - chunkY) * (j - chunkY) <= squaredRad)
+				&& ((i - lastChunkX) * (i - lastChunkX) + (j - lastChunkY) * (j - lastChunkY) > squaredRadWithSlack)) {
+				std::pair<long, long> key{i, j};
+				pool.asyncRequest(this, key, args);
+			}
+		}
+	}*/
+  	int lastBottom = lastChunkY - renderDistance;
+	int lastTop = lastChunkY + renderDistance;
+	int top = chunkY + renderDistance;
+	int bottom = chunkY - renderDistance;
+
+	int lastLeft = lastChunkX - renderDistance;
+	int lastRight = lastChunkX + renderDistance;
+	int left = chunkX - renderDistance;
+	int right = chunkX + renderDistance;
+
+	int deleteXleft;
+	int deleteXright;
+	int addXleft;
+	int addXright;
+	if (lastLeft < left) {
+		deleteXleft = lastLeft;
+		deleteXright = left - 1;
+		addXleft = lastRight + 1;
+		addXright = right;
+	}
+	else {
+		deleteXleft = right + 1;
+		deleteXright = lastRight;
+		addXleft = left;
+		addXright = lastLeft-1;
+	}
+
+	//TODO - Combine into one to make more efficient (maybe?)
+	for (int j = lastBottom; j <= lastTop; j++) {
+		for (int i = deleteXleft; i <= deleteXright; i++) {
+			std::pair<long, long> key{ i,j };
+			pool.asyncRelease(this, key);
+		}
+	}
+	for (int j = bottom; j <= top; j++) {
+		for (int i = addXleft; i <= addXright; i++) {
+			std::pair<long, long> key{ i,j };
+			pool.asyncRequest(this, key, args);
 		}
 	}
 
-	lastChunkCacheX = selectedCamera->getPosition().x;
-	lastChunkCacheY = selectedCamera->getPosition().y;
-}
+	int deleteYbottom;
+	int deleteYtop;
+	int addYbottom;
+	int addYtop;
+	if (lastBottom < bottom) {
+		deleteYbottom = lastBottom;
+		deleteYtop = bottom - 1;
+		addYbottom = lastTop + 1;
+		addYtop = top;
+	}
+	else {
+		deleteYbottom = top + 1;
+		deleteYtop = lastTop;
+		addYbottom = bottom;
+		addYtop = lastBottom - 1;
+	}
 
-void WorldUi::releaseFromChunkPool() {
+	//we've already done some of the x values, so we can speed up the process
+	int xLeftLimit;
+	if (left < lastLeft) {
+		xLeftLimit = lastLeft;
+	}
+	else {
+		xLeftLimit = left;
+	}
+	int xRightLimit;
+	if (right < lastRight) {
+		xRightLimit = right;
+	}
+	else {
+		xRightLimit = lastRight;
+	}
 
-	std::set<std::pair<long, long>> chunksToDelete = getChunksToDelete();
-
-	//Remove the ones that don't need rendering anymore
-	for (auto it = chunksToDelete.begin(); it != chunksToDelete.end(); it++) {
-		long chunkX = it->first;
-		long chunkY = it->second;
-		std::pair<long, long> key{ chunkX, chunkY };
-		if (renderers.find(key) != renderers.end()) {
-			std::pair<long, long> key{ chunkX, chunkY };
+	for (int i = xLeftLimit; i <= xRightLimit; i++) {
+		for (int j = deleteYbottom; j <= deleteYtop; j++) {
+			std::pair<long, long> key{ i,j };
 			pool.asyncRelease(this, key);
+		}
+		for (int j = addYbottom; j <= addYtop; j++) {
+			std::pair<long, long> key{ i,j };
+			pool.asyncRequest(this, key, args);
 		}
 	}
 }
@@ -113,69 +202,6 @@ Chunk* WorldUi::getChunk(long& chunkX, long& chunkY) {
 	World* theWorld = World::the();
 	return theWorld->getChunkLoader()->getChunk(chunkX, chunkY);
 }
-
-//TODO - Replace with the palyer's position and update the player
-std::set<std::pair<long, long>> WorldUi::getChunksToRender() {
-
-	long chunkX = floorl(selectedCamera->getPosition().x / Chunk::CHUNK_SIZE);
-	long chunkY = floorl(selectedCamera->getPosition().y / Chunk::CHUNK_SIZE);
-	std::set<std::pair<long, long>> retval{};
-
-	long squaredRad = renderDistance * renderDistance;
-
-	if (firstChunkCache) {
-		for (int i = -renderDistance; i <= renderDistance; i++) {
-			for (int j = -renderDistance; j <= renderDistance; j++) {
-				if (i * i + j * j <= squaredRad) {
-					retval.insert(std::pair<int, int>{chunkX + i, chunkY + j});
-				}
-			}
-		}
-		firstChunkCache = false;
-		return retval;
-	}
-
-	long lastChunkX = floorl(lastChunkCacheX / Chunk::CHUNK_SIZE);
-	long lastChunkY = floorl(lastChunkCacheY / Chunk::Chunk::CHUNK_SIZE);
-	long squaredRadWithSlack = (renderDistance - 2) * (renderDistance - 2);
-
-	for (int i = chunkX - renderDistance; i <= chunkX + renderDistance; i++) {
-		for (int j = chunkY - renderDistance; j <= chunkY + renderDistance; j++) {
-			if (((i - chunkX) * (i - chunkX) + (j - chunkY) * (j - chunkY) <= squaredRad)
-				&& ((i - lastChunkX) * (i - lastChunkX) + (j - lastChunkY) * (j - lastChunkY) > squaredRadWithSlack)) {
-				retval.insert(std::pair<int, int>{i, j});
-			}
-		}
-	}
-	return retval;
-}
-
-std::set<std::pair<long, long>> WorldUi::getChunksToDelete() {
-	std::set<std::pair<long, long>> retval{};
-	if (firstChunkCache) {
-		return retval;
-	}
-	long chunkX = floorl(selectedCamera->getPosition().x / Chunk::CHUNK_SIZE);
-	long chunkY = floorl(selectedCamera->getPosition().y / Chunk::CHUNK_SIZE);
-	long lastChunkX = floorl(lastChunkCacheX / Chunk::CHUNK_SIZE);
-	long lastChunkY = floorl(lastChunkCacheY / Chunk::Chunk::CHUNK_SIZE);
-	long squaredRad = renderDistance * renderDistance;
-	long squaredRadWithSlack = (renderDistance + 2) * (renderDistance + 2);
-	long checkDistance = std::ceill(std::fmax(std::abs(chunkX - lastChunkX) + renderDistance + 1, std::abs(chunkY - lastChunkY) + renderDistance + 1));
-	long squredCheckDistance = checkDistance * checkDistance;
-
-	for (int i = chunkX - checkDistance; i <= chunkX + checkDistance; i++) {
-		for (int j = chunkY - checkDistance; j <= chunkY + checkDistance; j++) {
-			if (((i - chunkX) * (i - chunkX) + (j - chunkY) * (j - chunkY) > squaredRad)
-				&& ((i - lastChunkX) * (i - lastChunkX) + (j - lastChunkY) * (j - lastChunkY) <= squaredRadWithSlack)) {
-				retval.insert(std::pair<int, int>{i, j});
-			}
-		}
-	}
-	return retval;
-}
-
-
 
 void WorldUi::render() {
 	glm::mat4 view = selectedCamera->getView();
@@ -215,6 +241,7 @@ bool WorldUi::checkRenderDistance(long& chunkX, long& chunkY) {
 }
 
 void WorldUi::onCreate(Chunk& val) {
+	val.cacheVoxelData();
 	std::pair<long, long>key{ val.getChunkX(), val.getChunkY() };
 	queueLock.lock();
 	chunkQueue.insert({ key, &val});

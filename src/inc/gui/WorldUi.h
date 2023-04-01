@@ -31,7 +31,7 @@ private:
 	std::map<std::pair<long, long>, ChunkRenderer*> renderers{};
 	std::map<std::pair<long, long>, ChunkRenderer*> renderersToDelete{};
 
-	unsigned char renderDistance = 5;
+	unsigned char renderDistance = 10;
 	long chunkX;
 	long chunkY;
 
@@ -41,8 +41,7 @@ private:
 	double lastChunkCacheZ;
 
 	bool updateChunkPosition();
-	void requestFromChunkPool();
-	void releaseFromChunkPool();
+	void flushChunkPool();
 
 	void flushChunkQueue();
 	void flushRenderersToDelete();
