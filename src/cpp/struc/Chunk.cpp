@@ -116,98 +116,72 @@ void Chunk::cacheVoxelData() {
 	if (!recache) {
 		return;
 	}
-
-	std::pair<std::vector<float>*, std::vector<float>*> cachedSurfaceAndColors = cacheSurfaceAndColors();
-
-	std::vector<float>* vecAllVertices = cachedSurfaceAndColors.first;
-	std::vector<float>* vecAllColors = cachedSurfaceAndColors.second;
-
-	delete[] cachedSurface;
-	delete[] cachedVoxelColors;
-
-	cachedColorsSize = vecAllColors->size();
-	cachedSurfaceSize = vecAllVertices->size();
-
-	cachedVoxelColors = new float[cachedColorsSize];
-	cachedSurface = new float[cachedSurfaceSize];
-
-	long loopSize = vecAllVertices->size();
-
-	for (int i = 0; i < loopSize; i++) {
-		cachedSurface[i] = vecAllVertices->at(i);
-		cachedVoxelColors[i] = vecAllColors->at(i);
-	}
-	delete vecAllVertices;
-	delete vecAllColors;
-
-	recache = false;
+	cacheSurfaceAndColors();
 }
 
-std::pair<std::vector<float>*, std::vector<float>*> Chunk::cacheSurfaceAndColors() {
+void Chunk::cacheSurfaceAndColors() {
 	if (lazyInited) {
 		return cacheSurfaceAndColorsLazy();
 	}
 	return cacheSurfaceAndColorsIndustrious();
 }
-std::pair<std::vector<float>*, std::vector<float>*> Chunk::cacheSurfaceAndColorsLazy() {
-	std::vector<float>* vecAllVertices = new std::vector<float>();
-	std::vector<float>* vecAllColors = new std::vector<float>();
+void Chunk::cacheSurfaceAndColorsLazy() {
+	cachedFloatSurface.clear();
+	cachedFloatColors.clear();
 
 	for (auto it = cachedVoxelSurface->begin(); it != cachedVoxelSurface->end(); it++) {
 		Triple<long, long, long> key = (*it).first;
 		Voxel vox = (*it).second;
-		vecAllVertices->push_back((float)key.first);
-		vecAllVertices->push_back((float)key.second);
-		vecAllVertices->push_back((float)key.third);
+		cachedFloatSurface.push_back((float)key.first);
+		cachedFloatSurface.push_back((float)key.second);
+		cachedFloatSurface.push_back((float)key.third);
 
 		glm::vec3* color = ChunkType::getColor(vox.type);
-		vecAllColors->push_back(color->x);
-		vecAllColors->push_back(color->y);
-		vecAllColors->push_back(color->z);
+		cachedFloatColors.push_back(color->x);
+		cachedFloatColors.push_back(color->y);
+		cachedFloatColors.push_back(color->z);
 		delete color;
 	}
-	return std::pair<std::vector<float>*, std::vector<float>*>{vecAllVertices, vecAllColors};
 }
-std::pair<std::vector<float>*, std::vector<float>*> Chunk::cacheSurfaceAndColorsIndustrious() {
-	std::vector<float>* vecAllVertices = new std::vector<float>();
-	std::vector<float>* vecAllColors = new std::vector<float>();
+void Chunk::cacheSurfaceAndColorsIndustrious() {
+	cachedFloatSurface.clear();
+	cachedFloatColors.clear();
 
 	for (int i = 0; i < CHUNK_SIZE; i++) {
 		for (int j = 0; j < CHUNK_SIZE; j++) {
 			for (int k = 0; k < CHUNK_HEIGHT; k++) {
 				if (voxels[i][j][k].active
 					&& isVoxelOnSurface(i, j, k)) {
-					vecAllVertices->push_back((float)(chunkX + i));
-					vecAllVertices->push_back((float)(chunkY + j));
-					vecAllVertices->push_back((float)k);
+					cachedFloatSurface.push_back((float)(chunkX + i));
+					cachedFloatSurface.push_back((float)(chunkY + j));
+					cachedFloatSurface.push_back((float)k);
 
 					glm::vec3* color = ChunkType::getColor(voxels[i][j][k].type);
-					vecAllColors->push_back(color->x);
-					vecAllColors->push_back(color->y);
-					vecAllColors->push_back(color->z);
+					cachedFloatColors.push_back(color->x);
+					cachedFloatColors.push_back(color->y);
+					cachedFloatColors.push_back(color->z);
 					delete color;
 				}
 			}
 		}
 	}
-	return std::pair<std::vector<float>*, std::vector<float>*>{vecAllVertices, vecAllColors};
 }
 
 std::pair<long, float*> Chunk::getVoxelPositionsToRender() {
 	cacheVoxelData();
-	return std::pair<long,float*>{cachedSurfaceSize, cachedSurface};
+	long size = cachedFloatSurface.size();
+	if (size == 0) {
+		return std::pair<long, float*>(0, nullptr);
+	}
+	return std::pair<long,float*>{size, &(cachedFloatSurface[0])};
 }
 std::pair<long, float*> Chunk::getVoxelColorsToRender() {
 	cacheVoxelData();
-	return std::pair<long, float*>{cachedColorsSize, cachedVoxelColors};
-}
-
-void Chunk::setCachedInfos(float* cachedSurface, long cachedSurfaceSize, float* cachedVoxelColors, long cachedColorsSize) {
-	this->cachedColorsSize = cachedColorsSize;
-	this->cachedVoxelColors = cachedVoxelColors;
-	this->cachedSurfaceSize = cachedSurfaceSize;
-	this->cachedSurface = cachedSurface;
-	this->recache = false;
+	long size = cachedFloatColors.size();
+	if (size == 0) {
+		return std::pair<long, float*>(0, nullptr);
+	}
+	return std::pair<long, float*>{size, & (cachedFloatColors[0])};
 }
 
 //default constructor used when initizlizing arrays!
@@ -236,9 +210,6 @@ Chunk::~Chunk() {
 	else {
 		deleteVoxelArray();
 	}
-	
-	delete[] cachedSurface;
-	delete[] cachedVoxelColors;
 }
 void Chunk::deleteVoxelArray() {
 	for (int i = 0; i < CHUNK_SIZE; i++) {

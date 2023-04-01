@@ -15,8 +15,8 @@ private:
 	bool lazyInited = true;
 	Voxel*** voxels;
 	std::map<Triple<long, long, long>, Voxel>* cachedVoxelSurface;
-	std::vector<float> cachedFloatSurface;
-	std::vector<float>* cachedColors;
+	std::vector<float> cachedFloatSurface{};
+	std::vector<float> cachedFloatColors{};
 
 	int chunkX;
 	int chunkY;
@@ -24,16 +24,12 @@ private:
 	bool isVoxelOnSurface(unsigned int i, unsigned int j, unsigned int k);
 
 	bool recache = true;
-	float* cachedSurface = NULL;
-	long cachedSurfaceSize;
-	float* cachedVoxelColors = NULL;
-	long cachedColorsSize;
 
 	Voxel* getNeighbouringVoxel(int iNeighbour, int jNeighbour, int kNeighbour);
 
-	std::pair<std::vector<float>*, std::vector<float>*> cacheSurfaceAndColors();
-	std::pair<std::vector<float>*, std::vector<float>*> cacheSurfaceAndColorsLazy();
-	std::pair<std::vector<float>*, std::vector<float>*> cacheSurfaceAndColorsIndustrious();
+	void cacheSurfaceAndColors();
+	void cacheSurfaceAndColorsLazy();
+	void cacheSurfaceAndColorsIndustrious();
 
 public:
 
@@ -52,6 +48,4 @@ public:
 	void cacheVoxelData();
 	std::pair<long, float*> getVoxelPositionsToRender();
 	std::pair<long, float*> getVoxelColorsToRender();
-
-	void setCachedInfos(float* cachedSurface, long cachedSurfaceSize, float* cachedVoxelColors, long cachedColorsSize);
 };
