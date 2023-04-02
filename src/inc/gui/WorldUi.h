@@ -26,12 +26,12 @@ private:
 	//All for making sure we render chunks properly
 	std::mutex queueLock{};
 	std::mutex renderLock{};
-	std::mutex rendererDeleteLock{};
+	std::mutex rendererRecycleLock{};
 	std::map<std::pair<long, long>, Chunk*> chunkQueue{};
 	std::map<std::pair<long, long>, ChunkRenderer*> renderers{};
-	std::map<std::pair<long, long>, ChunkRenderer*> renderersToDelete{};
+	std::vector<ChunkRenderer*> renderersToRecycle{};
 
-	unsigned char renderDistance = 5;
+	unsigned char renderDistance = 20;
 	long chunkX;
 	long chunkY;
 
