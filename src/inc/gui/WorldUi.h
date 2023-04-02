@@ -31,7 +31,7 @@ private:
 	std::map<std::pair<long, long>, ChunkRenderer*> renderers{};
 	std::vector<ChunkRenderer*> renderersToRecycle{};
 
-	unsigned char renderDistance = 5;
+	unsigned char renderDistance = 20;
 	long chunkX;
 	long chunkY;
 
