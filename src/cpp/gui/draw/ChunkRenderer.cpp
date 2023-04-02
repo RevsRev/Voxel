@@ -60,6 +60,11 @@ void ChunkRenderer::initShaderProgram() {
 	delete vertexShader;
 }
 
+void ChunkRenderer::setChunk(Chunk* chunk) {
+	this->chunk = chunk;
+	this->recache = true;
+}
+
 void ChunkRenderer::render() {
 
 	if (recache) {

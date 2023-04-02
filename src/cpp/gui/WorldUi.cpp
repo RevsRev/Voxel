@@ -34,30 +34,41 @@ void WorldUi::update(float delTime) {
 void WorldUi::flushChunkQueue() {
 	queueLock.lock();
 	renderLock.lock();
+	rendererRecycleLock.lock();
 
 	for (auto it = chunkQueue.begin(); it != chunkQueue.end(); it++) {
 		std::pair<long, long> key = (*it).first;
 		Chunk* chunk = (*it).second;
-		ChunkRenderer* renderer = new ChunkRenderer(chunk);
-		
+
+		ChunkRenderer* renderer;
+		if (renderersToRecycle.size() != 0) {
+			renderer = renderersToRecycle.at(renderersToRecycle.size() - 1);
+			renderersToRecycle.pop_back();
+			renderer->setChunk(chunk);
+		}
+		else {
+			renderer = new ChunkRenderer(chunk);
+
+		}
 		renderers.insert({ key, renderer});
 	}
 	renderLock.unlock();
+	rendererRecycleLock.unlock();
 
 	chunkQueue.clear();
 	queueLock.unlock();
 }
 
 void WorldUi::flushRenderersToDelete() {
-	rendererDeleteLock.lock();
+	/*rendererDeleteLock.lock();
 
-	for (auto it = renderersToDelete.begin(); it != renderersToDelete.end(); it++) {
+	for (auto it = renderersToRecycle.begin(); it != renderersToRecycle.end(); it++) {
 		ChunkRenderer* renderer = (*it).second;
 		delete renderer;
 	}
-	renderersToDelete.clear();
+	renderersToRecycle.clear();
 
-	rendererDeleteLock.unlock();
+	rendererDeleteLock.unlock();*/
 }
 
 bool WorldUi::updateChunkPosition() {
@@ -256,7 +267,7 @@ void WorldUi::onDelete(Chunk& val) {
 	std::pair<long, long>key{ val.getChunkX(), val.getChunkY() };
 	renderLock.lock();
 	queueLock.lock();
-	rendererDeleteLock.lock();
+	rendererRecycleLock.lock();
 
 	if (chunkQueue.find(key) != chunkQueue.end()) {
 		chunkQueue.erase(key);
@@ -265,10 +276,10 @@ void WorldUi::onDelete(Chunk& val) {
 	if (renderers.find(key) != renderers.end()) {
 		ChunkRenderer* renderer = renderers.at(key);
 		renderers.erase(key);
-		renderersToDelete.insert({ key, renderer });
+		renderersToRecycle.push_back(renderer);
 	}
 
-	rendererDeleteLock.unlock();
+	rendererRecycleLock.unlock();
 	queueLock.unlock();
 	renderLock.unlock();
 }
