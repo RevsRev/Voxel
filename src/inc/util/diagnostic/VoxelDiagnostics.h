@@ -1,14 +1,14 @@
 #pragma once
 
-#include <util/diagnostic/RollingAvg.h>
+#include <util/diagnostic/Diagnostic.h>
 #include <iostream>
 
 class VoxelDiagnostics {
 
 private:
-	RollingAvg chunkGenTime{};
-	RollingAvg bufferLoadTime{};
-	RollingAvg frameRate{};
+	Diagnostic chunkGenTime{};
+	Diagnostic bufferLoadTime{};
+	Diagnostic frameRate{};
 
 	VoxelDiagnostics() {}
 

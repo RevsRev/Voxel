@@ -83,6 +83,8 @@ void Window::start() {
 
 	std::cout << "Beginning render loop" << std::endl;
 
+	bool firstLoop = true;
+
 	while (!glfwWindowShouldClose(glfwWindow)) {
 
 		renderStartTime = std::chrono::system_clock::now();
@@ -97,9 +99,13 @@ void Window::start() {
 
 		renderEndTime = std::chrono::system_clock::now();
 		std::chrono::duration<double> currentFrameTime = renderEndTime - renderStartTime;
-
-		VoxelDiagnostics::the().submitFrameTime(currentFrameTime.count());
-		//VoxelDiagnostics::the().dump();
+		if (!firstLoop) {
+			VoxelDiagnostics::the().submitFrameTime(currentFrameTime.count());
+			VoxelDiagnostics::the().dump();
+		}
+		else {
+			firstLoop = false;
+		}
 	}
 
 	engine->stop();

@@ -11,9 +11,17 @@ void VoxelDiagnostics::submitFrameTime(double time) {
 }
 
 void VoxelDiagnostics::dump() {
-	std::cout << "ChunkGenTime (ms): " << chunkGenTime.getAvg() << std::endl;
-	std::cout << "BufferLoadTime (ms): " << bufferLoadTime.getAvg() << std::endl;
-	std::cout << "Frame time (ms): " << frameRate.getAvg() << std::endl;
+	std::cout << "ChunkGenTime:: ";
+	chunkGenTime.dump();
+	std::cout << std::endl;
+
+	std::cout << "BufferLoadTime:: ";
+	bufferLoadTime.dump();
+	std::cout << std::endl;
+
+	std::cout << "Frame time:: ";
+	frameRate.dump();
+	std::cout << std::endl;
 }
 
 VoxelDiagnostics& VoxelDiagnostics::the() {
