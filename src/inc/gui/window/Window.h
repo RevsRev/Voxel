@@ -27,6 +27,7 @@
 #include <phys/GameEngine.h>
 #include <phys/Player.h>
 #include <gui/WorldUi.h>
+#include <util/diagnostic/VoxelDiagnostics.h>
 
 //TODO - Add exceptions when trying to bring up the windows in case of failure
 

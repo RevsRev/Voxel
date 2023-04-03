@@ -60,11 +60,21 @@ void ChunkRenderer::initShaderProgram() {
 	delete vertexShader;
 }
 
+void ChunkRenderer::setChunk(Chunk* chunk) {
+	this->chunk = chunk;
+	this->recache = true;
+}
+
 void ChunkRenderer::render() {
 
-	if (recache) {
-		std::pair<long, float*> positionsAndColors = chunk->getPositionsAndColorsToRender();
+	if (recache) {std::pair<long, float*> positionsAndColors = chunk->getPositionsAndColorsToRender();
+
+		std::chrono::system_clock::time_point bufStart = std::chrono::system_clock::now();
 		vboPositionAndColorInstance.setBufferData(positionsAndColors.second, positionsAndColors.first * sizeof(float));
+#
+		std::chrono::system_clock::time_point bufEnd = std::chrono::system_clock::now();
+		std::chrono::duration<double> bufTime = bufEnd - bufStart;
+		VoxelDiagnostics::the().submitBufferLoadTime(bufTime.count());
 
 		numTrianglesForArray = positionsAndColors.first / 6;
 		recache = false;

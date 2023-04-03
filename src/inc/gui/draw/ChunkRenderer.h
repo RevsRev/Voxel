@@ -3,7 +3,8 @@
 #include "struc/Chunk.h"
 #include "gui/draw/VAO.h"
 #include "gui/shader/ShaderProgram.h"
-
+#include <util/diagnostic/VoxelDiagnostics.h>
+#include <chrono>
 
 class ChunkRenderer {
 private:
@@ -29,6 +30,7 @@ private:
 public:
 	ChunkRenderer(Chunk* chunk);
 	//~ChunkRenderer();
+	void setChunk(Chunk* chunk);
 	void render();
 	ShaderProgram* getShaderProgram();
 };

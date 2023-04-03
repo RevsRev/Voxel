@@ -123,19 +123,17 @@ void ChunkLoader::saveToFile(Chunk*& chunk) {
 }
 
 Chunk* ChunkLoader::getChunk(long& chunkX, long& chunkY) {
-	Chunk* chunk = nullptr;
-	std::pair<long, long> key{ chunkX, chunkY };
-	if (chunk != nullptr) {
-		return chunk;
-	}
-
 	if (chunkFileExists(chunkX, chunkY)) {
-		chunk = loadFromFile(chunkX, chunkY);
+		return loadFromFile(chunkX, chunkY);
 	}
-	else {
-		chunk = generateChunkLazy(chunkX, chunkY);
-		saveToFile(chunk);
-	}
+	
+	std::chrono::system_clock::time_point genStart = std::chrono::system_clock::now();
+	Chunk* chunk = generateChunkLazy(chunkX, chunkY);
+	saveToFile(chunk);
+	std::chrono::system_clock::time_point genEnd = std::chrono::system_clock::now();
+	std::chrono::duration<double> genTime = genEnd - genStart;
+
+	VoxelDiagnostics::the().submitChunkGenTime(genTime.count());
 
 	return chunk;
 }

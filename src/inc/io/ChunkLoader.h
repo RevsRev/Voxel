@@ -12,6 +12,8 @@
 #include <set>
 #include <iostream>
 #include <util/data/Loader.h>
+#include <chrono>
+#include <util/diagnostic/VoxelDiagnostics.h>
 
 class ChunkLoader : public Loader<std::pair<long,long>,Chunk> {
 private:

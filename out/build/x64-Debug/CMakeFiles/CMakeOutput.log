@@ -50,16 +50,26 @@ The CXX compiler identification is MSVC, found in "C:/Users/eddie/Documents/Voxe
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: C:/Users/eddie/Documents/Voxel/Voxel/out/build/x64-Debug/CMakeFiles/CMakeTmp
 
+<<<<<<< HEAD
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_6ccd5 && [1/2] Building C object CMakeFiles\cmTC_6ccd5.dir\CMakeCCompilerABI.c.obj
+[2/2] Linking C executable cmTC_6ccd5.exe
+=======
 Run Build Command(s):C:/PROGRA~1/MICROS~1/2022/COMMUN~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_4ca2d && [1/2] Building C object CMakeFiles\cmTC_4ca2d.dir\CMakeCCompilerABI.c.obj
 [2/2] Linking C executable cmTC_4ca2d.exe
+>>>>>>> main
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: C:/Users/eddie/Documents/Voxel/Voxel/out/build/x64-Debug/CMakeFiles/CMakeTmp
 
+<<<<<<< HEAD
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_34a65 && [1/2] Building CXX object CMakeFiles\cmTC_34a65.dir\CMakeCXXCompilerABI.cpp.obj
+[2/2] Linking CXX executable cmTC_34a65.exe
+=======
 Run Build Command(s):C:/PROGRA~1/MICROS~1/2022/COMMUN~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_76b8f && [1/2] Building CXX object CMakeFiles\cmTC_76b8f.dir\CMakeCXXCompilerABI.cpp.obj
 [2/2] Linking CXX executable cmTC_76b8f.exe
+>>>>>>> main
 
 
 

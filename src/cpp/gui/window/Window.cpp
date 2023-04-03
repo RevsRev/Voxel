@@ -97,6 +97,9 @@ void Window::start() {
 
 		renderEndTime = std::chrono::system_clock::now();
 		std::chrono::duration<double> currentFrameTime = renderEndTime - renderStartTime;
+
+		VoxelDiagnostics::the().submitFrameTime(currentFrameTime.count());
+		//VoxelDiagnostics::the().dump();
 	}
 
 	engine->stop();
